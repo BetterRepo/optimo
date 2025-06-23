@@ -1,0 +1,498 @@
+"use client";
+
+import React from "react";
+import {
+  LeadType,
+  ModuleType,
+  StorageOption,
+  Adder,
+  FinanceCompany,
+  FinanceType,
+} from "./types";
+
+interface FinanceCompanySelectorProps {
+  selectedCompany: FinanceCompany | "";
+  selectedEscalator: string;
+  selectedTerm: string;
+  selectedLeadType: LeadType | "";
+  selectedModuleCount: string;
+  selectedModuleType: ModuleType | "";
+  selectedStorage: StorageOption;
+  selectedAdders: Adder[];
+  selectedStorageOption: StorageOption;
+  selectedInterestRate: string;
+  selectedYearlyProduction: string;
+  selectedFinanceOrg: string;
+  selectedLgcyCanvassId: string;
+  selectedEpc: string;
+  selectedKwhRate: string;
+  selectedLeadId: string;
+  selectedPangeaId: string;
+  selectedInsightlyId: string;
+  selectedSalesRepEmail: string;
+  selectedSalesRepEmail2: string;
+  selectedDialerEmail: string;
+  selectedCustomerEmail: string;
+  selectedCustomerPhone: string;
+  onCompanyChange: (value: FinanceCompany | "") => void;
+  onEscalatorChange: (value: string) => void;
+  onTermChange: (value: string) => void;
+  onLeadTypeChange: (value: LeadType | "") => void;
+  onModuleCountChange: (value: string) => void;
+  onModuleTypeChange: (value: ModuleType | "") => void;
+  onStorageChange: (value: StorageOption) => void;
+  onAddersChange: (value: Adder[]) => void;
+  onStorageOptionChange: (value: StorageOption) => void;
+  onInterestRateChange: (value: string) => void;
+  onYearlyProductionChange: (value: string) => void;
+  onFinanceOrgChange: (value: string) => void;
+  onLgcyCanvassIdChange: (value: string) => void;
+  onEpcChange: (value: string) => void;
+  onKwhRateChange: (value: string) => void;
+  onLeadIdChange: (value: string) => void;
+  onPangeaIdChange: (value: string) => void;
+  onInsightlyIdChange: (value: string) => void;
+  onSalesRepEmailChange: (value: string) => void;
+  onSalesRepEmail2Change: (value: string) => void;
+  onDialerEmailChange: (value: string) => void;
+  onCustomerEmailChange: (value: string) => void;
+  onCustomerPhoneChange: (value: string) => void;
+  onFileUpload: (files: FileList) => Promise<boolean>;
+}
+
+export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
+  selectedCompany,
+  selectedEscalator,
+  selectedTerm,
+  selectedLeadType,
+  selectedModuleCount,
+  selectedModuleType,
+  selectedStorage,
+  selectedAdders,
+  selectedStorageOption,
+  selectedInterestRate,
+  selectedYearlyProduction,
+  selectedFinanceOrg,
+  selectedLgcyCanvassId,
+  selectedEpc,
+  selectedKwhRate,
+  selectedLeadId,
+  selectedPangeaId,
+  selectedInsightlyId,
+  selectedSalesRepEmail,
+  selectedSalesRepEmail2,
+  selectedDialerEmail,
+  selectedCustomerEmail,
+  selectedCustomerPhone,
+  onCompanyChange,
+  onEscalatorChange,
+  onTermChange,
+  onLeadTypeChange,
+  onModuleCountChange,
+  onModuleTypeChange,
+  onStorageChange,
+  onAddersChange,
+  onStorageOptionChange,
+  onInterestRateChange,
+  onYearlyProductionChange,
+  onFinanceOrgChange,
+  onLgcyCanvassIdChange,
+  onEpcChange,
+  onKwhRateChange,
+  onLeadIdChange,
+  onPangeaIdChange,
+  onInsightlyIdChange,
+  onSalesRepEmailChange,
+  onSalesRepEmail2Change,
+  onDialerEmailChange,
+  onCustomerEmailChange,
+  onCustomerPhoneChange,
+  onFileUpload,
+}) => {
+  const companies = [
+    { id: "Sunnova", label: "Sunnova" },
+    { id: "LightReach", label: "LightReach" },
+    { id: "GoodLeap", label: "GoodLeap (Lease or PPA only)" },
+    { id: "EnFin", label: "EnFin (Lease or PPA only)" },
+  ];
+
+  const types = [
+    { id: "GoodLeap", label: "GoodLeap" },
+    { id: "Dividend", label: "Dividend" },
+    { id: "Cash", label: "Cash" },
+    { id: "LightReach OR EverBright OR Sunnova", label: "LightReach OR EverBright OR Sunnova" },
+    { id: "Other", label: "Other" },
+    { id: "Lightreach", label: "Lightreach" },
+  ];
+
+  const escalators = [
+    "0.00%",
+    "0.99%",
+    "1.90%",
+    "1.99%",
+    "2.90%",
+    "2.99%",
+    "3.50%",
+    "3.59%",
+    "3.90%",
+    "4.90%",
+  ];
+
+  const interestRates = [
+    "0.99%",
+    "1.99%",
+    "2.99%",
+    "3.99%",
+    "4.99%",
+    "5.99%",
+    "6.99%",
+  ];
+
+  const showFinanceType =
+    selectedCompany === "Sunnova";
+
+  // Show escalator for PPA or Lease - now no longer needed since we removed these options
+  const showEscalator = false;
+
+  // Show term input for these companies
+  const showTerm = ["LightReach", "EnFin"].includes(
+    selectedCompany
+  );
+
+  // For GoodLeap and EnFin, restrict to only PPA and Lease options
+  // But allow all new finance types to be visible regardless of company
+  const filteredTypes = types;
+
+  return (
+    <div className="space-y-4">
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Number of Modules <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          value={selectedModuleCount}
+          onChange={(e) => onModuleCountChange(e.target.value)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+          placeholder="Enter number of modules"
+        />
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Module Type <span className="text-red-500">*</span>
+        </label>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg space-y-2">
+          <div className="flex items-center space-x-3">
+            <input
+              type="radio"
+              id="module-premium"
+              name="moduleType"
+              value="Premium+ 405w"
+              checked={selectedModuleType === "Premium+ 405w"}
+              onChange={(e) => onModuleTypeChange(e.target.value as ModuleType)}
+              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+            />
+            <label
+              htmlFor="module-premium"
+              className="text-gray-700 dark:text-gray-200"
+            >
+              Premium+ 405w
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Include Storage? <span className="text-red-500">*</span>
+        </label>
+        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg space-y-2">
+          {["Yes", "No"].map((option) => (
+            <div key={option} className="flex items-center space-x-3">
+              <input
+                type="radio"
+                id={`storage-${option}`}
+                name="storage"
+                value={option}
+                checked={selectedStorage === option}
+                onChange={(e) => onStorageChange(option as StorageOption)}
+                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+              />
+              <label
+                htmlFor={`storage-${option}`}
+                className="text-gray-700 dark:text-gray-200"
+              >
+                {option}
+              </label>
+            </div>
+          ))}
+        </div>
+
+        {selectedStorage === "Yes" && (
+          <div className="mt-6">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+              Storage Option <span className="text-red-500">*</span>
+            </label>
+            <div className="bg-white dark:bg-gray-800 p-4 rounded-lg space-y-2">
+              {[
+                "1 SE Energy Bank (No Bkup)",
+                "2 SE Energy Bank (No Bkup)",
+                "3 SE Energy Bank (No Bkup)",
+                "1 Enphase 5P (No Bkup)",
+                "1 Enphase 5P (Partial Backup)",
+                "2 Enphase 5P (No Bkup)",
+                "2 Enphase 5P (Partial Backup)",
+                "3 Enphase 5P (No Bkup)",
+                "3 Enphase 5P (WH Backup)",
+                "4 Enphase 5P (No Bkup)",
+                "4 Enphase 5P (WH Backup)",
+                "1 Franklin Batt (Partial Backup)",
+                "2 Franklin Batt (WH Backup)",
+                "3 Franklin Batt (WH Backup)",
+                "1 SE Energy Bank (Partial Backup)",
+                "2 SE Energy Bank (WH Backup)",
+                "3 SE Energy Bank (WH Backup)",
+              ].map((option) => (
+                <div key={option} className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    id={`storage-option-${option}`}
+                    name="storage-option"
+                    value={option}
+                    checked={selectedStorageOption === option}
+                    onChange={(e) =>
+                      onStorageOptionChange(option as StorageOption)
+                    }
+                    className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+                  />
+                  <label
+                    htmlFor={`storage-option-${option}`}
+                    className="text-gray-700 dark:text-gray-200"
+                  >
+                    {option}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Adders to Include
+        </label>
+        <br></br>
+        <div className="space-y-2">
+          {[
+            "25 Yr. SE Inverter Warranty Extension",
+            "Attic Run",
+            "EV Charger + Install",
+            "Ground Mount (16+ Panels)",
+            "Equipment in Garage",
+            "NEM Aggregation",
+            "NEM 2.0 Transfer",
+            "Panel Skirting-Metal",
+            "Pigeon/Squirrel Guard-Mesh",
+            "Remove Existing Solar System",
+            "Remove and Reinstall Solar System",
+            "Reroof",
+            "Thermal Solar Removal",
+          ].map((adder) => (
+            <div key={adder} className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                id={`adder-${adder}`}
+                value={adder}
+                checked={selectedAdders.includes(adder as Adder)}
+                onChange={(e) => {
+                  const newAdders = e.target.checked
+                    ? [...selectedAdders, adder as Adder]
+                    : selectedAdders.filter((a) => a !== adder);
+                  onAddersChange(newAdders);
+                }}
+                className="form-checkbox text-blue-600 focus:ring-blue-500 h-4 w-4"
+              />
+              <label
+                htmlFor={`adder-${adder}`}
+                className="text-gray-700 dark:text-gray-200"
+              >
+                {adder}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Sold kWh Rate <span className="text-red-500">*</span>
+        </label>
+        <input
+          type="text"
+          value={selectedKwhRate}
+          onChange={(e) => onKwhRateChange(e.target.value)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+          placeholder="Enter sold kWh rate"
+        />
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Lead ID
+        </label>
+        <input
+          type="text"
+          value={selectedLeadId}
+          onChange={(e) => onLeadIdChange(e.target.value)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+          placeholder="Enter Lead ID"
+        />
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Record ID from Pangea
+        </label>
+        <input
+          type="text"
+          value={selectedPangeaId}
+          onChange={(e) => onPangeaIdChange(e.target.value)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+          placeholder="Enter Record ID from Pangea"
+        />
+      </div>
+
+      <div className="mt-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          Insightly Project ID
+        </label>
+        <input
+          type="text"
+          value={selectedInsightlyId}
+          onChange={(e) => onInsightlyIdChange(e.target.value)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+          placeholder="Enter Insightly Project ID"
+        />
+      </div>
+
+      {/* Conditional Email of Dialer field */}
+      {(selectedSalesRepEmail.includes("@betterearth.solar") && selectedLeadId.includes("LightReach")) && (
+        <div className="mt-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+            Email of Dialer (if applicable)
+          </label>
+          <input
+            type="email"
+            value={selectedDialerEmail}
+            onChange={(e) => onDialerEmailChange(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500
+                     bg-white dark:bg-[#3A3B3C] dark:text-white"
+            placeholder="Enter dialer email"
+          />
+        </div>
+      )}
+
+      {selectedCompany === "EnFin" && (
+        <div className="mt-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+            EnFin Term <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={selectedTerm}
+            onChange={(e) => onTermChange(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500
+                     bg-white dark:bg-[#3A3B3C] dark:text-white"
+            placeholder="Enter EnFin term"
+          />
+        </div>
+      )}
+
+      {selectedCompany === "GoodLeap" && (
+        <div className="mt-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+            GoodLeap Term <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={selectedTerm}
+            onChange={(e) => onTermChange(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                     focus:outline-none focus:ring-2 focus:ring-blue-500
+                     bg-white dark:bg-[#3A3B3C] dark:text-white"
+            placeholder="Enter GoodLeap term"
+          />
+        </div>
+      )}
+
+      {showEscalator && (
+        <div className="mt-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+            PPA / Lease Escalator <span className="text-red-500">*</span>
+          </label>
+          <div className="p-4 rounded-lg space-y-2">
+            {escalators.map((escalator) => (
+              <div key={escalator} className="flex items-center space-x-3">
+                <input
+                  type="radio"
+                  id={`escalator-${escalator}`}
+                  name="escalator"
+                  value={escalator}
+                  checked={selectedEscalator === escalator}
+                  onChange={(e) => onEscalatorChange(e.target.value)}
+                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+                />
+                <label
+                  htmlFor={`escalator-${escalator}`}
+                  className="text-gray-700 dark:text-gray-200 cursor-pointer"
+                >
+                  {escalator}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {showTerm && (
+        <div className="mt-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+            {selectedCompany} Term <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="text"
+            value={selectedTerm}
+            onChange={(e) => onTermChange(e.target.value)}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter term"
+          />
+        </div>
+      )}
+
+      {/* Only show BetterEarth Solar Reps the warning message */}
+      {(selectedCompany === "GoodLeap" && selectedSalesRepEmail.includes("@betterearth.solar")) && (
+        <div className="mt-2 mb-6 p-3 bg-yellow-50 border-l-4 border-yellow-400 text-sm text-yellow-700">
+          <p className="font-bold">Important Note for BetterEarth Solar Representatives:</p>
+          <p className="mt-1">
+            Remember that you must countersign the EverBright agreement 
+            in your email. Please check your inbox and take action promptly.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};

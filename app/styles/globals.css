@@ -1,0 +1,37 @@
+/* Remove blue autofill background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+    -webkit-text-fill-color: inherit !important;
+}
+
+/* For dark mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px #151821 inset !important;
+    -webkit-text-fill-color: white !important;
+}
+
+/* Remove blue highlight/outline on all inputs and selects */
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #d1d5db !important; /* Light gray border */
+}
+
+.dark input:focus, .dark select:focus, .dark textarea:focus {
+    border-color: #4b5563 !important; /* Dark gray border */
+}
+
+/* Override any blue backgrounds */
+.no-blue-bg {
+    background-color: white !important;
+}
+
+.dark .no-blue-bg {
+    background-color: #151821 !important;
+} 

@@ -1,0 +1,2878 @@
+"use client";
+
+import React, { useState, useEffect, useRef } from "react";
+import { FinanceCompanySelector } from "../FinanceCompanySelector";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { AddressForm } from "../../common-components/AddressForm";
+import { ProjectCreationFormData, StorageOption, Adder, LeadType, FinanceCompany, FinanceType } from "../types";
+import { useProjectSubmission } from "../hooks/useProjectSubmission";
+import { SubmitButton } from "../../survey-booking/components/common/SubmitButton";
+import { toast } from "react-toastify";
+import ClientOnly from "@/app/components/ClientOnly";
+
+// Add LanguageSelector component
+const LanguageSelector: React.FC<{
+  selectedLanguage: 'English' | 'Spanish' | '';
+  onChange: (value: 'English' | 'Spanish') => void;
+}> = ({ selectedLanguage, onChange }) => {
+  return (
+    <div className="mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+            Preferred Language <span className="text-red-500">*</span>
+          </label>
+          <select
+            id="preferredLanguage"
+            className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+                     focus:outline-none focus:border-green-500
+                     bg-white dark:bg-[#151821] dark:text-white"
+            value={selectedLanguage}
+            onChange={(e) => onChange(e.target.value as 'English' | 'Spanish')}
+          >
+            <option value="">Please Select</option>
+            <option value="English">English</option>
+            <option value="Spanish">Spanish</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Add PPA/Lease Escalator section component
+const EscalatorSection: React.FC<{
+  selectedEscalator: string;
+  onChange: (value: string) => void;
+}> = ({ selectedEscalator, onChange }) => {
+  const escalators = [
+    "0.00%",
+    "0.99%",
+    "1.90%",
+    "1.99%",
+    "2.90%",
+    "2.99%",
+    "3.50%",
+    "3.59%",
+    "3.90%",
+    "4.90%",
+  ];
+
+  return (
+    <div className="pt-6 pb-4">
+      <div>
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+          PPA / Lease Escalator <span className="text-red-500">*</span>
+        </label>
+        <div className="p-4 rounded-lg space-y-2">
+          {escalators.map((escalator) => (
+            <div key={escalator} className="flex items-center space-x-3">
+              <input
+                type="radio"
+                id={`escalator-${escalator}`}
+                name="escalator"
+                value={escalator}
+                checked={selectedEscalator === escalator}
+                onChange={(e) => onChange(e.target.value)}
+                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+              />
+              <label
+                htmlFor={`escalator-${escalator}`}
+                className="text-gray-700 dark:text-gray-200 cursor-pointer"
+              >
+                {escalator}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Add utility bill upload component
+const UBillUploadSection: React.FC<{
+  onFileUpload: (files: FileList) => Promise<boolean>;
+}> = ({ onFileUpload }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      setIsUploading(true);
+      try {
+        const result = await onFileUpload(files);
+        if (result) {
+          // Convert FileList to array and add to existing files
+          const newFiles = Array.from(files);
+          setUploadedFiles(prev => [...prev, ...newFiles]);
+        }
+      } catch (error) {
+        console.error("Error during file upload:", error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    
+    const files = e.dataTransfer.files;
+    if (files && files.length > 0) {
+      setIsUploading(true);
+      try {
+        const result = await onFileUpload(files);
+        if (result) {
+          // Convert FileList to array and add to existing files
+          const newFiles = Array.from(files);
+          setUploadedFiles(prev => [...prev, ...newFiles]);
+        }
+      } catch (error) {
+        console.error("Error during file upload:", error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
+  const removeFile = (index: number) => {
+    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  return (
+    <div className="pt-8 pb-6">
+      <div>
+        <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">
+          Please upload a complete Utility Bill file
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 mb-4">
+          The Utility Bill must clearly show the following information. While optional, projects without a complete utility bill may face delays in the design stage.
+        </p>
+        
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          accept=".pdf,.jpg,.jpeg,.png"
+          className="hidden"
+          multiple
+          data-testid="utility-bill-input"
+        />
+        
+        {/* File Upload Area */}
+        <div
+          className={`mt-2 border-2 border-dashed ${isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/30'} rounded-lg p-8 cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50`}
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(true);
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsDragging(false);
+          }}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <div className="flex flex-col items-center justify-center">
+            {isUploading ? (
+              <div className="animate-pulse">
+                <svg className="w-12 h-12 text-blue-500 dark:text-blue-400 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <p className="mt-4 text-base font-medium text-gray-700 dark:text-gray-300">Uploading...</p>
+              </div>
+            ) : (
+              <>
+                <svg
+                  className="w-12 h-12 text-blue-500 dark:text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <div className="mt-4 text-center">
+                  <p className="text-base font-medium text-gray-700 dark:text-gray-300">
+                    Browse Files
+                  </p>
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                    Drag and drop files here or click to browse
+                  </p>
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Accepted file types: PDF, JPG, JPEG, PNG
+                  </p>
+                  <p className="mt-1 text-xs font-medium text-blue-500 dark:text-blue-400">
+                    You can upload multiple files
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        
+        {/* Uploaded Files List */}
+        {uploadedFiles.length > 0 && (
+          <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+            <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+              <h4 className="font-medium text-gray-700 dark:text-gray-300">Uploaded Files ({uploadedFiles.length})</h4>
+            </div>
+            <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+              {uploadedFiles.map((file, index) => (
+                <li key={`${file.name}-${index}`} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      {file.type.includes('image') ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
+                          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                          <path d="M8 11a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                        </svg>
+                      )}
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate max-w-xs">{file.name}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
+                    </div>
+                  </div>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeFile(index);
+                    }}
+                    className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        
+        <div className="mt-5 p-5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg shadow-sm">
+          <h4 className="font-bold text-base text-amber-800 dark:text-amber-300 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Required Information
+          </h4>
+          <p className="mt-2 text-sm text-amber-800 dark:text-amber-300">
+            The Utility Bill must clearly show the following information, or the Utility Bill status will be considered incomplete. Projects without a complete utility bill will become Deferred and will not proceed to the design stage.
+          </p>
+          <ul className="mt-3 ml-6 list-disc space-y-1.5 text-sm text-amber-800 dark:text-amber-300">
+            <li>Customer Name</li>
+            <li>Customer Address</li>
+            <li>Account Number</li>
+            <li>Meter Number</li>
+            <li>Must have been issued in the past 12 months</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Add Lead Type section component
+const LeadTypeSection: React.FC<{
+  selectedLeadType: ProjectCreationFormData["leadType"];
+  onChange: (value: ProjectCreationFormData["leadType"]) => void;
+}> = ({ selectedLeadType, onChange }) => {
+  return (
+    <div className="mb-8">
+      <div>
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+          Lead Type
+        </label>
+        <select
+          value={selectedLeadType}
+          onChange={(e) => onChange(e.target.value as LeadType)}
+          className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+                   focus:outline-none focus:ring-2 focus:ring-blue-500
+                   bg-white dark:bg-[#3A3B3C] dark:text-white"
+        >
+          <option value="">Please Select</option>
+          <option value="Lead Gen (Virtual)">Lead Gen (Virtual)</option>
+          <option value="Lead Gen (In Home)">Lead Gen (In Home)</option>
+          <option value="Lead Gen (Spanish Funnel)">
+            Lead Gen (Spanish Funnel)
+          </option>
+          <option value="Lead Gen (Referral)">Lead Gen (Referral)</option>
+          <option value="Website Lead">Website Lead</option>
+          <option value="Self Gen (Doors)">Self Gen (Doors)</option>
+          <option value="Self Gen (HOT Lead)">Self Gen (HOT Lead)</option>
+          <option value="Self Gen (Cold Call)">Self Gen (Cold Call)</option>
+          <option value="Self Gen (Referral)">Self Gen (Referral)</option>
+          <option value="Self Gen (Blitz)">Self Gen (Blitz)</option>
+          <option value="Lead Gen (Hybrid)">Lead Gen (Hybrid)</option>
+          <option value="VIS Holiday Marketing Campaign">
+            VIS Holiday Marketing Campaign
+          </option>
+          <option value="SolarEdge">SolarEdge</option>
+        </select>
+      </div>
+    </div>
+  );
+};
+
+function ProjectCreationFormContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  // State to control visibility of warning messages
+  const [showWarnings, setShowWarnings] = useState(false);
+  
+  // Add local state for submission handling
+  const [localIsSubmitting, setLocalIsSubmitting] = useState(false);
+  const [localError, setLocalError] = useState<string | null>(null);
+  
+  // Add validation state for name fields
+  const [nameValidation, setNameValidation] = useState({
+    firstName: { isValid: true, message: "" },
+    lastName: { isValid: true, message: "" },
+  });
+  
+  // Add validation state for email
+  const [emailValidation, setEmailValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+  
+  // Add validation state for phone field
+  const [phoneValidation, setPhoneValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+  
+  // Add validation state for sales rep email
+  const [salesRepEmailValidation, setSalesRepEmailValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+  
+  // Add state for secondary contact
+  const [showSecondaryContact, setShowSecondaryContact] = useState(false);
+
+  // Add validation state for secondary contact fields
+  const [secondaryNameValidation, setSecondaryNameValidation] = useState({
+    firstName: { isValid: true, message: "" },
+    lastName: { isValid: true, message: "" },
+  });
+  
+  // Add validation state for secondary email
+  const [secondaryEmailValidation, setSecondaryEmailValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+  
+  // Add validation state for secondary phone field
+  const [secondaryPhoneValidation, setSecondaryPhoneValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+
+  // Add validation state for tenant fields
+  const [tenantNameValidation, setTenantNameValidation] = useState({
+    firstName: { isValid: true, message: "" },
+    lastName: { isValid: true, message: "" },
+  });
+  
+  // Add validation state for tenant email
+  const [tenantEmailValidation, setTenantEmailValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+  
+  // Add validation state for tenant phone field
+  const [tenantPhoneValidation, setTenantPhoneValidation] = useState({
+    isValid: true,
+    message: ""
+  });
+
+  const [formData, setFormData] = useState<ProjectCreationFormData & {
+    secondaryFirstName?: string;
+    secondaryLastName?: string;
+    secondaryEmail?: string;
+    secondaryPhone?: string;
+    secondaryRelationship?: string;
+    hasTenants?: boolean;
+    tenantFirstName?: string;
+    tenantLastName?: string;
+    tenantEmail?: string;
+    tenantPhone?: string;
+  }>({
+    firstName: "",
+    lastName: "",
+    preferredLanguage: "English",
+    hasCompletedWelcomeCall: false,
+    welcomeCallCompleted: false,
+    financeCompany: "",
+    financeType: "",
+    escalator: "",
+    term: "",
+    leadType: "",
+    moduleCount: "",
+    moduleType: "",
+    storage: "",
+    storageOption: "",
+    adders: [],
+    streetAddress: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    warehouse: "Out of Region",
+    ubillFile: undefined,
+    ubillFiles: [],
+    isAdditionalSurvey: false,
+    isSurveyBooking: false,
+    insightlyRecordId: "",
+    interestRate: "",
+    yearlyProduction: '',
+    financeOrg: "",
+    lgcyCanvassId: "",
+    epc: "",
+    kwhRate: "",
+    leadId: "",
+    pangeaId: "",
+    insightlyId: "",
+    salesRepEmail: "",
+    salesRepEmail2: "",
+    dialerEmail: "",
+    customerEmail: "",
+    customerPhone: "",
+    internalToken: "",
+    // Secondary contact fields
+    secondaryFirstName: "",
+    secondaryLastName: "",
+    secondaryEmail: "",
+    secondaryPhone: "",
+    secondaryRelationship: "",
+    // Tenant information
+    hasTenants: false,
+    tenantFirstName: "",
+    tenantLastName: "",
+    tenantEmail: "",
+    tenantPhone: ""
+  });
+
+  // Add submission error state
+  const [submissionError, setSubmissionError] = useState<string | null>(null);
+
+  // Add a debug error display state
+  const [debugError, setDebugError] = useState<string | null>(null);
+
+  // Add state to track and display specific validation errors
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+
+  const { handleSubmit, isSubmitting, error } = useProjectSubmission();
+  
+  // Combine our states
+  const effectiveIsSubmitting = isSubmitting || localIsSubmitting;
+  const effectiveError = error || localError;
+
+  // Load form data from URL parameters
+  useEffect(() => {
+    if (!searchParams) return;
+    
+    const newFormData = { ...formData };
+    let hasUpdates = false;
+    
+    // Map URL parameters to form fields
+    const paramMap: Record<string, keyof ProjectCreationFormData> = {
+      firstName: "firstName",
+      lastName: "lastName",
+      preferredLanguage: "preferredLanguage",
+      customerEmail: "customerEmail",
+      customerPhone: "customerPhone",
+      salesRepEmail: "salesRepEmail",
+      salesRepEmail2: "salesRepEmail2",
+      streetAddress: "streetAddress",
+      city: "city",
+      state: "state",
+      postalCode: "postalCode",
+      warehouse: "warehouse",
+      // Add other fields as needed
+    };
+    
+    // Process each parameter
+    Object.entries(paramMap).forEach(([param, formField]) => {
+      const value = searchParams.get(param);
+      if (value && value !== formData[formField]) {
+        // @ts-expect-error - We're being careful with the mapping
+        newFormData[formField] = value;
+        hasUpdates = true;
+      }
+    });
+    
+    // Update form data if changes were found
+    if (hasUpdates) {
+      console.log("Loaded form data from URL parameters:", newFormData);
+      setFormData(newFormData);
+    }
+  }, [searchParams]);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const target = e.target;
+    const id = target.id;
+    const value = target.value;
+
+    if (target instanceof HTMLInputElement && target.type === "checkbox") {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: target.checked,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [id]: value,
+      }));
+      
+      // For name fields, validate as user types
+      if (id === "firstName" || id === "lastName") {
+        validateName(id, value);
+      }
+    }
+  };
+
+  const handleFinanceCompanyChange = (
+    value: ProjectCreationFormData["financeCompany"]
+  ) => {
+    setFormData((prev) => ({
+      ...prev,
+      financeCompany: value,
+      escalator: "",
+      term: "",
+    }));
+  };
+
+  const handleEscalatorChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, escalator: value }));
+  };
+
+  const handleTermChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, term: value }));
+  };
+
+  const handleLeadTypeChange = (value: ProjectCreationFormData["leadType"]) => {
+    setFormData((prev) => ({ ...prev, leadType: value }));
+  };
+
+  const handleAddersChange = (adders: ProjectCreationFormData["adders"]) => {
+    setFormData((prev) => ({ ...prev, adders }));
+  };
+
+  const handleStorageOptionChange = (value: StorageOption) => {
+    setFormData((prev) => ({ ...prev, storageOption: value }));
+  };
+
+  const handleFileUpload = async (files: FileList) => {
+    try {
+      // Store all uploaded files
+      const uploadedFiles: {
+        name: string;
+        type: string;
+        size: number;
+        url: string;
+      }[] = [];
+
+      // Process each file one by one
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Validate file size (max 10MB)
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        if (file.size > maxSize) {
+          toast.error(`File ${file.name} is too large. Maximum size is 10MB.`);
+          continue; // Skip this file but continue with others
+        }
+        
+        // Validate file type
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        if (!allowedTypes.includes(file.type)) {
+          toast.error(`File ${file.name} type not supported. Please upload PDF, JPG, or PNG files.`);
+          continue; // Skip this file but continue with others
+        }
+        
+        console.log(`Uploading file ${i+1}/${files.length}:`, file.name, "Type:", file.type, "Size:", (file.size / 1024 / 1024).toFixed(2) + "MB");
+        
+        try {
+          // Create a placeholder URL for demos
+          let fileUrl = URL.createObjectURL(file);
+
+          // Try to check if the API endpoint exists
+          try {
+            const endpointCheckResponse = await fetch('/api/file-upload', { 
+              method: 'HEAD',
+            });
+            
+            if (endpointCheckResponse.status !== 404) {
+              // Actual upload logic
+              const formDataObj = new FormData();
+              formDataObj.append("file", file);
+
+              const response = await fetch("/api/file-upload", {
+                method: "POST",
+                body: formDataObj,
+              });
+
+              if (!response.ok) {
+                const errorText = await response.text();
+                let errorMessage = `Upload failed for ${file.name}`;
+                
+                try {
+                  const errorData = JSON.parse(errorText);
+                  errorMessage = errorData.message || errorMessage;
+                } catch (e) {
+                  if (errorText) errorMessage = errorText;
+                }
+                
+                throw new Error(errorMessage);
+              }
+
+              const data = await response.json();
+              
+              if (!data.success) {
+                throw new Error(data.message || `Upload failed for ${file.name}`);
+              }
+              
+              fileUrl = data.fileUrl;
+            } else {
+              console.warn("API endpoint /api/file-upload doesn't exist. Using local URL for demo.");
+              toast.info(`Demo mode: Simulating upload for ${file.name}`);
+            }
+          } catch (error) {
+            console.warn("Could not check API endpoint. Using local URL for demo:", error);
+          }
+
+          // Add the file to our uploaded files array
+          uploadedFiles.push({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            url: fileUrl,
+          });
+        } catch (error: any) {
+          console.error("Error uploading file:", file.name, error);
+          toast.error(`Error uploading ${file.name}: ${error.message || "Unknown error"}`);
+        }
+      }
+
+      // Update form data with all successfully uploaded files
+      if (uploadedFiles.length > 0) {
+        setFormData((prev) => ({
+          ...prev,
+          ubillFiles: [...(prev.ubillFiles || []), ...uploadedFiles],
+        }));
+        
+        toast.success(`Successfully uploaded ${uploadedFiles.length} file${uploadedFiles.length !== 1 ? 's' : ''}`);
+        return true;
+      } else {
+        toast.error("No files were uploaded successfully");
+        return false;
+      }
+    } catch (error: any) {
+      console.error("Error in file upload process:", error);
+      toast.error(error.message || "An unexpected error occurred during file upload");
+      return false;
+    }
+  };
+
+  const handleInterestRateChange = (value: string) => {
+    setFormData(prev => ({ ...prev, interestRate: value }));
+  };
+
+  const handleLanguageChange = (value: 'English' | 'Spanish') => {
+    setFormData(prev => ({ ...prev, preferredLanguage: value }));
+  };
+
+  // Keep the original onSubmit for the form
+  const onSubmit = async (e: React.FormEvent | React.MouseEvent) => {
+    // Make sure we prevent the default behavior regardless of event type
+    if (e && e.preventDefault) {
+    e.preventDefault();
+    }
+    
+    console.log("⭐️ onSubmit function called!", { eventType: e.type });
+    
+    // Call the button click handler directly
+    const submitButton = document.querySelector('button[type="button"]') as HTMLButtonElement;
+    if (submitButton) {
+      submitButton.click();
+    }
+  };
+
+  console.log("Form validation:", {
+    firstName: !!formData.firstName,
+    lastName: !!formData.lastName,
+    welcomeCall: formData.hasCompletedWelcomeCall,
+    financeCompany: !!formData.financeCompany,
+    leadType: !!formData.leadType, // This is just for logging, doesn't affect validation
+    moduleCount: !!formData.moduleCount,
+    moduleType: !!formData.moduleType,
+    storage: !!formData.storage,
+  });
+
+  // Validate name fields
+  const validateName = (field: 'firstName' | 'lastName', value: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    // Name shouldn't be empty
+    if (!value.trim()) {
+      isValid = false;
+      message = `Primary Customer ${field === 'firstName' ? 'First' : 'Last'} Name is required`;
+    } 
+    // Name should be at least 2 characters
+    else if (value.trim().length < 2) {
+      isValid = false;
+      message = `Name must be at least 2 characters`;
+    }
+    // Name should be at most 50 characters
+    else if (value.trim().length > 50) {
+      isValid = false;
+      message = `Name cannot exceed 50 characters`;
+    }
+    // Name should only contain letters, spaces, hyphens, and apostrophes
+    else if (!/^[A-Za-z\s\-']+$/.test(value)) {
+      isValid = false;
+      message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
+    }
+    
+    // Update validation state
+    setNameValidation(prev => ({
+      ...prev,
+      [field]: { isValid, message }
+    }));
+    
+    return isValid;
+  };
+  
+  // Format name with proper capitalization
+  const formatNameCase = (name: string): string => {
+    if (!name) return name;
+    
+    // Split on spaces, hyphens, and apostrophes while keeping the delimiters
+    return name.trim().toLowerCase().split(/(?=['\s-])|(?<=['\s-])/)
+      .map((part) => {
+        // Only capitalize parts that are actual characters, not delimiters
+        return /[a-z]/.test(part) ? part.charAt(0).toUpperCase() + part.slice(1) : part;
+      })
+      .join('');
+  };
+  
+  // Handle email field blur
+  const handleEmailBlur = (email: string) => {
+    // Validate email and update validation state
+    const validation = validateEmail(email);
+    setEmailValidation(validation);
+    
+    // If valid, trim whitespace
+    if (validation.isValid && email) {
+      setFormData(prev => ({
+        ...prev,
+        customerEmail: email.trim()
+      }));
+    }
+  };
+
+  // Handle name field blur (when user tabs out or clicks elsewhere)
+  const handleNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+    // Validate the name
+    const isValid = validateName(field, value);
+    
+    // If valid, format with proper capitalization
+    if (isValid && value.trim()) {
+      const formattedName = formatNameCase(value);
+      
+      setFormData(prev => ({
+        ...prev,
+        [field]: formattedName
+      }));
+    }
+  };
+
+  // Add email validation function
+  const validateEmail = (email: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // Email shouldn't be empty
+    if (!trimmedEmail) {
+      isValid = false;
+      message = "Primary Customer Email is required";
+      return { isValid, message };
+    } 
+    
+    // Basic email format check using regex
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      isValid = false;
+      message = "Please enter a valid email address";
+      return { isValid, message };
+    }
+    
+    // Validate email format more rigorously
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      isValid = false;
+      message = "Please enter a valid email address format";
+      return { isValid, message };
+    }
+    
+    // Extract domain from email
+    const domain = trimmedEmail.split('@')[1];
+    
+    // Check for common test/temporary email domains
+    if (domain) {
+      const disallowedDomains = [
+        'test.com',
+        'example.com',
+        'mailinator.com',
+        'tempmail.com',
+        'fakeemail.com',
+        'fakeinbox.com',
+        'yopmail.com',
+        'mailnesia.com',
+        'guerrillamail.com',
+        'sharklasers.com',
+        'temp-mail.org',
+        '10minutemail.com',
+        'tempinbox.com',
+        'throwawaymail.com',
+        'trashmail.com',
+        'mailcatch.com',
+        'getairmail.com',
+        'getnada.com',
+        'dispostable.com'
+      ];
+      
+      // Check for obviously fake domains
+      if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+        isValid = false;
+        message = "Please use a real email address";
+        return { isValid, message };
+      }
+      
+      // Check for suspicious patterns in the domain
+      if (domain.includes('temp') || 
+          domain.includes('fake') || 
+          domain.includes('test') || 
+          domain.includes('disposable') ||
+          domain.includes('throwaway') || 
+          domain.includes('trash') || 
+          domain.includes('dump') ||
+          domain.includes('temporary')) {
+        isValid = false;
+        message = "Please use your regular email address";
+        return { isValid, message };
+      }
+    }
+    
+    // Email shouldn't be too long
+    if (trimmedEmail.length > 100) {
+      isValid = false;
+      message = "Email address is too long";
+      return { isValid, message };
+    }
+
+    // Check for repeated characters that might indicate invalid email
+    if (/(.)\1{5,}/.test(trimmedEmail)) {
+      isValid = false;
+      message = "Email address contains too many repeated characters";
+      return { isValid, message };
+    }
+    
+    // Return validation result for valid email
+    return { isValid, message };
+  };
+
+  // Handle changes to the phone field
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Extract only digits from the input
+    const digitsOnly = e.target.value.replace(/\D/g, '');
+    
+    // Update state with just the digits
+    setFormData(prev => ({ 
+      ...prev, 
+      customerPhone: digitsOnly 
+    }));
+  };
+
+  // Handle phone field blur
+  const handlePhoneBlur = (phone: string) => {
+    // Format phone before validation
+    const formattedPhone = formatPhoneNumber(phone);
+    
+    // Validate phone
+    const validation = validatePhone(formattedPhone);
+    setPhoneValidation(validation);
+    
+    // Always update with formatted version
+    setFormData(prev => ({
+      ...prev,
+      customerPhone: formattedPhone
+    }));
+  };
+
+  // Validate phone number
+  const validatePhone = (phone: string) => {
+    let isValid = true;
+    let message = "";
+    
+    // Remove all non-digit characters
+    const digitsOnly = phone.replace(/\D/g, '');
+    
+    // Phone shouldn't be empty
+    if (!digitsOnly) {
+      isValid = false;
+      message = "Customer phone number is required";
+      return { isValid, message };
+    }
+    
+    // Phone must be exactly 11 digits starting with 1 (US format with country code)
+    if (digitsOnly.length !== 11) {
+      isValid = false;
+      message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+      return { isValid, message };
+    }
+    
+    // First digit must be 1 (country code)
+    if (digitsOnly[0] !== '1') {
+      isValid = false;
+      message = "Phone number must start with 1 (US country code)";
+      return { isValid, message };
+    }
+    
+    // Valid phone number
+    return { isValid, message };
+  };
+  
+  // Format phone number in required format 17074303821
+  const formatPhoneNumber = (phone: string): string => {
+    // Remove all non-digit characters
+    const digitsOnly = phone.replace(/\D/g, '');
+    
+    // If it's already the right length, just return it
+    if (digitsOnly.length === 11 && digitsOnly[0] === '1') {
+      return digitsOnly;
+    }
+    
+    // If it's 10 digits (without country code), add the 1
+    if (digitsOnly.length === 10) {
+      return `1${digitsOnly}`;
+    }
+    
+    // Otherwise just return what we have
+    return digitsOnly;
+  };
+  
+  // Validate sales rep email (similar to customer email but with different messages)
+  const validateSalesRepEmail = (email: string) => {
+    let isValid = true;
+    let message = "";
+    
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // Email shouldn't be empty
+    if (!trimmedEmail) {
+      isValid = false;
+      message = "Sales representative email is required";
+      return { isValid, message };
+    }
+    
+    // Basic email format check using regex
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      isValid = false;
+      message = "Please enter a valid email address";
+      return { isValid, message };
+    }
+    
+    // Validate email format more rigorously
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      isValid = false;
+      message = "Please enter a valid email address format";
+      return { isValid, message };
+    }
+    
+    // Check for company domains if needed
+    // const allowedDomains = ['betterearth.solar', 'company.com'];
+    // if (domain && !allowedDomains.some(allowed => domain === allowed)) {
+    //   isValid = false;
+    //   message = "Please use a company email address";
+    //   return { isValid, message };
+    // }
+    
+    // Email shouldn't be too long
+    if (trimmedEmail.length > 100) {
+      isValid = false;
+      message = "Email address is too long";
+      return { isValid, message };
+    }
+    
+    return { isValid, message };
+  };
+  
+  // Handle sales rep email blur
+  const handleSalesRepEmailBlur = (email: string) => {
+    // Validate email
+    const validation = validateSalesRepEmail(email);
+    setSalesRepEmailValidation(validation);
+    
+    // If valid, trim whitespace
+    if (validation.isValid && email) {
+      setFormData(prev => ({
+        ...prev,
+        salesRepEmail: email.trim()
+      }));
+    }
+  };
+
+  // Add function to validate all fields and display errors
+  const validateAllFields = () => {
+    console.log("Running validation check...");
+    console.log("Welcome Call Status:", formData.hasCompletedWelcomeCall, formData.welcomeCallCompleted);
+    let isValid = true;
+    const errors: string[] = [];
+
+    // Check welcome call - now optional
+    // Removed the validation check that requires the welcome call checkbox
+
+    // Check first name
+    if (!formData.firstName) {
+      isValid = false;
+      errors.push("First Name is required");
+    }
+
+    // Check last name
+    if (!formData.lastName) {
+      isValid = false;
+      errors.push("Last Name is required");
+    }
+
+    // Check customer email
+    if (!formData.customerEmail) {
+      isValid = false;
+      errors.push("Email Address is required");
+    } else if (!emailValidation.isValid) {
+      isValid = false;
+      errors.push(emailValidation.message || "Email is invalid");
+    }
+
+    // Check customer phone
+    if (!formData.customerPhone) {
+      isValid = false;
+      errors.push("Phone Number is required");
+    } else if (!phoneValidation.isValid) {
+      isValid = false;
+      errors.push(phoneValidation.message || "Phone number is invalid");
+    }
+
+    // Check finance company
+    if (!formData.financeCompany) {
+      isValid = false;
+      errors.push("Finance Company is required");
+    }
+
+    // Check finance type
+    if (!formData.financeType) {
+      isValid = false;
+      errors.push("Finance Type is required");
+    }
+
+    // Check leadType - now optional
+    // Removed the validation for lead type
+    
+    // Check moduleCount
+    if (!formData.moduleCount) {
+      isValid = false;
+      errors.push("Module Count is required");
+    }
+
+    // Check moduleType
+    if (!formData.moduleType) {
+      isValid = false;
+      errors.push("Module Type is required");
+    }
+
+    // Check storage
+    if (!formData.storage) {
+      isValid = false;
+      errors.push("Storage is required");
+    }
+
+    // Check address fields
+    if (!formData.streetAddress) {
+      isValid = false;
+      errors.push("Street Address is required");
+    }
+
+    if (!formData.city) {
+      isValid = false;
+      errors.push("City is required");
+    }
+
+    if (!formData.state) {
+      isValid = false;
+      errors.push("State is required");
+    }
+
+    if (!formData.postalCode) {
+      isValid = false;
+      errors.push("Postal Code is required");
+    }
+
+    // Store all validation errors
+    setValidationErrors(errors);
+
+    // Return validation result
+    return isValid;
+  };
+
+  const handleSecondaryContactChange = (value: boolean) => {
+    setShowSecondaryContact(value);
+  };
+
+  // Add handler for secondary phone formatting
+  const handleSecondaryPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Extract only digits from the input
+    const digitsOnly = e.target.value.replace(/\D/g, '');
+    
+    // Update state with just the digits
+    setFormData(prev => ({ 
+      ...prev, 
+      secondaryPhone: digitsOnly 
+    }));
+  };
+  
+  // Handle secondary phone field blur
+  const handleSecondaryPhoneBlur = (phone: string) => {
+    // Format phone before validation
+    const formattedPhone = formatPhoneNumber(phone);
+    
+    // Validate phone
+    const validation = validateSecondaryPhone(formattedPhone);
+    setSecondaryPhoneValidation(validation);
+    
+    // Always update with formatted version
+    setFormData(prev => ({
+      ...prev,
+      secondaryPhone: formattedPhone
+    }));
+  };
+
+  // Validate secondary phone number
+  const validateSecondaryPhone = (phone: string) => {
+    let isValid = true;
+    let message = "";
+    
+    // Remove all non-digit characters
+    const digitsOnly = phone.replace(/\D/g, '');
+    
+    // If phone is provided (optional), validate it
+    if (digitsOnly) {
+      // Phone must be exactly 11 digits starting with 1 (US format with country code)
+      if (digitsOnly.length !== 11) {
+        isValid = false;
+        message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+        return { isValid, message };
+      }
+      
+      // First digit must be 1 (country code)
+      if (digitsOnly[0] !== '1') {
+        isValid = false;
+        message = "Phone number must start with 1 (US country code)";
+        return { isValid, message };
+      }
+    }
+    
+    // Valid phone number
+    return { isValid, message };
+  };
+
+  // Validate secondary name fields
+  const validateSecondaryName = (field: 'firstName' | 'lastName', value: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    // Only validate if a value is provided (secondary contact fields are optional)
+    if (value.trim()) {
+      // Name should be at least 2 characters
+      if (value.trim().length < 2) {
+        isValid = false;
+        message = `Name must be at least 2 characters`;
+      }
+      // Name should be at most 50 characters
+      else if (value.trim().length > 50) {
+        isValid = false;
+        message = `Name cannot exceed 50 characters`;
+      }
+      // Name should only contain letters, spaces, hyphens, and apostrophes
+      else if (!/^[A-Za-z\s\-']+$/.test(value)) {
+        isValid = false;
+        message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
+      }
+    }
+    
+    // Update validation state
+    setSecondaryNameValidation(prev => ({
+      ...prev,
+      [field]: { isValid, message }
+    }));
+    
+    return isValid;
+  };
+
+  // Handle secondary name field blur
+  const handleSecondaryNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+    // Validate the name
+    const isValid = validateSecondaryName(field, value);
+    
+    // If valid, format with proper capitalization
+    if (isValid && value.trim()) {
+      const formattedName = formatNameCase(value);
+      
+      if (field === 'firstName') {
+        setFormData(prev => ({
+          ...prev,
+          secondaryFirstName: formattedName
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          secondaryLastName: formattedName
+        }));
+      }
+    }
+  };
+
+  // Validate secondary email - similar to primary email but optional
+  const validateSecondaryEmail = (email: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // If email is provided (optional), validate it
+    if (trimmedEmail) {
+      // Basic email format check using regex
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+        isValid = false;
+        message = "Please enter a valid email address";
+        return { isValid, message };
+      }
+      
+      // Validate email format more rigorously
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(trimmedEmail)) {
+        isValid = false;
+        message = "Please enter a valid email address format";
+        return { isValid, message };
+      }
+      
+      // Extract domain from email
+      const domain = trimmedEmail.split('@')[1];
+      
+      // Check for common test/temporary email domains
+      if (domain) {
+        const disallowedDomains = [
+          'test.com',
+          'example.com',
+          'mailinator.com',
+          'tempmail.com',
+          'fakeemail.com',
+          'fakeinbox.com',
+          'yopmail.com',
+          'mailnesia.com',
+          'guerrillamail.com',
+          'sharklasers.com',
+          'temp-mail.org',
+          '10minutemail.com',
+          'tempinbox.com',
+          'throwawaymail.com',
+          'trashmail.com',
+          'mailcatch.com',
+          'getairmail.com',
+          'getnada.com',
+          'dispostable.com'
+        ];
+        
+        // Check for obviously fake domains
+        if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+          isValid = false;
+          message = "Please use a real email address";
+          return { isValid, message };
+        }
+        
+        // Check for suspicious patterns in the domain
+        if (domain.includes('temp') || 
+            domain.includes('fake') || 
+            domain.includes('test') || 
+            domain.includes('disposable') ||
+            domain.includes('throwaway') ||
+            domain.includes('trash') ||
+            domain.includes('dump') ||
+            domain.includes('temporary')) {
+          isValid = false;
+          message = "Please use a regular email address";
+          return { isValid, message };
+        }
+      }
+      
+      // Email shouldn't be too long
+      if (trimmedEmail.length > 100) {
+        isValid = false;
+        message = "Email address is too long";
+        return { isValid, message };
+      }
+
+      // Check for repeated characters that might indicate invalid email
+      if (/(.)\1{5,}/.test(trimmedEmail)) {
+        isValid = false;
+        message = "Email address contains too many repeated characters";
+        return { isValid, message };
+      }
+    }
+    
+    // Return validation result
+    return { isValid, message };
+  };
+  
+  // Handle secondary email field blur
+  const handleSecondaryEmailBlur = (email: string) => {
+    // Validate email and update validation state
+    const validation = validateSecondaryEmail(email);
+    setSecondaryEmailValidation(validation);
+    
+    // If valid, trim whitespace
+    if (validation.isValid && email) {
+      setFormData(prev => ({
+        ...prev,
+        secondaryEmail: email.trim()
+      }));
+    }
+  };
+
+  const handleTenantsChange = (value: boolean) => {
+    setFormData(prev => ({ ...prev, hasTenants: value }));
+  };
+
+  // Validate tenant name fields
+  const validateTenantName = (field: 'firstName' | 'lastName', value: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    // Only validate if a value is provided (tenant fields are optional)
+    if (value.trim()) {
+      // Name should be at least 2 characters
+      if (value.trim().length < 2) {
+        isValid = false;
+        message = `Name must be at least 2 characters`;
+      }
+      // Name should be at most 50 characters
+      else if (value.trim().length > 50) {
+        isValid = false;
+        message = `Name cannot exceed 50 characters`;
+      }
+      // Name should only contain letters, spaces, hyphens, and apostrophes
+      else if (!/^[A-Za-z\s\-']+$/.test(value)) {
+        isValid = false;
+        message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
+      }
+    }
+    
+    // Update validation state
+    setTenantNameValidation(prev => ({
+      ...prev,
+      [field]: { isValid, message }
+    }));
+    
+    return isValid;
+  };
+
+  // Handle tenant name field blur
+  const handleTenantNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+    // Validate the name
+    const isValid = validateTenantName(field, value);
+    
+    // If valid, format with proper capitalization
+    if (isValid && value.trim()) {
+      const formattedName = formatNameCase(value);
+      
+      if (field === 'firstName') {
+        setFormData(prev => ({
+          ...prev,
+          tenantFirstName: formattedName
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          tenantLastName: formattedName
+        }));
+      }
+    }
+  };
+
+  // Validate tenant email - similar to other email fields but optional
+  const validateTenantEmail = (email: string) => {
+    // Initialize validation state
+    let isValid = true;
+    let message = "";
+    
+    const trimmedEmail = email.trim().toLowerCase();
+    
+    // If email is provided (optional), validate it
+    if (trimmedEmail) {
+      // Basic email format check using regex
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+        isValid = false;
+        message = "Please enter a valid email address";
+        return { isValid, message };
+      }
+      
+      // Validate email format more rigorously
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(trimmedEmail)) {
+        isValid = false;
+        message = "Please enter a valid email address format";
+        return { isValid, message };
+      }
+      
+      // Extract domain from email
+      const domain = trimmedEmail.split('@')[1];
+      
+      // Check for common test/temporary email domains
+      if (domain) {
+        const disallowedDomains = [
+          'test.com',
+          'example.com',
+          'mailinator.com',
+          'tempmail.com',
+          'fakeemail.com',
+          'fakeinbox.com',
+          'yopmail.com',
+          'mailnesia.com',
+          'guerrillamail.com',
+          'sharklasers.com',
+          'temp-mail.org',
+          '10minutemail.com'
+        ];
+        
+        // Check for obviously fake domains
+        if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+          isValid = false;
+          message = "Please use a real email address";
+          return { isValid, message };
+        }
+        
+        // Check for suspicious patterns in the domain
+        if (domain.includes('temp') || 
+            domain.includes('fake') || 
+            domain.includes('test') || 
+            domain.includes('disposable') ||
+            domain.includes('throwaway')) {
+          isValid = false;
+          message = "Please use a regular email address";
+          return { isValid, message };
+        }
+      }
+      
+      // Email shouldn't be too long
+      if (trimmedEmail.length > 100) {
+        isValid = false;
+        message = "Email address is too long";
+        return { isValid, message };
+      }
+    }
+    
+    // Return validation result
+    return { isValid, message };
+  };
+  
+  // Handle tenant email field blur
+  const handleTenantEmailBlur = (email: string) => {
+    // Validate email and update validation state
+    const validation = validateTenantEmail(email);
+    setTenantEmailValidation(validation);
+    
+    // If valid, trim whitespace
+    if (validation.isValid && email) {
+      setFormData(prev => ({
+        ...prev,
+        tenantEmail: email.trim()
+      }));
+    }
+  };
+
+  // Add handler for tenant phone formatting
+  const handleTenantPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Extract only digits from the input
+    const digitsOnly = e.target.value.replace(/\D/g, '');
+    
+    // Update state with just the digits
+    setFormData(prev => ({ 
+      ...prev, 
+      tenantPhone: digitsOnly 
+    }));
+  };
+  
+  // Handle tenant phone field blur
+  const handleTenantPhoneBlur = (phone: string) => {
+    // Format phone before validation
+    const formattedPhone = formatPhoneNumber(phone);
+    
+    // Validate phone
+    const validation = validateTenantPhone(formattedPhone);
+    setTenantPhoneValidation(validation);
+    
+    // Always update with formatted version
+    setFormData(prev => ({
+      ...prev,
+      tenantPhone: formattedPhone
+    }));
+  };
+
+  // Validate tenant phone number
+  const validateTenantPhone = (phone: string) => {
+    let isValid = true;
+    let message = "";
+    
+    // Remove all non-digit characters
+    const digitsOnly = phone.replace(/\D/g, '');
+    
+    // If phone is provided (optional), validate it
+    if (digitsOnly) {
+      // Phone must be exactly 11 digits starting with 1 (US format with country code)
+      if (digitsOnly.length !== 11) {
+        isValid = false;
+        message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+        return { isValid, message };
+      }
+      
+      // First digit must be 1 (country code)
+      if (digitsOnly[0] !== '1') {
+        isValid = false;
+        message = "Phone number must start with 1 (US country code)";
+        return { isValid, message };
+      }
+    }
+    
+    // Valid phone number
+    return { isValid, message };
+  };
+
+  return (
+    <form onSubmit={onSubmit} className="space-y-6 pb-10">
+      {/* Debug error display - will always be visible when there's an error */}
+      {debugError && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white p-4 text-center font-bold text-lg shadow-lg">
+          ERROR: {debugError}
+        </div>
+      )}
+      
+      {/* Title as the first element */}
+      <div className="relative mb-8 pt-10">
+        <h2 className="text-center text-3xl font-bold 
+                     bg-gradient-to-r from-[#58b37e] to-[#053058] dark:from-[#8efbbc] dark:to-[#1db7e2]
+                     bg-clip-text text-transparent pb-2">
+          Enter Your Project Details
+        </h2>
+      </div>
+      
+      {/* LeadType Section */}
+      <div className="space-y-4">
+        
+        {/* Display Insightly Record ID if it's an additional survey or survey booking */}
+        {(formData.isAdditionalSurvey || formData.isSurveyBooking) && (
+          <div className="mb-6">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Insightly Record ID <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="insightlyRecordId"
+              className="w-full px-4 py-3 rounded-lg border border-gray-300/50 dark:border-gray-600/50 
+                       bg-gray-100 dark:bg-[#3A3B3C] text-gray-500 dark:text-gray-400
+                       cursor-not-allowed opacity-75"
+              value={formData.insightlyRecordId}
+              onChange={handleChange}
+              readOnly
+            />
+          </div>
+        )}
+        
+        {/* Customer Name Row - Two columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Customer First Name */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Primary Customer First Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              onBlur={(e) => handleNameBlur('firstName', e.target.value)}
+              className={`p-2 border ${!nameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${!nameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+              placeholder="Enter first name"
+              aria-invalid={!nameValidation.firstName.isValid}
+              aria-describedby="firstName-error"
+            />
+            {!nameValidation.firstName.isValid && (
+              <div 
+                id="firstName-error" 
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {nameValidation.firstName.message}
+              </div>
+            )}
+          </div>
+          
+          {/* Customer Last Name */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Primary Customer Last Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              onBlur={(e) => handleNameBlur('lastName', e.target.value)}
+              className={`p-2 border ${!nameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${!nameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+              placeholder="Enter last name"
+              aria-invalid={!nameValidation.lastName.isValid}
+              aria-describedby="lastName-error"
+            />
+            {!nameValidation.lastName.isValid && (
+              <div 
+                id="lastName-error" 
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {nameValidation.lastName.message}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Customer Contact Row - Two columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Customer Email */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Primary Customer Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="customerEmail"
+              value={formData.customerEmail}
+              onChange={(e) => {
+                setFormData(prev => ({ ...prev, customerEmail: e.target.value }));
+                // Don't immediately validate as user types
+              }}
+              onBlur={(e) => handleEmailBlur(e.target.value)}
+              className={`p-2 border ${!emailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${!emailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+              placeholder="Enter customer email"
+              aria-invalid={!emailValidation.isValid}
+              aria-describedby="email-error"
+            />
+            {!emailValidation.isValid && (
+              <div 
+                id="email-error" 
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {emailValidation.message}
+              </div>
+            )}
+          </div>
+          
+          {/* Customer Phone */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Primary Customer Phone <span className="text-red-500">*</span>
+            </label>
+            <div className="relative">
+            <input
+              type="tel"
+                id="customerPhone"
+              value={formData.customerPhone}
+                onChange={handlePhoneChange}
+                onBlur={(e) => handlePhoneBlur(e.target.value)}
+                className={`p-2 border ${!phoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${!phoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                         bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                placeholder="Enter as 17074303821"
+                aria-invalid={!phoneValidation.isValid}
+                aria-describedby="phone-format-hint phone-error"
+              />
+            </div>
+            <p id="phone-format-hint" className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+            </p>
+            {!phoneValidation.isValid && (
+              <div 
+                id="phone-error" 
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {phoneValidation.message}
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Secondary Contact Question */}
+        <div className="mt-8 mb-6">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-3">
+            Would you like to add a Secondary Contact?
+          </label>
+          <div className="flex space-x-8">
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="secondary-contact-yes"
+                name="secondary-contact"
+                checked={showSecondaryContact}
+                onChange={() => handleSecondaryContactChange(true)}
+                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              />
+              <label htmlFor="secondary-contact-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+                Yes
+              </label>
+            </div>
+            <div className="flex items-center">
+              <input
+                type="radio"
+                id="secondary-contact-no"
+                name="secondary-contact"
+                checked={!showSecondaryContact}
+                onChange={() => handleSecondaryContactChange(false)}
+                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              />
+              <label htmlFor="secondary-contact-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+                No
+              </label>
+            </div>
+          </div>
+        </div>
+        
+        {/* Secondary Contact Fields - Show only if user selected "Yes" */}
+        {showSecondaryContact && (
+          <div className="space-y-6 mt-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+            {/* Relationship Dropdown - Added at the top */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  Relationship
+                </label>
+                <select
+                  id="secondaryRelationship"
+                  value={formData.secondaryRelationship || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, secondaryRelationship: e.target.value }))}
+                  className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+                           focus:outline-none focus:ring-2 focus:ring-blue-500
+                           bg-white dark:bg-[#3A3B3C] dark:text-white"
+                >
+                  <option value="">Select Relationship</option>
+                  <option value="Spouse">Spouse</option>
+                  <option value="Partner">Partner</option>
+                  <option value="Parent">Parent</option>
+                  <option value="Child">Child</option>
+                  <option value="Friend">Friend</option>
+                  <option value="Other Family">Other Family</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+            
+            {/* Secondary Contact Name Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Secondary First Name */}
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="secondaryFirstName"
+                  value={formData.secondaryFirstName}
+                  onChange={(e) => {
+                    setFormData(prev => ({ ...prev, secondaryFirstName: e.target.value }));
+                    validateSecondaryName('firstName', e.target.value);
+                  }}
+                  onBlur={(e) => handleSecondaryNameBlur('firstName', e.target.value)}
+                  className={`p-2 border ${!secondaryNameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${!secondaryNameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                           bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                  placeholder="Enter first name"
+                  aria-invalid={!secondaryNameValidation.firstName.isValid}
+                  aria-describedby="secondaryFirstName-error"
+                />
+                {!secondaryNameValidation.firstName.isValid && (
+                  <div 
+                    id="secondaryFirstName-error" 
+                    className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                  >
+                    ⚠️ {secondaryNameValidation.firstName.message}
+                  </div>
+                )}
+              </div>
+              
+              {/* Secondary Last Name */}
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="secondaryLastName"
+                  value={formData.secondaryLastName}
+                  onChange={(e) => {
+                    setFormData(prev => ({ ...prev, secondaryLastName: e.target.value }));
+                    validateSecondaryName('lastName', e.target.value);
+                  }}
+                  onBlur={(e) => handleSecondaryNameBlur('lastName', e.target.value)}
+                  className={`p-2 border ${!secondaryNameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${!secondaryNameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                           bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                  placeholder="Enter last name"
+                  aria-invalid={!secondaryNameValidation.lastName.isValid}
+                  aria-describedby="secondaryLastName-error"
+                />
+                {!secondaryNameValidation.lastName.isValid && (
+                  <div 
+                    id="secondaryLastName-error" 
+                    className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                  >
+                    ⚠️ {secondaryNameValidation.lastName.message}
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Secondary Contact Info Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Secondary Email */}
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  id="secondaryEmail"
+                  value={formData.secondaryEmail}
+                  onChange={(e) => setFormData(prev => ({ ...prev, secondaryEmail: e.target.value }))}
+                  onBlur={(e) => handleSecondaryEmailBlur(e.target.value)}
+                  className={`p-2 border ${!secondaryEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${!secondaryEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                           bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                  placeholder="Enter email address"
+                  aria-invalid={!secondaryEmailValidation.isValid}
+                  aria-describedby="secondary-email-error"
+                />
+                {!secondaryEmailValidation.isValid && (
+                  <div 
+                    id="secondary-email-error" 
+                    className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                  >
+                    ⚠️ {secondaryEmailValidation.message}
+                  </div>
+                )}
+              </div>
+              
+              {/* Secondary Phone */}
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  id="secondaryPhone"
+                  value={formData.secondaryPhone}
+                  onChange={handleSecondaryPhoneChange}
+                  onBlur={(e) => handleSecondaryPhoneBlur(e.target.value)}
+                  className={`p-2 border ${!secondaryPhoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${!secondaryPhoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                           bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                  placeholder="Enter as 17074303821"
+                  aria-invalid={!secondaryPhoneValidation.isValid}
+                  aria-describedby="secondary-phone-error"
+                />
+                {!secondaryPhoneValidation.isValid && (
+                  <div 
+                    id="secondary-phone-error" 
+                    className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                  >
+                    ⚠️ {secondaryPhoneValidation.message}
+                  </div>
+                )}
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                  Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Sales Rep Email Row - Two columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          {/* Sales Rep Email */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Email of Sales Rep <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="salesRepEmail"
+              value={formData.salesRepEmail}
+              onChange={(e) => setFormData(prev => ({ ...prev, salesRepEmail: e.target.value }))}
+              onBlur={(e) => handleSalesRepEmailBlur(e.target.value)}
+              className={`p-2 border ${!salesRepEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${!salesRepEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+              placeholder="Enter sales representative email"
+              aria-invalid={!salesRepEmailValidation.isValid}
+              aria-describedby="salesrep-email-error"
+            />
+            {!salesRepEmailValidation.isValid && (
+              <div 
+                id="salesrep-email-error" 
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {salesRepEmailValidation.message}
+              </div>
+            )}
+          </div>
+          
+          {/* Sales Rep Email 2 */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Email of Sales Rep 2
+            </label>
+            <input
+              type="email"
+              value={formData.salesRepEmail2}
+              onChange={(e) => setFormData(prev => ({ ...prev, salesRepEmail2: e.target.value }))}
+              className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500
+                       bg-white dark:bg-[#3A3B3C] dark:text-white"
+              placeholder="Enter second sales representative email"
+            />
+          </div>
+        </div>
+      </div>
+
+      <AddressForm
+        formData={formData}
+        handleChange={handleChange}
+        onValidAddress={() => {}}
+      />
+
+      {/* Tenants Question - Typo fixed */}
+      <div className="mt-8 mb-6">
+        <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-3">
+          Do any Tenants live at this property?
+        </label>
+        <div className="flex space-x-8">
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="tenants-yes"
+              name="tenants"
+              checked={formData.hasTenants === true}
+              onChange={() => handleTenantsChange(true)}
+              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+            />
+            <label htmlFor="tenants-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+              Yes
+            </label>
+          </div>
+          <div className="flex items-center">
+            <input
+              type="radio"
+              id="tenants-no"
+              name="tenants"
+              checked={formData.hasTenants === false}
+              onChange={() => handleTenantsChange(false)}
+              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+            />
+            <label htmlFor="tenants-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+              No
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      {/* Tenant Information Fields - Show only if user selected "Yes" */}
+      {formData.hasTenants && (
+        <div className="space-y-6 mt-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+          {/* Tenant Contact Name Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Tenant First Name */}
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Tenant First Name
+              </label>
+              <input
+                type="text"
+                id="tenantFirstName"
+                value={formData.tenantFirstName}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, tenantFirstName: e.target.value }));
+                  validateTenantName('firstName', e.target.value);
+                }}
+                onBlur={(e) => handleTenantNameBlur('firstName', e.target.value)}
+                className={`p-2 border ${!tenantNameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${!tenantNameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                         bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                placeholder="Enter tenant first name"
+                aria-invalid={!tenantNameValidation.firstName.isValid}
+                aria-describedby="tenantFirstName-error"
+              />
+              {!tenantNameValidation.firstName.isValid && (
+                <div 
+                  id="tenantFirstName-error" 
+                  className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                >
+                  ⚠️ {tenantNameValidation.firstName.message}
+                </div>
+              )}
+            </div>
+            
+            {/* Tenant Last Name */}
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Tenant Last Name
+              </label>
+              <input
+                type="text"
+                id="tenantLastName"
+                value={formData.tenantLastName}
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, tenantLastName: e.target.value }));
+                  validateTenantName('lastName', e.target.value);
+                }}
+                onBlur={(e) => handleTenantNameBlur('lastName', e.target.value)}
+                className={`p-2 border ${!tenantNameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${!tenantNameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                         bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                placeholder="Enter tenant last name"
+                aria-invalid={!tenantNameValidation.lastName.isValid}
+                aria-describedby="tenantLastName-error"
+              />
+              {!tenantNameValidation.lastName.isValid && (
+                <div 
+                  id="tenantLastName-error" 
+                  className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                >
+                  ⚠️ {tenantNameValidation.lastName.message}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Tenant Contact Info Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Tenant Email */}
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Tenant Email
+              </label>
+              <input
+                type="email"
+                id="tenantEmail"
+                value={formData.tenantEmail}
+                onChange={(e) => setFormData(prev => ({ ...prev, tenantEmail: e.target.value }))}
+                onBlur={(e) => handleTenantEmailBlur(e.target.value)}
+                className={`p-2 border ${!tenantEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${!tenantEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                         bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                placeholder="Enter tenant email address"
+                aria-invalid={!tenantEmailValidation.isValid}
+                aria-describedby="tenant-email-error"
+              />
+              {!tenantEmailValidation.isValid && (
+                <div 
+                  id="tenant-email-error" 
+                  className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                >
+                  ⚠️ {tenantEmailValidation.message}
+                </div>
+              )}
+            </div>
+            
+            {/* Tenant Phone */}
+            <div>
+              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                Tenant Phone
+              </label>
+              <input
+                type="tel"
+                id="tenantPhone"
+                value={formData.tenantPhone}
+                onChange={handleTenantPhoneChange}
+                onBlur={(e) => handleTenantPhoneBlur(e.target.value)}
+                className={`p-2 border ${!tenantPhoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${!tenantPhoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                         bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
+                placeholder="Enter as 17074303821"
+                aria-invalid={!tenantPhoneValidation.isValid}
+                aria-describedby="tenant-phone-error"
+              />
+              {!tenantPhoneValidation.isValid && (
+                <div 
+                  id="tenant-phone-error" 
+                  className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+                >
+                  ⚠️ {tenantPhoneValidation.message}
+                </div>
+              )}
+              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Lead Type and Preferred Language in same row */}
+      <div className="mt-8 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Lead Type */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Lead Type
+            </label>
+            <select
+              id="leadType"
+              value={formData.leadType}
+              onChange={(e) => handleLeadTypeChange(e.target.value as LeadType)}
+              className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+                       focus:outline-none focus:ring-2 focus:ring-blue-500
+                       bg-white dark:bg-[#3A3B3C] dark:text-white"
+            >
+              <option value="">Please Select</option>
+              <option value="Lead Gen (Virtual)">Lead Gen (Virtual)</option>
+              <option value="Lead Gen (In Home)">Lead Gen (In Home)</option>
+              <option value="Lead Gen (Spanish Funnel)">Lead Gen (Spanish Funnel)</option>
+              <option value="Lead Gen (Referral)">Lead Gen (Referral)</option>
+              <option value="Website Lead">Website Lead</option>
+              <option value="Self Gen (Doors)">Self Gen (Doors)</option>
+              <option value="Self Gen (HOT Lead)">Self Gen (HOT Lead)</option>
+              <option value="Self Gen (Cold Call)">Self Gen (Cold Call)</option>
+              <option value="Self Gen (Referral)">Self Gen (Referral)</option>
+              <option value="Self Gen (Blitz)">Self Gen (Blitz)</option>
+              <option value="Lead Gen (Hybrid)">Lead Gen (Hybrid)</option>
+              <option value="VIS Holiday Marketing Campaign">VIS Holiday Marketing Campaign</option>
+              <option value="SolarEdge">SolarEdge</option>
+            </select>
+          </div>
+          
+          {/* Preferred Language */}
+          <div>
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+              Preferred Language <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="preferredLanguage"
+              className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+                       focus:outline-none focus:border-green-500
+                       bg-white dark:bg-[#151821] dark:text-white"
+              value={formData.preferredLanguage}
+              onChange={(e) => handleLanguageChange(e.target.value as 'English' | 'Spanish')}
+            >
+              <option value="">Please Select</option>
+              <option value="English">English</option>
+              <option value="Spanish">Spanish</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      {/* Finance Type selection */}
+      <div className="pt-8 pb-6">
+        <div>
+          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100 mb-1">
+            Finance Type <span className="text-red-500">*</span>
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            Select the type of financing for this project
+          </p>
+          <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-6">
+            <div className="space-y-3">
+              {[
+                { id: 'Loan', label: 'Loan' },
+                { id: 'Cash', label: 'Cash' },
+                { id: 'Lease', label: 'Lease' },
+                { id: 'PPA', label: 'PPA' },
+                { id: 'PACE', label: 'PACE' },
+                { id: 'Prepaid-PPA', label: 'Prepaid-PPA' }
+              ].map((type) => (
+                <div key={type.id} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="financeType"
+                    id={`financeType-${type.id}`}
+                    value={type.id}
+                    checked={formData.financeType === type.id}
+                    onChange={(e) => setFormData(prev => ({ ...prev, financeType: e.target.value as FinanceType }))}
+                    className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  />
+                  <label htmlFor={`financeType-${type.id}`} className="text-gray-700 dark:text-gray-200 cursor-pointer">
+                    {type.label}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Finance Company selection */}
+      <div className="pt-8 pb-6">
+        <div className="mb-6">
+          <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">
+            Select Finance Company <span className="text-red-500">*</span>
+          </h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            Choose the financial institution you&apos;ll be working with for this project
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          {[
+            { 
+              id: "Sunnova" as FinanceCompany, 
+              label: "Sunnova", 
+              logoPath: "/images/sunnova.jpeg",
+              logoAlt: "Sunnova logo" 
+            },
+            { 
+              id: "LightReach" as FinanceCompany, 
+              label: "LightReach", 
+              logoPath: "/images/lightreach.png",
+              logoAlt: "LightReach logo" 
+            },
+            { 
+              id: "GoodLeap" as FinanceCompany, 
+              label: "GoodLeap", 
+              description: "(Lease or PPA only)", 
+              logoPath: "/images/GoodLeap.jpg",
+              logoAlt: "GoodLeap logo" 
+            },
+            { 
+              id: "EnFin" as FinanceCompany, 
+              label: "EnFin", 
+              description: "(Lease or PPA only)", 
+              logoPath: "/images/enfin.png",
+              logoAlt: "EnFin logo" 
+            }
+          ].map((company: {
+            id: FinanceCompany;
+            label: string;
+            description?: string;
+            logoPath: string;
+            logoAlt: string;
+          }) => (
+            <div 
+              key={company.id}
+              onClick={() => handleFinanceCompanyChange(company.id)}
+              className={`relative cursor-pointer rounded-xl shadow-sm transition-all duration-300 
+                ${formData.financeCompany === company.id 
+                  ? 'border-2 border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md transform -translate-y-1' 
+                  : 'border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
+            >
+              <input
+                type="radio"
+                id={`company-${company.id}`}
+                name="financeCompany"
+                value={company.id}
+                checked={formData.financeCompany === company.id}
+                onChange={(e) => handleFinanceCompanyChange(e.target.value as FinanceCompany)}
+                className="sr-only" // Hide the actual radio input
+              />
+              <label
+                htmlFor={`company-${company.id}`}
+                className="block p-4 cursor-pointer h-full"
+              >
+                <div className="flex flex-col items-center space-y-3">
+                  {/* Logo container - fixed size with consistent display */}
+                  <div className="h-20 w-full flex items-center justify-center p-2">
+                    <div className="w-24 h-16 flex items-center justify-center">
+                      <img 
+                        src={company.logoPath} 
+                        alt={company.logoAlt} 
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* Company name and description */}
+                  <div className="text-center">
+                    <div className="font-medium text-gray-800 dark:text-white">{company.label}</div>
+                    {company.description && (
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{company.description}</div>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Selected indicator */}
+                {formData.financeCompany === company.id && (
+                  <div className="absolute top-2 right-2 h-6 w-6 bg-green-500 rounded-full flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                )}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Financier's Welcome Call Checkbox - Conditional based on selected company */}
+      <div className="pt-8 pb-6">
+        <div 
+          className={`p-6 rounded-lg shadow-sm cursor-pointer relative ${
+            formData.welcomeCallCompleted 
+              ? 'bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800' 
+              : 'bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800'
+          }`}
+          onClick={() => {
+            const isChecked = !formData.welcomeCallCompleted;
+            console.log("Section clicked - toggling checkbox to:", isChecked);
+            setFormData((prev) => ({
+              ...prev,
+              welcomeCallCompleted: isChecked,
+              hasCompletedWelcomeCall: isChecked
+            }));
+          }}
+        >
+          <div className="flex items-start space-x-4">
+            <div className="flex-shrink-0 mt-0.5">
+              <input
+                id="welcomeCallCompleted"
+                name="welcomeCallCompleted"
+                type="checkbox"
+                className={`h-5 w-5 rounded border-gray-300 ${
+                  formData.welcomeCallCompleted 
+                    ? 'text-green-600 focus:ring-green-500' 
+                    : 'text-red-600 focus:ring-red-500'
+                } dark:border-gray-500 dark:bg-gray-700 cursor-pointer`}
+                checked={formData.welcomeCallCompleted || false}
+                onChange={(e) => {
+                  // Keep this for React form handling, but primary logic is in onClick
+                  e.stopPropagation();
+                  console.log("Checkbox onChange fired in ProjectCreationForm");
+                }}
+              />
+            </div>
+            <div className="flex-grow">
+              {!formData.financeCompany && (
+                <h4 className={`text-base font-bold ${
+                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                }`}>
+                  <label htmlFor="welcomeCallCompleted" className="cursor-pointer">
+                    I have completed the financier&apos;s Welcome Call & uploaded necessary documentation <span className="text-red-500">*</span>
+                  </label>
+                </h4>
+              )}
+              
+              {formData.financeCompany === "Sunnova" && (
+                <div>
+                  <h4 className={`text-base font-bold ${
+                    formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                  }`}>
+                    <label htmlFor="welcomeCallCompleted" className="cursor-pointer">
+                      I have completed the Sunnova Welcome Call or Digital Welcome Checklist. <span className="text-red-500">*</span>
+                    </label>
+                  </h4>
+                  <div className="mt-2">
+                    <a 
+                      href="https://help.betterearth.io/knowledge/finance-information/sunnova#block-e4e8636569dc49728469f89ebd5f4ec3" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 inline-flex items-center"
+                    >
+                      Click here for information about submitting a Sunnova project
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+              )}
+              
+              {formData.financeCompany === "LightReach" && (
+                <h4 className={`text-base font-bold ${
+                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                }`}>
+                  <label htmlFor="welcomeCallCompleted" className="cursor-pointer">
+                    I verify that my LightReach customer has completed their welcome checklist, uploaded their ID, payment information, and title information (if needed) <span className="text-red-500">*</span>
+                  </label>
+                </h4>
+              )}
+              
+              {formData.financeCompany === "GoodLeap" && (
+                <h4 className={`text-base font-bold ${
+                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                }`}>
+                  <label htmlFor="welcomeCallCompleted" className="cursor-pointer">
+                    I verify that my Goodleap customer has completed their Digital Welcome Call (with Call Pilot), payment information, and title / ID information (if needed) <span className="text-red-500">*</span>
+                  </label>
+                </h4>
+              )}
+              
+              {formData.financeCompany === "EnFin" && (
+                <h4 className={`text-base font-bold ${
+                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
+                }`}>
+                  <label htmlFor="welcomeCallCompleted" className="cursor-pointer">
+                    I verify that my EnFin customer has completed the EnFin Welcome Call and cleared all stipulations (if needed) <span className="text-red-500">*</span>
+                  </label>
+                </h4>
+              )}
+              
+              <p className={`mt-3 text-sm flex items-center ${
+                formData.welcomeCallCompleted ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
+              }`}>
+                {formData.welcomeCallCompleted ? (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    Verification complete! You can now proceed with your TPO project submission
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    This step is required before proceeding with your TPO project submission
+                  </>
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <FinanceCompanySelector
+        selectedCompany={formData.financeCompany}
+        selectedEscalator={formData.escalator}
+        selectedTerm={formData.term}
+        selectedLeadType={formData.leadType}
+        selectedModuleCount={formData.moduleCount}
+        selectedModuleType={formData.moduleType}
+        selectedStorage={formData.storage}
+        selectedStorageOption={formData.storageOption}
+        selectedAdders={formData.adders}
+        selectedInterestRate={formData.interestRate}
+        selectedYearlyProduction={formData.yearlyProduction}
+        selectedFinanceOrg={formData.financeOrg}
+        selectedLgcyCanvassId={formData.lgcyCanvassId}
+        selectedEpc={formData.epc}
+        selectedKwhRate={formData.kwhRate}
+        selectedLeadId={formData.leadId}
+        selectedPangeaId={formData.pangeaId}
+        selectedInsightlyId={formData.insightlyId}
+        selectedSalesRepEmail={formData.salesRepEmail}
+        selectedSalesRepEmail2={formData.salesRepEmail2}
+        selectedDialerEmail={formData.dialerEmail}
+        selectedCustomerEmail={formData.customerEmail}
+        selectedCustomerPhone={formData.customerPhone}
+        onCompanyChange={handleFinanceCompanyChange}
+        onEscalatorChange={handleEscalatorChange}
+        onTermChange={handleTermChange}
+        onLeadTypeChange={handleLeadTypeChange}
+        onModuleCountChange={(value) =>
+          setFormData((prev) => ({ ...prev, moduleCount: value }))
+        }
+        onModuleTypeChange={(value) =>
+          setFormData((prev) => ({ ...prev, moduleType: value }))
+        }
+        onStorageChange={(value) =>
+          setFormData((prev) => ({ ...prev, storage: value }))
+        }
+        onStorageOptionChange={handleStorageOptionChange}
+        onAddersChange={handleAddersChange}
+        onFileUpload={handleFileUpload}
+        onInterestRateChange={handleInterestRateChange}
+        onYearlyProductionChange={(value) =>
+          setFormData((prev) => ({ ...prev, yearlyProduction: value }))
+        }
+        onFinanceOrgChange={(value) =>
+          setFormData((prev) => ({ ...prev, financeOrg: value }))
+        }
+        onLgcyCanvassIdChange={(value: string) =>
+          setFormData((prev) => ({ ...prev, lgcyCanvassId: value }))
+        }
+        onEpcChange={(value) => setFormData(prev => ({ ...prev, epc: value }))}
+        onKwhRateChange={(value) => setFormData(prev => ({ ...prev, kwhRate: value }))}
+        onLeadIdChange={(value) => setFormData(prev => ({ ...prev, leadId: value }))}
+        onPangeaIdChange={(value) => setFormData(prev => ({ ...prev, pangeaId: value }))}
+        onInsightlyIdChange={(value) => setFormData(prev => ({ ...prev, insightlyId: value }))}
+        onSalesRepEmailChange={(value) => setFormData(prev => ({ ...prev, salesRepEmail: value }))}
+        onSalesRepEmail2Change={(value) => setFormData(prev => ({ ...prev, salesRepEmail2: value }))}
+        onDialerEmailChange={(value) => setFormData(prev => ({ ...prev, dialerEmail: value }))}
+        onCustomerEmailChange={(value) => setFormData(prev => ({ ...prev, customerEmail: value }))}
+        onCustomerPhoneChange={(value) => setFormData(prev => ({ ...prev, customerPhone: value }))}
+      />
+
+      {showWarnings && (
+        <>
+          <div className="text-lg font-semibold text-red-500 pl-9">
+            Failure to do so will result in Project DELAYS!
+          </div>
+
+          <div className="text-lg font-semibold text-red-500 pl-9">
+            AS A REMINDER, YOU, AS THE REP WILL HAVE TO COUNTERSIGN THE EVERBRIGHT AGREEMENT IN YOUR EMAIL.
+          </div>
+
+          <div className="text-sm font-semibold text-red-500 pl-9">
+            This form is only for GoodLeap PPAs/Leases ONLY. Please submit any GoodLeap Loan deals through Pangea
+          </div>
+
+          <div className="text-sm font-semibold text-red-500 pl-9">
+            This form is only for EnFin PPAs/Leases ONLY. Please submit any EnFin Loan deals through Pangea
+          </div>
+        </>
+      )}
+
+      {/* Validation Errors Section - Always visible when errors exist */}
+      {validationErrors.length > 0 && (
+        <div id="validation-errors" className="mt-6 p-6 bg-red-50 border-2 border-red-400 rounded-lg shadow-lg animate-pulse">
+          <div className="flex items-start">
+            <svg className="w-7 h-7 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div className="ml-3 w-full">
+              <h3 className="text-xl font-bold text-red-800">Please fix the following errors:</h3>
+              <div className="mt-3 text-base text-red-700">
+                <ul className="list-disc pl-5 space-y-2">
+                  {validationErrors.map((error, index) => (
+                    <li key={index} className="font-medium">{error}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Move utility bill upload to be the last section before submit button */}
+      <UBillUploadSection onFileUpload={handleFileUpload} />
+
+      <div className="text-center mt-8">
+        <button
+          type="button"
+          onClick={async () => {
+            // Immediately check welcome call status
+            console.log("Welcome Call Status at submit:", formData.hasCompletedWelcomeCall, formData.welcomeCallCompleted);
+            
+            // DEBUGGING: Always log button click and reset previous errors
+            console.log("🚨 SUBMIT BUTTON CLICKED - DEBUGGING");
+            setDebugError("Submit button clicked - processing...");
+            
+            // Show a visual indicator that the button was clicked
+            const submitButton = document.querySelector('button[type="button"]') as HTMLButtonElement;
+            if (submitButton) {
+              submitButton.style.backgroundColor = '#0078FF'; // Make it blue instead of red
+              setTimeout(() => {
+                submitButton.style.backgroundColor = '#5FCF87'; // Back to green
+              }, 500); // Longer flash to be noticeable
+            }
+            
+            try {
+              // DEBUGGING: Mark the beginning of the try block
+              console.log("🚨 ENTERING TRY BLOCK");
+              setDebugError("Processing submission...");
+              
+              // Always show toast to confirm button was clicked
+              toast.info("Processing form submission...");
+              
+              // DEBUGGING: Check if validation runs
+              console.log("🚨 RUNNING VALIDATION");
+              setDebugError("Validating form fields...");
+              
+              // Validate all fields
+              const isValid = validateAllFields();
+              console.log("🚨 VALIDATION RESULT:", isValid);
+              
+              if (!isValid) {
+                console.log("🚨 VALIDATION FAILED");
+                setDebugError("Validation failed - check form fields");
+                toast.error("Please correct the errors in the form before submitting");
+                
+                // Scroll to the validation errors section
+                setTimeout(() => {
+                  const errorElement = document.getElementById('validation-errors');
+                  if (errorElement) {
+                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }, 100);
+                
+                return;
+              }
+              
+              // Add the actual form submission code here
+              console.log("✅ Validation passed, preparing to submit to API...");
+              setDebugError("Validation passed! Submitting to API...");
+              
+              try {
+                // Format names with proper case
+                const formattedData = {
+                  ...formData,
+                  firstName: formatNameCase(formData.firstName),
+                  lastName: formatNameCase(formData.lastName)
+                };
+                
+                // Generate a unique token if one doesn't exist
+                if (!formattedData.internalToken) {
+                  formattedData.internalToken = `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+                  console.log("📝 Generated new internal token:", formattedData.internalToken);
+                }
+                
+                // Format adders as semicolon-separated string if it's an array
+                if (Array.isArray(formattedData.adders)) {
+                  (formattedData as any).addersString = formattedData.adders.join(';');
+                }
+                
+                // Format ubillFiles URLs as semicolon-separated string
+                if (Array.isArray(formattedData.ubillFiles) && formattedData.ubillFiles.length > 0) {
+                  // Extract URLs from all uploaded files and join with semicolons
+                  const fileUrls = formattedData.ubillFiles.map(file => file.url).join(';');
+                  (formattedData as any).ubillFilesUrls = fileUrls;
+                  
+                  // Also create a string of filenames for reference
+                  const fileNames = formattedData.ubillFiles.map(file => file.name).join(';');
+                  (formattedData as any).ubillFilesNames = fileNames;
+                  
+                  console.log("📝 Formatted ubillFiles URLs:", fileUrls);
+                }
+                
+                // Keep all fields in the payload even if null
+                const filteredPayload: Record<string, any> = { ...formattedData };
+                
+                console.log("📝 Submitting complete form data without filtering fields");
+                
+                // Call the API endpoint
+                const response = await fetch('/api/project-submit', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(filteredPayload) // Send the complete payload
+                });
+                
+                console.log("📝 API response status:", response.status);
+                
+                if (!response.ok) {
+                  let errorMessage = `Server responded with status ${response.status}`;
+                  try {
+                    const errorData = await response.json();
+                    errorMessage = errorData.message || errorMessage;
+                  } catch (e) {
+                    // If we can't parse the JSON, use the default error message
+                  }
+                  throw new Error(errorMessage);
+                }
+                
+                const responseData = await response.json();
+                console.log("✅ API response:", responseData);
+                
+                // Show success message
+                toast.success("Project submitted successfully!");
+                setDebugError("Success! Redirecting to survey booking...");
+                
+                // Generate URL parameters for the survey booking
+                const params = new URLSearchParams();
+                params.append('firstName', formattedData.firstName);
+                params.append('lastName', formattedData.lastName);
+                params.append('email', formattedData.customerEmail);
+                params.append('customerEmail', formattedData.customerEmail);
+                params.append('phone', formattedData.customerPhone);
+                params.append('customerPhone', formattedData.customerPhone);
+                params.append('streetAddress', formattedData.streetAddress);
+                params.append('city', formattedData.city);
+                params.append('state', formattedData.state);
+                params.append('postalCode', formattedData.postalCode);
+                params.append('warehouse', formattedData.warehouse || '');
+                params.append('token', formattedData.internalToken);
+                
+                // Add success message parameters
+                params.append('success', 'true');
+                params.append('message', 'Project submitted successfully! Please complete your survey booking.');
+                
+                // Show elegant success animation before redirecting
+                const successOverlay = document.createElement('div');
+                successOverlay.style.position = 'fixed';
+                successOverlay.style.top = '0';
+                successOverlay.style.left = '0';
+                successOverlay.style.width = '100%';
+                successOverlay.style.height = '100%';
+                successOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
+                successOverlay.style.display = 'flex';
+                successOverlay.style.flexDirection = 'column';
+                successOverlay.style.alignItems = 'center';
+                successOverlay.style.justifyContent = 'center';
+                successOverlay.style.zIndex = '9999';
+                successOverlay.style.transition = 'opacity 0.5s ease-in-out';
+                
+                const icon = document.createElement('div');
+                icon.innerHTML = `
+                  <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                  </svg>
+                `;
+                icon.style.animation = 'checkmark-pop 0.5s ease-in-out forwards';
+                
+                const text = document.createElement('h2');
+                text.textContent = 'Project Successfully Submitted!';
+                text.style.fontFamily = 'sans-serif';
+                text.style.color = '#333';
+                text.style.marginTop = '20px';
+                text.style.fontSize = '24px';
+                
+                const subtext = document.createElement('p');
+                subtext.textContent = 'Redirecting to survey booking...';
+                subtext.style.fontFamily = 'sans-serif';
+                subtext.style.color = '#666';
+                subtext.style.marginTop = '10px';
+                
+                // Add a style element for animations
+                const style = document.createElement('style');
+                style.textContent = `
+                  @keyframes checkmark-pop {
+                    0% { transform: scale(0); }
+                    50% { transform: scale(1.2); }
+                    100% { transform: scale(1); }
+                  }
+                  @keyframes fade-in {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                  }
+                `;
+                
+                document.head.appendChild(style);
+                successOverlay.appendChild(icon);
+                successOverlay.appendChild(text);
+                successOverlay.appendChild(subtext);
+                document.body.appendChild(successOverlay);
+                
+                // Redirect after showing success animation
+                setTimeout(() => {
+                  // Redirect to survey booking with parameters
+                  router.push(`/features/survey-booking?${params.toString()}`);
+                }, 2000);
+              } catch (apiError) {
+                console.error("❌ API submission error:", apiError);
+                const errorMessage = apiError instanceof Error ? apiError.message : "Error submitting to API";
+                setDebugError(`API Error: ${errorMessage}`);
+                toast.error(errorMessage);
+                setLocalError(errorMessage);
+                setSubmissionError(errorMessage);
+              }
+            } catch (err) {
+              console.log("🚨 OUTER ERROR CAUGHT:", err);
+              console.error("❌ Submission error:", err);
+              const errorMessage = err instanceof Error ? err.message : "Error submitting form";
+              setDebugError(`Outer error: ${errorMessage}`);
+              toast.error(errorMessage);
+              setLocalError(errorMessage);
+              setSubmissionError(errorMessage); // Set the submission error state
+            } finally {
+              console.log("🚨 FINALLY BLOCK REACHED");
+              setLocalIsSubmitting(false);
+            }
+          }}
+          disabled={effectiveIsSubmitting}
+          className="bg-[#5FCF87] hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-md text-lg"
+        >
+          {effectiveIsSubmitting ? 'Submitting...' : 'Submit'}
+        </button>
+        
+        {/* Make the error display more prominent */}
+        {(effectiveError || submissionError) && (
+          <div className="mt-4 p-6 bg-red-100 border-2 border-red-500 rounded-md shadow-lg">
+            <div className="flex items-start">
+              <svg className="w-8 h-8 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div className="ml-3">
+                <h3 className="text-lg font-bold text-red-800">Submission Failed</h3>
+                <div className="mt-2 text-base text-red-700">
+                  <p className="font-medium">{effectiveError || submissionError}</p>
+                  <p className="mt-3">Please try again or contact support if the problem persists.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Additional troubleshooting information */}
+      {(effectiveError || submissionError) && (
+        <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
+          <details className="cursor-pointer">
+            <summary className="text-sm font-medium text-gray-700">Troubleshooting Steps</summary>
+            <div className="mt-2 text-sm text-gray-600">
+              <ul className="list-disc pl-5 space-y-1">
+                <li>Check your internet connection and try again</li>
+                <li>Ensure all required fields are filled correctly</li>
+                <li>Try refreshing the page and submitting again</li>
+                <li>If you&apos;ve uploaded files, try with smaller files or fewer files</li>
+                <li>Contact technical support for assistance</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      )}
+    </form>
+  );
+}
+
+// Wrap in ClientOnly to ensure useSearchParams works correctly
+export default function ProjectCreationForm() {
+  return (
+    <ClientOnly>
+      <ProjectCreationFormContent />
+    </ClientOnly>
+  );
+}

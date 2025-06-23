@@ -1,0 +1,3281 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>OptimoRoute API Reference v1.17</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all.js"></script>
+  </head>
+
+  <body class="index" data-languages="[&quot;shell&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/optimoroute_logo.png" class="logo" alt="Optimoroute logo" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">shell</a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <ul id="toc" class="toc-list-h1">
+          <li>
+            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#introduction-our-web-service-api-is-http-based" class="toc-h2 toc-link" data-title="Our Web Service API is HTTP based">Our Web Service API is HTTP based</a>
+                  </li>
+                  <li>
+                    <a href="#introduction-we-use-json-for-structured-data-exchange" class="toc-h2 toc-link" data-title="We use JSON for structured data exchange">We use JSON for structured data exchange</a>
+                  </li>
+                  <li>
+                    <a href="#introduction-ssl-is-required" class="toc-h2 toc-link" data-title="SSL is required">SSL is required</a>
+                  </li>
+                  <li>
+                    <a href="#introduction-limited-number-of-concurrent-requests" class="toc-h2 toc-link" data-title="Limited number of concurrent requests">Limited number of concurrent requests</a>
+                  </li>
+                  <li>
+                    <a href="#introduction-general-error-codes" class="toc-h2 toc-link" data-title="General error codes">General error codes</a>
+                  </li>
+                  <li>
+                    <a href="#introduction-allow-for-additional-fields-in-the-response-messages" class="toc-h2 toc-link" data-title="Allow for additional fields in the response messages">Allow for additional fields in the response messages</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+          </li>
+          <li>
+            <a href="#data-objects" class="toc-h1 toc-link" data-title="Data Objects">Data Objects</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#data-objects-order-object" class="toc-h2 toc-link" data-title="Order Object">Order Object</a>
+                  </li>
+                  <li>
+                    <a href="#data-objects-location-object" class="toc-h2 toc-link" data-title="Location Object">Location Object</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#create-order" class="toc-h1 toc-link" data-title="Create Order">Create Order</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-order-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#create-order-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#create-order-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#create-order-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#create-or-update-orders-bulk" class="toc-h1 toc-link" data-title="Create or Update Orders (bulk)">Create or Update Orders (bulk)</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#create-or-update-orders-bulk-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#create-or-update-orders-bulk-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#create-or-update-orders-bulk-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#create-or-update-orders-bulk-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#get-orders-bulk" class="toc-h1 toc-link" data-title="Get Orders (bulk)">Get Orders (bulk)</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-orders-bulk-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#get-orders-bulk-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#get-orders-bulk-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#get-orders-bulk-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#delete-order" class="toc-h1 toc-link" data-title="Delete Order">Delete Order</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#delete-order-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#delete-order-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#delete-order-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#delete-order-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#delete-all-orders" class="toc-h1 toc-link" data-title="Delete All Orders">Delete All Orders</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#delete-all-orders-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#delete-all-orders-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#delete-all-orders-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#delete-all-orders-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#delete-orders-bulk" class="toc-h1 toc-link" data-title="Delete Orders (bulk)">Delete Orders (bulk)</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#delete-orders-bulk-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#delete-orders-bulk-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#delete-orders-bulk-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#delete-orders-bulk-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#get-routes" class="toc-h1 toc-link" data-title="Get Routes">Get Routes</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-routes-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#get-routes-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#get-routes-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#get-routes-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#get-scheduling-information" class="toc-h1 toc-link" data-title="Get Scheduling Information">Get Scheduling Information</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-scheduling-information-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#get-scheduling-information-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#get-scheduling-information-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#get-scheduling-information-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#start-planning" class="toc-h1 toc-link" data-title="Start Planning">Start Planning</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#start-planning-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#start-planning-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#start-planning-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#start-planning-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#stop-planning" class="toc-h1 toc-link" data-title="Stop Planning">Stop Planning</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#stop-planning-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#stop-planning-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#stop-planning-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#stop-planning-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#get-planning-status" class="toc-h1 toc-link" data-title="Get Planning Status">Get Planning Status</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-planning-status-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#get-planning-status-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#get-planning-status-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#get-planning-status-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#update-driver-parameters" class="toc-h1 toc-link" data-title="Update Driver Parameters">Update Driver Parameters</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#update-driver-parameters-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#update-driver-parameters-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#update-driver-parameters-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#update-driver-parameters-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#get-mobile-events" class="toc-h1 toc-link" data-title="Get Mobile Events">Get Mobile Events</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#get-mobile-events-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#get-mobile-events-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#get-mobile-events-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#get-mobile-events-examples" class="toc-h2 toc-link" data-title="Examples">Examples</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#booking-slots-beta" class="toc-h1 toc-link" data-title="Booking Slots (Beta)">Booking Slots (Beta)</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#booking-slots-beta-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#booking-slots-beta-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#booking-slots-beta-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#booking-slots-beta-reservation-object" class="toc-h2 toc-link" data-title="Reservation object">Reservation object</a>
+                  </li>
+                  <li>
+                    <a href="#booking-slots-beta-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
+            <a href="#booking-reserve-beta" class="toc-h1 toc-link" data-title="Booking Reserve (Beta)">Booking Reserve (Beta)</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#booking-reserve-beta-http-request" class="toc-h2 toc-link" data-title="HTTP Request">HTTP Request</a>
+                  </li>
+                  <li>
+                    <a href="#booking-reserve-beta-parameters" class="toc-h2 toc-link" data-title="Parameters">Parameters</a>
+                  </li>
+                  <li>
+                    <a href="#booking-reserve-beta-response" class="toc-h2 toc-link" data-title="Response">Response</a>
+                  </li>
+                  <li>
+                    <a href="#booking-reserve-beta-error-and-warning-codes" class="toc-h2 toc-link" data-title="Error and Warning Codes">Error and Warning Codes</a>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+        <ul class="toc-footer">
+            <li><center>OptimoRoute API v1.17</center></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        <h1 id='introduction'>Introduction</h1>
+<p>This document is the official reference for the OptimoRoute Web Service Application Programming Interface (WS API).</p>
+<h2 id='introduction-our-web-service-api-is-http-based'>Our Web Service API is HTTP based</h2>
+<p>The methods to retrieve data from our Web Service (WS) API require an HTTP <strong>GET</strong> request method.</p>
+
+<p>The methods that submit, change, or destroy data require a <strong>POST</strong> request method.</p>
+
+<p>The API methods will return an error if you do not make your request with the correct HTTP method.</p>
+<h2 id='introduction-we-use-json-for-structured-data-exchange'>We use JSON for structured data exchange</h2>
+<p>Our API uses the JSON (JavaScript Object Notation) format.</p>
+
+<p>More information about JSON and how it works can be found here: <a href="http://json.org/">http://json.org/</a> and here: <a href="http://en.wikipedia.org/wiki/JSON">http://en.wikipedia.org/wiki/JSON</a>.</p>
+
+<p>There are many readily available libraries to convert to and from the JSON format both for popular and for more esoteric programming languages.</p>
+<h2 id='introduction-ssl-is-required'>SSL is required</h2>
+<p>Using SSL (https) is required to avoid passing both the authentication key and potentially confidential data in clear text over the web.</p>
+<h2 id='introduction-limited-number-of-concurrent-requests'>Limited number of concurrent requests</h2>
+<p>The maximum number of concurrent web service API requests for one account or for one IP address is limited to 5.</p>
+<h2 id='introduction-general-error-codes'>General error codes</h2>
+<p>The following error codes are applicable to all API operations:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>AUTH_KEY_MISSING</code></td>
+<td>the authentication key is missing</td>
+</tr>
+<tr>
+<td><code>AUTH_KEY_UNKNOWN</code></td>
+<td>a wrong authentication key was supplied</td>
+</tr>
+<tr>
+<td><code>MALFORMED_REQUEST</code></td>
+<td>something is wrong with the input</td>
+</tr>
+<tr>
+<td><code>ERR_MISSING_MAND_FIELD</code></td>
+<td>one of the mandatory fields is missing</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_PARAM_FORMAT</code></td>
+<td>one of the specified fields is not in a valid format</td>
+</tr>
+<tr>
+<td><code>ERR_TOO_MANY_CONNECTIONS</code></td>
+<td>there are too many concurrent requests</td>
+</tr>
+<tr>
+<td><code>ERR_INTERNAL</code></td>
+<td>an internal server error occur</td>
+</tr>
+</tbody></table>
+
+<p>There are also error codes specific that are described in the <em>Error and Warning Codes</em> section of each method.</p>
+<h3 id='introduction-general-error-codes-error-codes-with-bulk-operations'>Error codes with bulk operations</h3>
+<p>For bulk operations, there are multiple failure modes. For example, if performing a bulk operation on orders:</p>
+
+<ul>
+<li>the whole request can fail (e.g. a serious validation or programming error).<br>
+The response will contain an error code.</li>
+<li>the operation failed for some orders, but succeeded for others.<br>
+The response will contain a list in which some objects have an error code.</li>
+</ul>
+<h2 id='introduction-allow-for-additional-fields-in-the-response-messages'>Allow for additional fields in the response messages</h2>
+<p>Additional fields might be added to the JSON response messages in the future, so your client code should ignore additional fields.
+ </p>
+<h1 id='authentication'>Authentication</h1>
+<p>The OptimoRoute Web Service API authentication key parameter is required with all API requests, in addition to all the standard parameters.</p>
+
+<p>To enable the API and generate the API key please log into the OptimoRoute web application. In the <strong>Administration</strong> section select <strong>Settings</strong> -&gt; <strong>WS API</strong> and enable the API. The API key will be generated for you.</p>
+
+<p>The Web Service API is also available during the free trial period.</p>
+<h1 id='data-objects'>Data Objects</h1>
+<p>Some endpoints in the API share definitions of objects that are sent in the request and response.</p>
+<h2 id='data-objects-order-object'>Order Object</h2>
+<blockquote>
+<p>Example Order Object</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-11-12"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"priority"</span><span class="p">:</span><span class="w"> </span><span class="s2">"M"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"T"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load1"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load2"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load3"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load4"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"assignedTo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"externalId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DRV001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"001"</span><span class="p">},</span><span class="w">
+  </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOC001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green Cross Pharmacy North End"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">42.365142</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-71.052882</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"checkInTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"timeWindows"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17:00"</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="s2">"allowedWeekdays"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mon"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tue"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"thu"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fri"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"allowedDates"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+  </span><span class="s2">"allowedDateTimes"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-12-10T07:39:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-12-15T19:39:00"</span><span class="w">
+  </span><span class="p">}],</span><span class="w">
+  </span><span class="s2">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SK001"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"vehicleFeatures"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"john.doe@example.com"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"customField1"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"customField2"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"customField3"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"customField4"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"customField5"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"notificationPreference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orderNo</code></td>
+<td>string</td>
+<td>A user specified order identifier, also displayed in the web application. Orders are matched by this identifier. It can also be used for deleting and retrieving orders via the WS API.</td>
+</tr>
+<tr>
+<td><code>relatedOrderNo</code></td>
+<td>string or <code>null</code></td>
+<td><code>orderNo</code> of the related order. Used to link pickups and deliveries in situations where goods are transported directly from one customer location to the another customer location.<br />When creating orders, the relationship should be specified only on the second order that is created (the first order has to already exist in the system so that it can be referenced).<br/>The default value is <code>null</code>, which means the order is not related to any other pickup/delivery.</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>date (string)</td>
+<td>Delivery date.<br /><em>YYYY-MM-DD</em> format, for example <code>2013-12-20</code>.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td><a href="#data-objects-location-object">location object</a></td>
+<td>Delivery/Service location. See <em>Location Object</em>.</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>string enum</td>
+<td>Order type: <code>D</code> (delivery), <code>P</code> (pickup) or <code>T</code> (task).</td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>integer</td>
+<td>The time in minutes required to unload the goods or perform a task at the given location.</td>
+</tr>
+<tr>
+<td><code>timeWindows</code></td>
+<td>list of time windows</td>
+<td>List of time windows when the order can be serviced.<br />Each time window is an object with <code>twFrom</code> and <code>twTo</code> fields. Both times are in 24-hour (military) clock format, in the range from <code>00:00</code> to <code>23:59</code>.<br /><code>twFrom</code> specifies the earliest time allowed to begin the service (if the driver arrives too early, they will be forced to wait). <code>twTo</code> specifies the deadline to end the service.<br />Example: <br /><code>[{&quot;twFrom&quot;: &quot;10:00&quot;, &quot;twTo&quot;: &quot;14:00&quot;}]</code>.<br />Default is <code>[]</code> meaning no time windows.</td>
+</tr>
+<tr>
+<td><code>allowedWeekdays</code></td>
+<td>list of strings</td>
+<td>Restricts days of the week when the order can be scheduled:<br /><code>sun</code>, <code>mon</code>, <code>tue</code>, <code>wed</code>, <code>thu</code>, <code>fri</code>, <code>sat</code>.<br />For example if the order can be scheduled on Monday or Tuesday the value should be:<br /><code>[&quot;mon&quot;, &quot;tue&quot;]</code>.<br />By default all days of the week are allowed.</td>
+</tr>
+<tr>
+<td><code>allowedDates</code></td>
+<td>daterange object</td>
+<td>Restricts the dates when the order can be scheduled.<br />Daterange is specified as an object with <code>from</code> and <code>to</code> fields, for example:<br /><code>{&quot;from&quot;: &quot;2018-06-01&quot;, &quot;to&quot;: &quot;2018-07-01&quot;}</code><br />Default is an empty object <code>{}</code> meaning no restriction.</td>
+</tr>
+<tr>
+<td><code>allowedDateTimes</code></td>
+<td>list of datetime windows</td>
+<td>List of datetime windows when the order can be serviced.<br />Each object can contain <code>from</code> and/or <code>to</code> fields, which are datetime strings, or <code>null</code>. Strings are in the format <code>YYYY-MM-DDTHH:MM:SS</code>, e.g. <code>2020-01-30T15:54:02</code>. The field <code>from</code> defines the earliest time to begin the service, and <code>to</code> defines the latest time to <em>begin</em> the service. When only one end of the restriction is given, the other is assumed to be <code>null</code>, meaning it is not restricted.<br />Example: <br /><code>[{&quot;from&quot;: &quot;2019-12-26T00:00:00&quot;, &quot;to&quot;: &quot;2019-12-31T23:59:59&quot;}]</code>.<br />Default is <code>[]</code> meaning no restriction.</td>
+</tr>
+<tr>
+<td><code>assignedTo</code></td>
+<td>object or <code>null</code></td>
+<td>An object with string properties <code>serial</code> or <code>externalId</code> that uniquely identifies the Driver that this Order must be assigned to. Example: <code>{&quot;serial&quot;: &quot;102&quot;}</code> or <code>{&quot;externalId&quot;: &quot;444&quot;}</code>. Setting this field forces this Order to be served by the specified Driver. A <code>null</code> value means no assignment, which is the default.</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>string</td>
+<td>Order priority, by default <code>M</code>. Values can be:<br /><code>L</code> – Low<br /><code>M</code> – Medium<br /><code>H</code> – High<br /><code>C</code> – Critical<br />High priority orders are scheduled earlier and are less likely to be left unscheduled if not all orders can be serviced.</td>
+</tr>
+<tr>
+<td><code>load1</code></td>
+<td>integer</td>
+<td>The load requirements of the order, i.e. how many load units (Number of boxes, Kilos, Pounds, Liters etc) should be delivered.<br />The meaning of this entry depends on the provided configuration of load/capacity constraints.<br />Default value is <code>0</code>.</td>
+</tr>
+<tr>
+<td><code>load2</code></td>
+<td>integer</td>
+<td>See <code>load1</code>.</td>
+</tr>
+<tr>
+<td><code>load2</code></td>
+<td>integer</td>
+<td>See <code>load1</code>.</td>
+</tr>
+<tr>
+<td><code>load3</code></td>
+<td>integer</td>
+<td>See <code>load1</code>.</td>
+</tr>
+<tr>
+<td><code>vehicleFeatures</code></td>
+<td>list of strings</td>
+<td>The vehicle features used to differentiate some Vehicles from the others. The required vehicle features are defined as a list of vehicle feature codes. Default value is an empty list <code>[]</code>.</td>
+</tr>
+<tr>
+<td><code>skills</code></td>
+<td>list of strings</td>
+<td>The driver skills used to differentiate some Drivers from the others. The required skills are defined as a list of skill codes. Default value is an empty list <code>[]</code>.</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>string</td>
+<td>The optional note that will accompany the driver’s instructions. Notes do not affect the optimization process. A free form string.</td>
+</tr>
+<tr>
+<td><code>customField1</code></td>
+<td>string</td>
+<td>Value that will be saved in custom field #1, default empty.</td>
+</tr>
+<tr>
+<td><code>customField2</code></td>
+<td>string</td>
+<td>Value that will be saved in custom field #2, default empty.</td>
+</tr>
+<tr>
+<td><code>customField3</code></td>
+<td>string</td>
+<td>Value that will be saved in custom field #3, default empty.</td>
+</tr>
+<tr>
+<td><code>customField4</code></td>
+<td>string</td>
+<td>Value that will be saved in custom field #4, default empty.</td>
+</tr>
+<tr>
+<td><code>customField5</code></td>
+<td>string</td>
+<td>Value that will be saved in custom field #5, default empty.</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>string</td>
+<td>Customer email. If enabled, order notifications can be sent to that email. Default empty.</td>
+</tr>
+<tr>
+<td><code>phone</code></td>
+<td>string</td>
+<td>Customer phone number. Default empty.</td>
+</tr>
+<tr>
+<td><code>notificationPreference</code></td>
+<td>string enum</td>
+<td>Defines the delivery method for order tracking notifications for this order. Notifications will only be sent if this account has order tracking configured.<br />Allowed values:<br />•  <code>dont_notify</code> – don&#39;t send notifications<br />• <code>email</code> – send notification to email address specified in the email field <br />•   <code>sms</code> – send text message to number specified in the phone field <br />•    <code>both</code> – send both email and sms notifications<br />Defaults to <code>both</code>.</td>
+</tr>
+</tbody></table>
+<h2 id='data-objects-location-object'>Location Object</h2>
+<blockquote>
+<p>Location Object example with GPS coordinates:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1350 N High St, Columbus, OH 43201, USA"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">39.9892</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-83.0054</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Colorado pharmacy 033"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"COL033"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GATE CODE 4412"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"checkInTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>locationNo</code></td>
+<td>string</td>
+<td>The unique identifier for the given location.</td>
+</tr>
+<tr>
+<td><code>locationName</code></td>
+<td>string</td>
+<td>Location name.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>string</td>
+<td>The full address including the country, for example <code>393 Hanover St, Boston, MA 02113, US</code></td>
+</tr>
+<tr>
+<td><code>latitude</code></td>
+<td>decimal</td>
+<td>Location latitude.</td>
+</tr>
+<tr>
+<td><code>longitude</code></td>
+<td>decimal</td>
+<td>Location longitude.</td>
+</tr>
+<tr>
+<td><code>checkInTime</code></td>
+<td>integer</td>
+<td>Default value is <code>0</code>. Minimum waiting time at the location (in minutes). Upon arrival at the location the driver will spend at least checkInTime minutes before starting the service of one or several consecutive orders at the same location.<br />Example: if we have 3 orders at the same location: <ul><li>A: duration 10min, check in time 15min<li>B: duration 5min, check in time 15min</li><li>C: duration 20min, check in time 15min</li></ul> If one driver serves all three orders consecutively the driver would arrive at the location, spend 15 minutes at the location (for example parking and checking in) and then start servicing orders A, B and C. Total time at the location would be 50min = 15min (shared duration) + 10min (order A) + 5min (order B) + 20min (order C).</td>
+</tr>
+<tr>
+<td><code>notes</code></td>
+<td>string</td>
+<td>Optional notes related to this location.</td>
+</tr>
+</tbody></table>
+<h1 id='create-order'>Create Order</h1>
+<p>Creates a new order in the system or updates an existing order.</p>
+<h2 id='create-order-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/create_order</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/create_order?key=AUTH_KEY'</span>
+</code></pre><h2 id='create-order-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"operation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-10-14"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOC001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green Cross Pharmacy North End"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"acceptPartialMatch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10:00"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10:59"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load1"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"load2"</span><span class="p">:</span><span class="w"> </span><span class="mi">25</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"vehicleFeatures"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"FR"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SK001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"SK002"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Deliver at back door"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>In addition to properties from the <a href="#data-objects-order-object">Order Object</a>, the following properties are available:</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>operation</code></td>
+<td>string enum</td>
+<td><code>CREATE</code> – creates a new order in the system. <br /><br /><code>UPDATE</code> – updates an existing order in the system. If the orderNo does not exist the system will return an error. <br /><br /><code>SYNC</code> – recommended when the end goal is to make sure orders are reflected in OptimoRoute. If this is a new order, we will create it. If there is an existing order in the system, it will be updated. <code>SYNC</code> makes a clean sync-up of order data. Whatever we have on this order will be replaced by the data you send us on <code>SYNC</code>. <br /><br /><code>MERGE</code> – used to only update specific fields and leave all the other fields unchanged (for example if some fields were manually edited in OptimoRoute and should not be updated). If this is a new order, we will create it. If there is an existing order in the system, it will be updated.</td>
+</tr>
+<tr>
+<td><code>acceptDuplicateOrderNo</code></td>
+<td>boolean</td>
+<td>If set to <code>true</code> the system will accept orders with <code>orderNo</code> that already exists in the system. When <code>false</code> or not specified, the system will return an error.</td>
+</tr>
+<tr>
+<td><code>twFrom</code></td>
+<td>time (string)</td>
+<td>Deprecated, please use the <code>timeWindows</code> field; ignored if <code>timeWindows</code> is set.<br /><br />The earliest time allowed to begin the service (if the driver arrives too early, they will be forced to wait).<br />24-hour (military) clock format, for example: <code>16:00</code><br />The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+<tr>
+<td><code>twTo</code></td>
+<td>time (string)</td>
+<td>Deprecated, please use the <code>timeWindows</code> field; ignored if <code>timeWindows</code> is set.<br /><br />The deadline to end the service.<br />24-hour (military) clock format, for example <code>17:00</code><br />The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+</tbody></table>
+
+<p>The <code>operation</code> property is mandatory. When <code>operation</code> is specified as <code>UPDATE</code>, only <code>orderNo</code> is mandatory, otherwise mandatory properties are <code>orderNo</code>, <code>date</code>, <code>type</code>, <code>duration</code> and <code>location</code>.</p>
+<h3 id='create-order-parameters-location-object'>Location Object</h3>
+<blockquote>
+<p>Location Object example specifying address to be geocoded and accepting any result:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1350 N High St, Columbus, OH 43201, USA"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"acceptPartialMatch"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"acceptMultipleResults"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>In addition to properties from the <a href="#data-objects-location-object">Location Object</a>, the following properties are available:</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>acceptMultipleResults</code></td>
+<td>boolean</td>
+<td>Used only if a new location is created by geocoding the <code>address</code> field. If <code>false</code> or not specified, the system will not accept the geocoded addresses where several results matching the provided address have been found and an error will be raised.</td>
+</tr>
+<tr>
+<td><code>acceptPartialMatch</code></td>
+<td>boolean</td>
+<td>Used only if a new location is created by geocoding the <code>address</code> field. If <code>false</code> or not specified, the system will not accept the geocoded addresses that were only a partial match (lower geocoding confidence) and an error will be raised.</td>
+</tr>
+</tbody></table>
+
+<p>A location is defined by one of the following:</p>
+
+<ul>
+<li><code>locationNo</code><br />The location number of a location already existing in the system. An existing location is used.<br /><strong>NOTE</strong>: the <code>address</code>, <code>latitude</code> + <code>longitude</code> and <code>locationName</code> should <strong>NOT</strong> be specified, otherwise the system will try to geocode the location again or create one with a defined GPS location.</li>
+<li><code>latitude</code> + <code>longitude</code> + <code>locationName</code> (with optional <code>address</code> and <code>locationNo</code>)<br />The location is defined by the latitude and longitude.<br />The location name will be set to the value of <code>locationName</code> field.<br />The location address will be set to <code>address</code> if <code>address</code> is set, otherwise it will be left blank.<br />The location number will be set to <code>locationNo</code> if <code>locationNo</code> is set, otherwise it will be left blank.</li>
+<li><code>address</code> (with optional <code>locationName</code> and <code>locationNo</code>)<br />The system will try to find an existing locations with the specified <code>address</code> (and <code>locationName</code> if one is specified). If an existing location is not found the location address will be geocoded based on the supplied address.<br />The location name will be set to <code>locationName</code> field if <code>locationName</code> is supplied, otherwise it will be set to the value of address field.<br />The location number will be set to <code>locationNo</code> if <code>locationNo</code> is set, otherwise it will be left blank.</li>
+</ul>
+<h2 id='create-order-response'>Response</h2>
+<blockquote>
+<p>Response to example request:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-71.0528824</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green Cross Pharmacy North End"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOC001"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">42.3651425</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"checkInTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="s2">"geocodingResults"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="w">
+      </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+      </span><span class="mf">42.3651425</span><span class="p">,</span><span class="w">
+      </span><span class="mf">-71.0528824</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the order was saved, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string  <br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>location</code><br /><em>optional</em></td>
+<td><a href="#data-objects-location-object">location object</a><br />-</td>
+<td>The location data for the created order (only if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>geocodingResults</code><br /><em>optional</em></td>
+<td>list<br />-</td>
+<td>The list of geocoding results if the location is created from the supplied address. <br />Each geocoding result is defined as:<br /><code>[geocodedAddress, latitude, longitude, partialMatchFlag]</code></td>
+</tr>
+</tbody></table>
+<h2 id='create-order-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Create Order</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_ORD_EXISTS</code></td>
+<td>an order with the specified <code>orderNo</code> already exists in the system (checked only if <code>orderNo</code> field is set)</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_MISSING</code></td>
+<td>the order with the ID passed in <code>relatedOrderNo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_MULTIPLE</code></td>
+<td>multiple orders with ID passed in <code>relatedOrderNo</code> exist</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_LINK</code></td>
+<td>order can not be linked to order with ID passed in <code>relatedOrderNo</code> (only pickups and deliveries can be linked)</td>
+</tr>
+<tr>
+<td><code>ERR_DRV_NOT_EXISTS</code></td>
+<td>the driver with the serial number passed in <code>assignedTo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_DRV_MULTIPLE</code></td>
+<td>there is more than one driver with the <code>assignedTo</code> serial number</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_NOT_VALID</code></td>
+<td>the specified location is not valid</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_GEOCODING</code></td>
+<td>the specified address could not be geocoded</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_GEOCODING_MULTIPLE</code></td>
+<td>multiple results have been found during geocoding</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_GEOCODING_PARTIAL</code></td>
+<td>the geocoder did not return an exact match for the original request</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_NON_EXISTING_LOC</code></td>
+<td>the location specified by <code>locationNo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_MULTIPLE_LOC</code></td>
+<td>multiple locations with specified <code>locationNo</code> have been found</td>
+</tr>
+<tr>
+<td><code>ERR_VF_NOT_EXISTS</code></td>
+<td>the vehicle feature does not exist (for one of the codes specified in <code>vehicleFeatures</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_VF_MULTIPLE</code></td>
+<td>multiple vehicle features exist (for one of the codes specified in the <code>vehicleFeatures</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_SK_NOT_EXISTS</code></td>
+<td>the skill does not exist (for one of the codes specified in the <code>skills</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_SK_MULTIPLE</code></td>
+<td>multiple skills exist (for one of the codes specified in <code>skills</code> field)</td>
+</tr>
+<tr>
+<td><code>WAR_LOC_GEOCODING_MULTIPLE</code></td>
+<td>multiple results have been found during geocoding (but the order was created because <code>acceptMultipleResults</code> was set to True)</td>
+</tr>
+<tr>
+<td><code>WAR_LOC_GEOCODING_PARTIAL</code></td>
+<td>the geocoder did not return an exact match for the original request (but the order was created because <code>acceptPartialMatch</code> was set to True)</td>
+</tr>
+</tbody></table>
+<h1 id='create-or-update-orders-bulk'>Create or Update Orders (bulk)</h1>
+<p>Create, update or replace one or more orders in the system.</p>
+
+<p>Note that geocoding addresses is not available in this call. The locations for orders must either exist in the system, or be specified via latitude and longitude coordinates. Geocoding is available in <a href="#create-order">Create Order</a>.</p>
+<h2 id='create-or-update-orders-bulk-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/create_or_update_orders</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/create_or_update_orders?key=AUTH_KEY'</span>
+</code></pre><h2 id='create-or-update-orders-bulk-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"54913250"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-22"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"priority"</span><span class="p">:</span><span class="w"> </span><span class="s2">"H"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"T"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"assignedTo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"externalId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DRV001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"001"</span><span class="p">},</span><span class="w">
+      </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"G402333"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green Cross Pharmacy North End"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">42.365142</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-71.052882</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"checkInTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="s2">"timeWindows"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+        </span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11:00"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17:00"</span><span class="w">
+      </span><span class="p">}],</span><span class="w">
+      </span><span class="s2">"allowedWeekdays"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mon"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tue"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"thu"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fri"</span><span class="p">],</span><span class="w">
+      </span><span class="s2">"allowedDates"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+      </span><span class="s2">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SK001"</span><span class="p">],</span><span class="w">
+      </span><span class="s2">"vehicleFeatures"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Notify manager"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"joe.customer@example.com"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"customField1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"notificationPreference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"27463225"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-22"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"load1"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"999999999"</span><span class="p">,</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09463221"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-03-22"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"load1"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R384892"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Moe's Southwest Grill"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-71.7520717</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">42.2752323</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Use gate"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orders</code><br /><em>mandatory</em></td>
+<td>list of order objects<br />-</td>
+<td>List of one or more order objects to create, update or replace in the system. At most 500 orders can be specified.</td>
+</tr>
+</tbody></table>
+<h3 id='create-or-update-orders-bulk-parameters-order-object'>Order Object</h3>
+<p>In addition to properties from the <a href="#data-objects-order-object">Order Object</a>, the following properties are available:</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>operation</code></td>
+<td>string enum</td>
+<td><code>MERGE</code> (default) – used to only update specific fields and leave all the other fields unchanged (for example if some fields were manually edited in OptimoRoute and should not be updated). If this is a new order, we will create it. If there is an existing order in the system, it will be updated. <br /><br /><code>SYNC</code> – recommended when the end goal is to make sure orders are reflected in OptimoRoute. If this is a new order, we will create it. If there is an existing order in the system, it will be updated. <code>SYNC</code> makes a clean sync-up of order data. Whatever we have on this order will be replaced by the data you send us on <code>SYNC</code>. <br /><br /><code>CREATE</code> – creates a new order in the system. If the <code>orderNo</code> exists the system will return an error. <br /><br /><code>UPDATE</code> – updates an existing order in the system. If the orderNo does not exist the system will return an error.</td>
+</tr>
+</tbody></table>
+
+<p>Each order object given in <code>orders</code> will result in an order being created, updated or replaced in the system. The exact behavior for each order can be configured via <code>operation</code> in each order object. The default behavior is:</p>
+
+<ul>
+<li>if <code>orderNo</code> is not given or no order is found, a new order will be created;
+
+<ul>
+<li>properties <code>date</code> and <code>location</code> are mandatory</li>
+<li>properties <code>duration</code> and <code>type</code> will use the default values configured in OptimoRoute</li>
+<li>other properties can be omitted, in which case the default values listed in <a href="#data-objects-order-object">Order object</a> will be used</li>
+</ul></li>
+<li>if an existing order with matching orderNo is found, the existing order will be updated with the provided values;
+
+<ul>
+<li>properties that are not provided in the request will keep their existing values</li>
+</ul></li>
+</ul>
+<h3 id='create-or-update-orders-bulk-parameters-location-object'>Location Object</h3>
+<p>See <a href="#data-objects-location-object"><em>Location Object</em></a> for all available location properties.
+Locations can be created or updated.</p>
+
+<p>If <code>locationNo</code> is specified and a matching location exists, that location will be updated.
+If <code>locationNo</code> does not have any matches, a new location will be created.</p>
+
+<p>If <code>locationNo</code> is not specified and an existing order is updated -  the order&#39;s location will be updated.</p>
+
+<p>During update, the matched location will be updated with the values given in the object, if any. No properties are mandatory when updating. When updating with <code>SYNC</code> the properties are reset to default, otherwise they keep their existing values.</p>
+
+<p>In cases when a new location is created, the following properties are mandatory: <code>latitude</code>, <code>longitude</code> and one of <code>locationNo</code>, <code>address</code>, <code>locationName</code>.</p>
+<h2 id='create-or-update-orders-bulk-response'>Response</h2>
+<blockquote>
+<p>Response example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"54913250"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_LOC_NON_EXISTING_LOC"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The location with the given location number does not exist."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"27463225"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"999999999"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09463221"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if at least one operation was successful, <code>false</code> if all failed</td>
+</tr>
+<tr>
+<td><code>orders</code><br /></td>
+<td>list of order response objects<br />-</td>
+<td>Each order object in the list corresponds to the respective order in the request. See <em>Order Response Object</em> section for more information.</td>
+</tr>
+</tbody></table>
+<h3 id='create-or-update-orders-bulk-response-order-response-object'>Order Response Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the operation succeeded, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>orderNo</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>Identifier of the respective order</td>
+</tr>
+<tr>
+<td><code>locationNo</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>Identifier of the location if a location-related error happened</td>
+</tr>
+<tr>
+<td><code>code</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>A per-order error code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+</tbody></table>
+<h2 id='create-or-update-orders-bulk-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following per-order error codes are applicable:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_INVALID_PARAM_FORMAT</code></td>
+<td>the specified order is not valid, possibly an order to be created/updated did not exist in the system but could not be created because a mandatory property is missing</td>
+</tr>
+<tr>
+<td><code>ERR_ORD_EXISTS</code></td>
+<td>an order with the specified <code>orderNo</code> already exists in the system (only with <code>CREATE</code> plus <code>orderNo</code>)</td>
+</tr>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>the order with the matching <code>orderNo</code> was not found (only with <code>UPDATE</code> plus <code>orderNo</code>)</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>there are multiple orders matching the <code>orderNo</code></td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING</code></td>
+<td>optimization is running for this order</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_MISSING</code></td>
+<td>the order with the ID passed in <code>relatedOrderNo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_MULTIPLE</code></td>
+<td>multiple orders with ID passed in <code>relatedOrderNo</code> exist</td>
+</tr>
+<tr>
+<td><code>ERR_RELATED_ORD_LINK</code></td>
+<td>order can not be linked to order with ID passed in <code>relatedOrderNo</code> (only pickups and deliveries can be linked)</td>
+</tr>
+<tr>
+<td><code>ERR_DRV_NOT_EXISTS</code></td>
+<td>the driver specified in <code>assignedTo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_DRV_MULTIPLE</code></td>
+<td>there is more than one driver with the specified <code>assignedTo</code> values</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_NOT_VALID</code></td>
+<td>the specified location is not valid, possibly a location to be created/updated did not exist in the system but could not be created because a mandatory property is missing</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_NON_EXISTING_LOC</code></td>
+<td>the location specified by <code>locationNo</code> does not exist</td>
+</tr>
+<tr>
+<td><code>ERR_LOC_MULTIPLE_LOC</code></td>
+<td>multiple locations with specified <code>locationNo</code> have been found</td>
+</tr>
+<tr>
+<td><code>ERR_VF_NOT_EXISTS</code></td>
+<td>the vehicle feature does not exist (for one of the codes specified in <code>vehicleFeatures</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_VF_MULTIPLE</code></td>
+<td>multiple vehicle features exist (for one of the codes specified in the <code>vehicleFeatures</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_SK_NOT_EXISTS</code></td>
+<td>the skill does not exist (for one of the codes specified in the <code>skills</code> field)</td>
+</tr>
+<tr>
+<td><code>ERR_SK_MULTIPLE</code></td>
+<td>multiple skills exist (for one of the codes specified in <code>skills</code> field)</td>
+</tr>
+</tbody></table>
+<h1 id='get-orders-bulk'>Get Orders (bulk)</h1>
+<p>Retrieves one or more orders from the system.</p>
+<h2 id='get-orders-bulk-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/get_orders</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/get_orders?key=AUTH_KEY'</span>
+</code></pre><h2 id='get-orders-bulk-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD99"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orders</code><br /><em>mandatory</em></td>
+<td>list of order objects<br />-</td>
+<td>List of order objects to retrieve. Each order object must contain an <code>orderNo</code> property with user-specified identifier of an order. At most 500 orders can be specified.</td>
+</tr>
+</tbody></table>
+
+<p><br /><br />For flexibility, the call to get_orders can also be done as a HTTP <strong>GET</strong> request:</p>
+
+<blockquote>
+<p>GET request example:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_orders?key=AUTH_KEY&amp;orderNo=ORD001&amp;orderNo=ORD99'</span>
+</code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orderNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The user-specified identifier of an order; can be repeated to retrieve multiple orders</td>
+</tr>
+</tbody></table>
+<h2 id='get-orders-bulk-response'>Response</h2>
+<blockquote>
+<p>Response example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-11-12"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"priority"</span><span class="p">:</span><span class="w"> </span><span class="s2">"M"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"T"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"load1"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"load2"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"load3"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"load4"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"assignedTo"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="s2">"externalId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DRV001"</span><span class="p">,</span><span class="w"> </span><span class="s2">"serial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"001"</span><span class="p">},</span><span class="w">
+        </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="s2">"locationNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"LOC001"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"393 Hanover St, Boston, MA 02113, USA"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Green Cross Pharmacy North End"</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"latitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">42.365142</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"longitude"</span><span class="p">:</span><span class="w"> </span><span class="mf">-71.052882</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"checkInTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"timeWindows"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="w">
+            </span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"11:00"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17:00"</span><span class="w">
+        </span><span class="p">}],</span><span class="w">
+        </span><span class="s2">"allowedWeekdays"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"mon"</span><span class="p">,</span><span class="w"> </span><span class="s2">"tue"</span><span class="p">,</span><span class="w"> </span><span class="s2">"wed"</span><span class="p">,</span><span class="w"> </span><span class="s2">"thu"</span><span class="p">,</span><span class="w"> </span><span class="s2">"fri"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"allowedDates"</span><span class="p">:</span><span class="w"> </span><span class="p">{},</span><span class="w">
+        </span><span class="s2">"skills"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"SK001"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"vehicleFeatures"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+        </span><span class="s2">"notes"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"phone"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customField1"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customField2"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customField3"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customField4"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"customField5"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"notificationPreference"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The order with the matching orderNo was not found."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_ORD_NOT_FOUND"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD99"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if at least one order was retrieved, <code>false</code> if no orders were retrieved</td>
+</tr>
+<tr>
+<td><code>orders</code><br /><em>mandatory</em></td>
+<td>list of order response objects<br />-</td>
+<td>Each order object in the list corresponds to the respective <code>orderNo</code> in the request. See <em>Order Response Object</em> section for more information.</td>
+</tr>
+</tbody></table>
+<h3 id='get-orders-bulk-response-order-response-object'>Order Response Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the order was retrieved, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>orderNo</code><br><em>optional</em></td>
+<td>string<br />-</td>
+<td>The <code>orderNo</code> whose retrieval failed (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>data</code><br><em>optional</em></td>
+<td>Order object<br />-</td>
+<td>The retrieved order</td>
+</tr>
+</tbody></table>
+<h3 id='get-orders-bulk-response-order-object'>Order Object</h3>
+<p>In case of success, data will be an object with properties listed in <a href="#data-objects-order-object">Order Object</a>.</p>
+
+<p>The returned <code>type</code> property can additionally be <code>break</code> or <code>depot</code>.</p>
+<h2 id='get-orders-bulk-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following per-order error codes are applicable to <em>Get Orders</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>the order with the matching <code>orderNo</code> was not found.</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>there are multiple orders matching the <code>orderNo</code></td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_PARAM_FORMAT</code></td>
+<td>this <code>orderNo</code> is not valid</td>
+</tr>
+</tbody></table>
+<h1 id='delete-order'>Delete Order</h1>
+<p>Removes an order from the system.</p>
+<h2 id='delete-order-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/delete_order</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/delete_order?key=AUTH_KEY'</span>
+</code></pre><h2 id='delete-order-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orderNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The user-specified identifier of the order to be deleted.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-order-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if order was deleted, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>planningId</code><br /><em>optional</em></td>
+<td>integer<br />-</td>
+<td>The id of the planning process in case optimization is running for this order.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-order-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Delete Order</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>the order with the matching <code>orderNo</code> was not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>there are multiple orders matching the <code>orderNo</code></td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING</code></td>
+<td>optimization is running for this order</td>
+</tr>
+</tbody></table>
+<h1 id='delete-all-orders'>Delete All Orders</h1>
+<p>Removes all orders and planned routes for the specified date from the system. If no date is set, all orders and routes are removed from the system.</p>
+<h2 id='delete-all-orders-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/delete_all_orders</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/delete_all_orders?key=AUTH_KEY'</span>
+</code></pre><h2 id='delete-all-orders-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2014-10-14"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>date</code><br /><em>optional</em></td>
+<td>date (string)<br />-</td>
+<td>Date for which orders and routes will be deleted.<br /><em>YYYY-MM-DD</em> format, for example <code>2013-12-20</code>.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-all-orders-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if orders were deleted, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>planningId</code><br /><em>optional</em></td>
+<td>integer<br />-</td>
+<td>The id of the planning process in case optimization is running.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-all-orders-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Delete Order</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_OPT_RUNNING</code></td>
+<td>optimization is running for this date</td>
+</tr>
+</tbody></table>
+<h1 id='delete-orders-bulk'>Delete Orders (bulk)</h1>
+<p>Removes one or more orders from the system.</p>
+<h2 id='delete-orders-bulk-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/delete_orders</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/delete_orders?key=AUTH_KEY'</span>
+</code></pre><h2 id='delete-orders-bulk-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD999"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orders</code><br /><em>mandatory</em></td>
+<td>list of order objects<br />-</td>
+<td>List of order objects to delete. Each order object must contain an <code>orderNo</code> property with the user-specified identifier of an order. At most 500 orders can be specified.</td>
+</tr>
+<tr>
+<td><code>deleteMultiple</code><br /><em>optional</em></td>
+<td>boolean<br><code>false</code></td>
+<td>If <code>false</code>, when there are multiple orders matched by one order object, an error will be returned. If <code>true</code>, all the matches will be deleted.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-orders-bulk-response'>Response</h2>
+<blockquote>
+<p>Response example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"orders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD001"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"message"</span><span class="p">:</span><span class="w"> </span><span class="s2">"The order with the matching orderNo was not found."</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"code"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ERR_ORD_NOT_FOUND"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD999"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if at least one order was deleted, <code>false</code> if no orders were deleted.</td>
+</tr>
+<tr>
+<td><code>orders</code><br /><em>mandatory</em></td>
+<td>list of delete response objects<br />-</td>
+<td>Each order object in the list corresponds to the respective <code>orderNo</code> in the request. See <em>Delete Response Object</em> section for more information.</td>
+</tr>
+</tbody></table>
+<h3 id='delete-orders-bulk-response-delete-response-object'>Delete Response Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if deleted, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>orderNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The <code>orderNo</code> which was deleted, or whose delete failed.</td>
+</tr>
+<tr>
+<td><code>planningId</code><br /><em>optional</em></td>
+<td>integer<br />-</td>
+<td>The id of the planning process in case optimization is running for this order.</td>
+</tr>
+</tbody></table>
+<h2 id='delete-orders-bulk-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following per-order error codes are applicable to <em>Delete Orders</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>the order with the matching <code>orderNo</code> was not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>there are multiple orders matching the <code>orderNo</code>, but <code>deleteMultiple</code> was set to <em>false</em></td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING</code></td>
+<td>optimization is running for this order</td>
+</tr>
+<tr>
+<td><code>ERR_INVALID_PARAM_FORMAT</code></td>
+<td>this <code>orderNo</code> is not valid</td>
+</tr>
+</tbody></table>
+<h1 id='get-routes'>Get Routes</h1>
+<p>Gets the routes for a specific date.</p>
+<h2 id='get-routes-http-request'>HTTP Request</h2>
+<p><code>GET https://api.optimoroute.com/v1/get_routes</code></p>
+
+<blockquote>
+<p>Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_routes?key=AUTH_KEY&amp;date=2013-12-20'</span>
+</code></pre><h2 id='get-routes-parameters'>Parameters</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>date</code><br /><em>mandatory</em></td>
+<td>date (string)<br />-</td>
+<td>Queried date.<br /><em>YYYY-MM-DD</em> format, for example <code>2013-12-20</code>.</td>
+</tr>
+<tr>
+<td><code>driverExternalId</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Optionally filter by drivers external identifier.</td>
+</tr>
+<tr>
+<td><code>driverSerial</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Optionally filter by Serial number of the Driver.</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Optionally filter by Vehicle registration.</td>
+</tr>
+<tr>
+<td><code>includeRoutePolyline</code><br /><em>optional</em></td>
+<td>boolean<br /><code>false</code></td>
+<td>Optional property to include route polyline in the output. This polyline can be used to display the route on the map. The polyline is a list of coordinates encoded with <a href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm">Encoded Polyline Algorithm</a>.</td>
+</tr>
+</tbody></table>
+<h2 id='get-routes-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the query was successful, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>routes</code><br /><em>mandatory</em></td>
+<td>list of route objects<br /><code>[]</code></td>
+<td>List of routes matching the query.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+</tbody></table>
+<h3 id='get-routes-response-route-object'>Route Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the query was successful, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>driverExternalId</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The drivers external identifier.</td>
+</tr>
+<tr>
+<td><code>driverSerial</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The serial number assigned to the driver.</td>
+</tr>
+<tr>
+<td><code>driverName</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The driver’s name.</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Vehicle registration.</td>
+</tr>
+<tr>
+<td><code>vehicleLabel</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Vehicle label.</td>
+</tr>
+<tr>
+<td><code>duration</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Route duration in minutes.</td>
+</tr>
+<tr>
+<td><code>distance</code><br /><em>mandatory</em></td>
+<td>decimal<br />-</td>
+<td>Route distance in kilometers.</td>
+</tr>
+<tr>
+<td><code>load1</code><br /><em>mandatory</em></td>
+<td>integer<br /><code>0</code></td>
+<td>Route load #1.</td>
+</tr>
+<tr>
+<td><code>load2</code><br /><em>mandatory</em></td>
+<td>integer<br /><code>0</code></td>
+<td>Route load #2.</td>
+</tr>
+<tr>
+<td><code>load3</code><br /><em>mandatory</em></td>
+<td>integer<br /><code>0</code></td>
+<td>Route load #3.</td>
+</tr>
+<tr>
+<td><code>load4</code><br /><em>mandatory</em></td>
+<td>integer<br /><code>0</code></td>
+<td>Route load #4.</td>
+</tr>
+<tr>
+<td><code>stops</code><br /><em>mandatory</em></td>
+<td>list of stop objects<br /><code>[]</code></td>
+<td>An ordered list of stops/orders on the route.</td>
+</tr>
+<tr>
+<td><code>routePolyline</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Route polyline encoded with <a href="https://developers.google.com/maps/documentation/utilities/polylinealgorithm">Encoded Polyline Algorithm</a>. Only included if <code>includeRoutePolyline</code> is set to True.</td>
+</tr>
+</tbody></table>
+<h3 id='get-routes-response-stop-object'>Stop Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>stopNumber</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Stop number. Starts at <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>orderNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The order number.</td>
+</tr>
+<tr>
+<td><code>locationNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Location number.</td>
+</tr>
+<tr>
+<td><code>locationName</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Location name.</td>
+</tr>
+<tr>
+<td><code>address</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Location address.</td>
+</tr>
+<tr>
+<td><code>latitude</code><br /><em>mandatory</em></td>
+<td>decimal<br />-</td>
+<td>Location latitude.</td>
+</tr>
+<tr>
+<td><code>longitude</code><br /><em>mandatory</em></td>
+<td>decimal<br />-</td>
+<td>Location longitude.</td>
+</tr>
+<tr>
+<td><code>scheduledAt</code><br /><em>mandatory</em></td>
+<td>time (string)<br />-</td>
+<td>The scheduled time to begin the service.<br />24-hour (military) clock format, for example: <code>16:00</code>.<br />The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+<tr>
+<td><code>scheduledAtDt</code><br /><em>mandatory</em></td>
+<td>datetime (string)<br />-</td>
+<td>The scheduled date and time to begin the service. Format: <em>YYYY-mm-dd HH:MM:SS</em>, for example <code>2018-01-01 13:10:37</code>.</td>
+</tr>
+<tr>
+<td><code>arrivalTimeDt</code><br /><em>mandatory</em></td>
+<td>datetime (string)<br />-</td>
+<td>The date and time when the driver arrived at the location. Because of time windows the driver might need to wait to begin the service. Format: <em>YYYY-mm-dd HH:MM:SS</em>, for example <code>2018-01-01 13:10:37</code>.</td>
+</tr>
+<tr>
+<td><code>travelTime</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Travel time from previous stop (in seconds).</td>
+</tr>
+<tr>
+<td><code>distance</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Distance from previous stop (in meters).</td>
+</tr>
+<tr>
+<td><code>type</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Order type only added for lunch breaks (value will be <code>break</code>) and for depot trips (value will be <code>depot</code>).</td>
+</tr>
+</tbody></table>
+<h2 id='get-routes-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>None.</p>
+<h1 id='get-scheduling-information'>Get Scheduling Information</h1>
+<p>Gets the scheduling information for the specified Order.</p>
+<h2 id='get-scheduling-information-http-request'>HTTP Request</h2>
+<p><code>GET https://api.optimoroute.com/v1/get_scheduling_info</code></p>
+
+<blockquote>
+<p>Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_scheduling_info?key=AUTH_KEY&amp;orderNo=ORD001'</span>
+</code></pre><h2 id='get-scheduling-information-parameters'>Parameters</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>orderNo</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The user-specified identifier for the order.</td>
+</tr>
+</tbody></table>
+<h2 id='get-scheduling-information-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the query was successful, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>orderScheduled</code><br /><em>optional</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the order is scheduled, <code>false</code> otherwise.</td>
+</tr>
+<tr>
+<td><code>scheduleInformation</code><br /><em>optional</em></td>
+<td>schedule info object<br />-</td>
+<td>The order scheduling information.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+</tbody></table>
+<h3 id='get-scheduling-information-response-order-scheduling-information-object'>Order Scheduling Information Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>driverExternalId</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The drivers external identifier.</td>
+</tr>
+<tr>
+<td><code>driverSerial</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The serial number assigned to the driver.</td>
+</tr>
+<tr>
+<td><code>driverName</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The driver’s name.</td>
+</tr>
+<tr>
+<td><code>vehicleRegistration</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Vehicle registration.</td>
+</tr>
+<tr>
+<td><code>vehicleLabel</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Vehicle label.</td>
+</tr>
+<tr>
+<td><code>stopNumber</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Stop number on the route. Starts at <code>1</code>.</td>
+</tr>
+<tr>
+<td><code>scheduledAt</code><br /><em>mandatory</em></td>
+<td>time (string)<br />-</td>
+<td>The scheduled time to begin the service. <br />24-hour (military) clock format, for example: <code>16:00</code>.<br />The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+<tr>
+<td><code>scheduledAtDt</code><br /><em>mandatory</em></td>
+<td>datetime (string)<br />-</td>
+<td>The scheduled date and time to begin the service. Format: <em>YYYY-mm-dd HH:MM:SS</em>, for example <code>2018-01-01 13:10:37</code>.</td>
+</tr>
+<tr>
+<td><code>arrivalTimeDt</code><br /><em>mandatory</em></td>
+<td>datetime (string)<br />-</td>
+<td>The date and time when the driver arrived at the location. Because of time windows the driver might need to wait to begin the service. Format: <em>YYYY-mm-dd HH:MM:SS</em>, for example <code>2018-01-01 13:10:37</code>.</td>
+</tr>
+<tr>
+<td><code>travelTime</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Travel time from previous stop (in seconds).</td>
+</tr>
+<tr>
+<td><code>distance</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>Distance from previous stop (in meters).</td>
+</tr>
+</tbody></table>
+<h2 id='get-scheduling-information-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Get Scheduling Information</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>the order with the matching <code>orderNo</code> was not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>there are multiple orders matching the <code>orderNo</code></td>
+</tr>
+</tbody></table>
+<h1 id='start-planning'>Start Planning</h1>
+<p>Starts the planning process for the specified date.</p>
+<h2 id='start-planning-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/start_planning</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/start_planning?key=AUTH_KEY'</span>
+</code></pre><h2 id='start-planning-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2013-12-20"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>date</code><br /><em>mandatory</em></td>
+<td>date (string)<br />-</td>
+<td>Date to be planned.<br /><em>YYYY-MM-DD</em> format, for example <code>2013-12-20</code>.</td>
+</tr>
+<tr>
+<td><code>balancing</code><br /><em>optional</em></td>
+<td>string<br /><code>OFF</code></td>
+<td>Route balancing settings. Allowed values:<br /><code>OFF</code> – No balancing<br /><code>ON</code> – Balance routes<br /><code>ON_FORCE</code> – Balance routes and use all drivers<br /><br />No balancing: returns the best routes, some drivers might not be used.<br />Balance routes: balance the work load between drivers, some drivers may not be used.<br />Balance routes and use all drivers: balance work load between all available drivers.</td>
+</tr>
+<tr>
+<td><code>balanceBy</code><br /><em>optional</em></td>
+<td>string<br /><code>WT</code></td>
+<td>If route balancing is turned on, this defines the criteria for balancing the routes.<br /><br />Allowed values:<br /><code>WT</code> – Working time<br /><code>NUM</code> – Number of orders per driver</td>
+</tr>
+<tr>
+<td><code>balancingFactor</code><br /><em>optional</em></td>
+<td>decimal<br /><code>0.3</code></td>
+<td>Importance of balancing compared to route costs. Increasing the balancing factor will result in more balanced routes.<br />Only applicable in combination with <code>ON_FORCE</code> (otherwise ignored).<br /><br />Minimum value: <code>0.0</code><br />Maximum value: <code>1.0</code></td>
+</tr>
+<tr>
+<td><code>startWith</code><br /><em>optional</em></td>
+<td>string<br /><code>EMPTY</code></td>
+<td>Start planning from existing routes or from scratch.<br /><br />Allowed values:<br /><code>EMPTY</code> – Ignore existing routes and start from scratch<br /><code>CURRENT</code> – Start planning with the existing routes</td>
+</tr>
+<tr>
+<td><code>lockType</code><br /><em>optional</em></td>
+<td>string<br /><code>NONE</code></td>
+<td>Applicable if <code>startWith</code> is set to <code>CURRENT</code>.<br/><br/>Allowed values:<br/><code>NONE</code> – Allow all changes to the existing routes<br/><code>ROUTES</code> - Keep planned Routes unchanged and add new Orders to unused<br/><code>RESOURCES</code> - Keep Drivers/Vehicles for planned Orders and fit in new Orders</td>
+</tr>
+<tr>
+<td><code>depotTrips</code><br /><em>optional</em></td>
+<td>boolean<br /><code>false</code></td>
+<td>If <code>true</code> drivers will be scheduled to return to the warehouse to reload (or unload in case of pickups) if there is still time within their working hours to do another route.<br />More information is available on our blog:<br /><a href="https://optimoroute.com/stop-restock-and-continue-on-your-way/">https://optimoroute.com/stop-restock-and-continue-on-your-way/</a>.</td>
+</tr>
+<tr>
+<td><code>depotVisitDuration</code><br /><em>optional</em></td>
+<td>integer<br /><code>0</code></td>
+<td>Time in minutes required to reload or unload the goods in the warehouse before the driver goes out for another run. <br />Only applicable if depotTrips is set to true.</td>
+</tr>
+<tr>
+<td><code>clustering</code><br /><em>optional</em></td>
+<td>boolean<br /><code>false</code></td>
+<td>If <code>true</code> the system will try to minimize overlapp between driver routes.</td>
+</tr>
+<tr>
+<td><code>useDrivers</code><br /><em>optional</em></td>
+<td>list of SelectedDriver objects<br /><code>[]</code></td>
+<td>Selected drivers that should be used in the optimization.<br />By default (if <code>useDrivers</code> is not set or the list is empty) all available drivers for the specified date are used.</td>
+</tr>
+<tr>
+<td><code>useOrders</code><br /><em>optional</em></td>
+<td>list of strings<br /><code>[]</code></td>
+<td>Selected orders that should be included in the optimization.<br />Orders are specified as a list of order identifiers (<code>orderNo</code> strings).<br />By default (if <code>useOrders</code> is not set or the list is empty) all orders for the specified date are included.<br /><br />Orders that are not selected, but are already scheduled to drivers that will be used in the optimization will be unscheduled unless the <code>includeScheduledOrders</code> flag is set to true.</td>
+</tr>
+<tr>
+<td><code>includeScheduledOrders</code><br /><em>optional</em></td>
+<td>boolean<br /><code>true</code></td>
+<td>Determines behavior when a subset of orders is selected but there are other orders already scheduled to the applicable drivers. <br />If <code>includeScheduledOrders</code> is <code>true</code>, these orders will be included in the optimization, otherwise they will be unscheduled.</td>
+</tr>
+</tbody></table>
+<h3 id='start-planning-parameters-selecteddriver-object'>SelectedDriver Object</h3>
+<p>Use either <code>driverExternalId</code> or <code>driverSerial</code> (one field is enough):</p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>driverExternalId</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>The external identifier assigned to the driver in driver administration.</td>
+</tr>
+<tr>
+<td><code>driverSerial</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>The driver’s serial number.</td>
+</tr>
+</tbody></table>
+<h2 id='start-planning-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the optimization was started, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>planningId</code><br /><em>optional</em></td>
+<td>integer<br />-</td>
+<td>Returns id of the started optimization if operation was successful, or the already running optimization in case of <code>ERR_OPT_RUNNING_FOR_DATE</code> error. Planning id can be used later for getting the planning status or stopping the planning process.</td>
+</tr>
+<tr>
+<td><code>missingOrders</code><br /><em>optional</em></td>
+<td>list of strings<br /><code>[]</code></td>
+<td>In case <code>ERR_ORD_NOT_FOUND</code> error is raised this field will contain the list of missing order identifiers (<code>orderNo</code> strings).</td>
+</tr>
+<tr>
+<td><code>missingDrivers</code><br /><em>optional</em></td>
+<td>list of SelectedDriver objects<br /><code>[]</code></td>
+<td>In case <code>ERR_DRIVER_NOT_FOUND</code> error is raised this field will contain a list of missing drivers. Each driver is a <code>SelectedDriver</code> object.</td>
+</tr>
+</tbody></table>
+<h2 id='start-planning-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Start Planning</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_OPT_TRIAL_ENDED</code></td>
+<td>free trial has ended for this account</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING_FOR_DATE</code></td>
+<td>planning is already running for this date</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING_FOR_ORDER</code></td>
+<td>optimization is already running for one or more orders listed in <code>useOrders</code></td>
+</tr>
+<tr>
+<td><code>ERR_OPT_NO_REQUESTS</code></td>
+<td>no orders exist for the specified date</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_NO_RESOURCES</code></td>
+<td>no drivers are available for this date</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RESOURCES_EXCEEDED</code></td>
+<td>number of driver exceeded</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_REQUESTS_EXCEEDED</code></td>
+<td>number of orders exceeded</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_COULD_NOT_START</code></td>
+<td>internal error, please contact support</td>
+</tr>
+<tr>
+<td><code>ERR_ORD_NOT_FOUND</code></td>
+<td>one or more orders specified in <code>useOrders</code> were not found</td>
+</tr>
+<tr>
+<td><code>ERR_DRIVER_NOT_FOUND</code></td>
+<td>one or more drivers specified in <code>useDrivers</code> were not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_ORD_FOUND</code></td>
+<td>multiple orders with specified identifier have been found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_DRV</code></td>
+<td>multiple drivers with specified identifier have been found</td>
+</tr>
+</tbody></table>
+<h1 id='stop-planning'>Stop Planning</h1>
+<p>Stops the planning process.</p>
+<h2 id='stop-planning-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/stop_planning</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/stop_planning?key=AUTH_KEY'</span>
+</code></pre><h2 id='stop-planning-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">" planningId"</span><span class="p">:</span><span class="w"> </span><span class="mi">8828</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>planningId</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>The id of the planning process to be stopped.</td>
+</tr>
+</tbody></table>
+<h2 id='stop-planning-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the optimization was stopped, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+</tbody></table>
+<h2 id='stop-planning-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Stop Planning</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_JOB_NOT_FOUND</code></td>
+<td>planning job with specified id was not found</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_NOT_RUNNING</code></td>
+<td>planning job is not running</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_COULD_NOT_STOP</code></td>
+<td>internal error, please contact support</td>
+</tr>
+</tbody></table>
+<h1 id='get-planning-status'>Get Planning Status</h1>
+<p>Returns the status of the planning process.</p>
+<h2 id='get-planning-status-http-request'>HTTP Request</h2>
+<p><code>GET https://api.optimoroute.com/v1/get_planning_status</code></p>
+
+<blockquote>
+<p>Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_planning_status?key=AUTH_KEY&amp;planningId=8828'</span>
+</code></pre><h2 id='get-planning-status-parameters'>Parameters</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>planningId</code><br /><em>mandatory</em></td>
+<td>integer<br />-</td>
+<td>The id of the planning process.</td>
+</tr>
+</tbody></table>
+<h2 id='get-planning-status-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the request was a success, <code>false</code> if an error occurred.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>status</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td><code>N</code> - New<br /><code>R</code> - Running<br /><code>C</code> - Cancelled by the user<br /><code>F</code> - Finished<br /><code>E</code> - Error occurred<br /></td>
+</tr>
+<tr>
+<td><code>percentageComplete</code><br /><em>optional</em></td>
+<td>integer<br />-</td>
+<td>Percentage complete – values range from <code>0</code> to <code>100</code>.</td>
+</tr>
+</tbody></table>
+<h2 id='get-planning-status-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Get Planning Status</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_JOB_NOT_FOUND</code></td>
+<td>the planning job with the specified id was not found</td>
+</tr>
+</tbody></table>
+<h1 id='update-driver-parameters'>Update Driver Parameters</h1>
+<p>Updates driver parameters for a particular date and driver start and end location. 
+Any existing routes for the specified date/driver will be unscheduled. </p>
+
+<p>The following parameters can be changed:</p>
+
+<ul>
+<li>Enable/disable driver</li>
+<li>Driver work time from</li>
+<li>Driver work time to</li>
+<li>Assigned vehicle</li>
+<li>Vehicle load capacity #1</li>
+<li>Vehicle load capacity #2</li>
+<li>Vehicle load capacity #3</li>
+<li>Vehicle load capacity #4</li>
+<li>Driver start location</li>
+<li>Driver end location</li>
+</ul>
+<h2 id='update-driver-parameters-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/update_driver_parameters</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/update_driver_parameters?key=AUTH_KEY'</span>
+</code></pre><h2 id='update-driver-parameters-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"externalId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3945300304540"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"date"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-09-25"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"workTimeFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"09:30"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"workTimeTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"18:00"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>externalId</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>The external identifier assigned to the driver in driver administration.</td>
+</tr>
+<tr>
+<td><code>date</code><br /><em>mandatory</em></td>
+<td>date<br />-</td>
+<td>Date to be planned.<br /><em>YYYY-MM-DD</em> format, for example <code>2013-12-20</code>.</td>
+</tr>
+<tr>
+<td><code>enabled</code><br /><em>optional</em></td>
+<td>boolean<br />unchanged</td>
+<td>Enable or disable driver for the specified date.</td>
+</tr>
+<tr>
+<td><code>workTimeFrom</code><br /><em>optional</em></td>
+<td>time (string)<br />unchanged</td>
+<td>Driver’s work time from for the specified date.<br />24-hour (military) clock format, for example: <code>08:00</code>.<br />The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+<tr>
+<td><code>workTimeTo</code><br /><em>optional</em></td>
+<td>time (string)<br />unchanged</td>
+<td>Driver’s work time end for the specified date.<br />24-hour (military) clock format, for example: <code>08:00</code>. The valid values range from <code>00:00</code> to <code>23:59</code>.</td>
+</tr>
+<tr>
+<td><code>assignedVehicle</code><br /><em>optional</em></td>
+<td>string<br />unchanged</td>
+<td>The external identifier of the vehicle to be assigned to the driver for the specified date. This will also update the vehicle load capacity parameters (unless they are overridden with vehicleCapacityX settings).</td>
+</tr>
+<tr>
+<td><code>vehicleCapacity1</code><br /><em>optional</em></td>
+<td>integer<br />unchanged</td>
+<td>The new vehicle load capacity #1 for the specified date.</td>
+</tr>
+<tr>
+<td><code>vehicleCapacity2</code><br /><em>optional</em></td>
+<td>integer<br />unchanged</td>
+<td>The new vehicle load capacity #2 for the specified date.</td>
+</tr>
+<tr>
+<td><code>vehicleCapacity3</code><br /><em>optional</em></td>
+<td>integer<br />unchanged</td>
+<td>The new vehicle load capacity #3 for the specified date.</td>
+</tr>
+<tr>
+<td><code>vehicleCapacity4</code><br /><em>optional</em></td>
+<td>integer<br />unchanged</td>
+<td>The new vehicle load capacity #4 for the specified date.</td>
+</tr>
+<tr>
+<td><code>startLatitude</code><br /><em>optional</em></td>
+<td>decimal<br />unchanged</td>
+<td>Driver’s start location GPS latitude will be changed (this new location will be used for all future optimizations). If <code>startLongitude</code> is not defined this value will be ignored.</td>
+</tr>
+<tr>
+<td><code>startLongitude</code><br /><em>optional</em></td>
+<td>decimal<br />unchanged</td>
+<td>Driver’s start location GPS longitude (this new location will be used for all future optimizations). If <code>startLatitude</code> is not defined this value will be ignored.</td>
+</tr>
+<tr>
+<td><code>startAddress</code><br /><em>optional</em></td>
+<td>string<br />unchanged</td>
+<td>Driver’s start location address that will be displayed on reports (this new location will be used for all future optimizations). If <code>startLatitude</code> and <code>startLongitude</code> are not defined this value will be ignored.</td>
+</tr>
+<tr>
+<td><code>endLatitude</code><br /><em>optional</em></td>
+<td>decimal<br />unchanged</td>
+<td>Driver’s end location GPS latitude (this new location will be used for all future optimizations). If <code>endLongitude</code> is not defined this value will be ignored.</td>
+</tr>
+<tr>
+<td><code>endLongitude</code><br /><em>optional</em></td>
+<td>decimal<br />unchanged</td>
+<td>Driver’s end location GPS longitude (this new location will be used for all future optimizations). If <code>endLatitude</code> is not defined this value will be ignored.</td>
+</tr>
+<tr>
+<td><code>endAddress</code><br /><em>optional</em></td>
+<td>string<br />unchanged</td>
+<td>Driver’s end location address that will be displayed on reports (this new location will be used for all future optimizations). If <code>endLatitude</code> and <code>endLongitude</code> are not defined this value will be ignored.</td>
+</tr>
+</tbody></table>
+<h2 id='update-driver-parameters-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the driver parameters were updated, <code>false</code> if an error occurred.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+</tbody></table>
+<h2 id='update-driver-parameters-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Update Driver Parameters</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_DRIVER_NOT_FOUND</code></td>
+<td>the driver with the specified <code>externalId</code> was not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_DRV</code></td>
+<td>multiple drivers with specified <code>externalId</code> have been found</td>
+</tr>
+<tr>
+<td><code>ERR_VEH_NOT_FOUND</code></td>
+<td>the vehicle with the specified <code>externalId</code> was not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_VEH</code></td>
+<td>multiple vehicles with specified <code>externalId</code> have been found</td>
+</tr>
+</tbody></table>
+<h1 id='get-mobile-events'>Get Mobile Events</h1>
+<p>Retrieve mobile events such as <code>success</code>, <code>on_duty</code>, <code>failed</code>, … for the currently active plan (i.e. the last plan that was sent to drivers).</p>
+
+<p>Each <code>get_events</code> request returns up to <code>500</code> events which occurred after the specified tag. The result will contain a new tag which you can use in the next <code>get_events</code> request to skip already received events.</p>
+<h2 id='get-mobile-events-http-request'>HTTP Request</h2>
+<p><code>GET https://api.optimoroute.com/v1/get_events</code></p>
+
+<blockquote>
+<p>Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_events?key=AUTH_KEY&amp;after_tag='</span>
+</code></pre><h2 id='get-mobile-events-parameters'>Parameters</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>after_tag</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Specify the <code>after_tag</code> to retrieve only the events which occurred since a specific prior call to <code>get_events</code>.<br />In this case, the <code>after_tag</code> needs to contain the tag returned in the prior call.<br />See example below.</td>
+</tr>
+</tbody></table>
+<h2 id='get-mobile-events-response'>Response</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> unless an error occurred.</td>
+</tr>
+<tr>
+<td><code>events</code><br /><em>optional</em></td>
+<td>list of event objects<br /><code>[]</code></td>
+<td>A list of events objects in the order they arrived from drivers’ mobile apps.</td>
+</tr>
+<tr>
+<td><code>tag</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>Tag marks the point of time of the last event received in this response. Use it to specify the <code>after_tag</code> query parameter in the next get_events request.</td>
+</tr>
+<tr>
+<td><code>remainingEvents</code><br /><em>optional</em></td>
+<td>integer<br />unchanged</td>
+<td>The number of events that occurred but were not fetched in this response (in each response at most <code>500</code> events are returned).</td>
+</tr>
+</tbody></table>
+<h3 id='get-mobile-events-response-event-object'>Event Object</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>event</code><br /><em>mandatory</em></td>
+<td>string</td>
+<td>Event type. Currently one of the following:<br /><code>on_duty</code> – the driver went on duty<br /><code>off_duty</code> – the driver went off duty</br /><code>start_service</code> - the driver started the service<br /><code>success</code> – the specified order was completed successfully<br /><code>failed</code> – the driver failed to complete the order<br /><code>rejected</code> – the driver rejected the order</td>
+</tr>
+<tr>
+<td><code>unixTimestamp</code><br /><em>mandatory</em></td>
+<td>integer</td>
+<td>The time at which event occurred.<br />Number of seconds elapsed since 00:00 UTC January 1st 1970.</td>
+</tr>
+<tr>
+<td><code>utcTime</code><br /><em>mandatory</em></td>
+<td>ISO 8601 date (string)</td>
+<td>The UTC date and time at which the specified event occurred.</td>
+</tr>
+<tr>
+<td><code>localTime</code><br /><em>mandatory</em></td>
+<td>ISO 8601 date (string)</td>
+<td>The local time at which the specified event occurred.</td>
+</tr>
+<tr>
+<td><code>driverName</code><br /><em>optional</em></td>
+<td>string</td>
+<td>The driver’s name.<br />Will be sent for events that are related to a specific driver.</td>
+</tr>
+<tr>
+<td><code>driverSerial</code><br /><em>optional</em></td>
+<td>string</td>
+<td>The driver’s serial number.<br />Will not be sent if empty or if the event is not related to a specific driver.</td>
+</tr>
+<tr>
+<td><code>driverExternalId</code><br /><em>optional</em></td>
+<td>string</td>
+<td>The driver’s external identifier.<br />Will not be sent if empty or if the event is not related to a specific driver.</td>
+</tr>
+<tr>
+<td><code>orderNo</code><br /><em>optional</em></td>
+<td>string</td>
+<td>The identifier of the affected order.<br />Not sent for some events such as <code>on_duty</code>.</td>
+</tr>
+</tbody></table>
+
+<p>The returned event fields <code>unixTimestamp</code>, <code>utcTime</code> and <code>localTime</code> all refer to the same moment at which the event occurred, so you can use whichever is more convenient.</p>
+
+<p>Please note that some mobile devices might be offline temporarily and they will sync their events only after they reconnect so the events you’ll receive might arrive out of chronological order. For example, the first driver might successfully complete the order <code>001</code> at 9:00 AM, but might be offline until 09:15 AM. The second driver could finish the order <code>002</code> at 9:10 AM, but might be online the whole time. The server will receive the event for the order <code>002</code> first and only then the event for the order <code>001</code>.</p>
+<h2 id='get-mobile-events-examples'>Examples</h2>
+<blockquote>
+<p>In the first request we won’t specify the <code>after_tag</code> parameter (we’ll leave it empty):</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_events?key=AUTH_KEY&amp;after_tag='</span>
+</code></pre>
+<blockquote>
+<p>Response:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"remainingEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abcd1234xyz"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"unixTimestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1516294800</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"utcTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T17:00:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"localTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T09:00:00"</span><span class="w">
+      </span><span class="s2">"driverName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Charlie"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"driverSerial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0011"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"on_duty"</span><span class="p">,</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"unixTimestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1516296030</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"utcTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T17:20:30"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"localTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T09:20:30"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"driverName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Charlie"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"driverSerial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0011"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD232"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>We’ll retry the query in 10 seconds, but this time we’ll use the tag we received in the last result as our <code>after_tag</code> parameter:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_events?key=AUTH_KEY&amp;after_tag=abcd1234xyz'</span>
+</code></pre>
+<blockquote>
+<p>Response:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"remainingEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"abcd1234xyz"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<blockquote>
+<p>There were no new events in the meantime. We’ll retry the query in 10 seconds:</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl <span class="s1">'https://api.optimoroute.com/v1/get_events?key=AUTH_KEY&amp;after_tag=abcd1234xyz'</span>
+</code></pre>
+<blockquote>
+<p>Response:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"remainingEvents"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"tag"</span><span class="p">:</span><span class="w"> </span><span class="s2">"qwe9876541213"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"unixTimestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1516298030</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"event"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"utcTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T17:53:50"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"localTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2018-01-18T09:53:50"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"driverName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Charlie"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"driverSerial"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0011"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ORD771"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre><h1 id='booking-slots-beta'>Booking Slots (Beta)</h1>
+<p>Returns all possible slots to serve the order and the associated costs.</p>
+
+<p>Method does not create the order, just a reservation. To actually create the order withing the specified slot use the <code>reservationId</code> and <em>Booking Reserve</em> method.</p>
+
+<p>This method can be used for allowing the customer to select the time slot for the service by choosing one of the available slots.</p>
+<h2 id='booking-slots-beta-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/booking_slots</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/booking_slots?key=AUTH_KEY'</span>
+</code></pre><h2 id='booking-slots-beta-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"order"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"operation"</span><span class="p">:</span><span class="w"> </span><span class="s2">"CREATE"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"orderNo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"B001"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"D"</span><span class="p">,</span><span class="w">
+        </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="s2">"locationName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mike Jackson"</span><span class="p">,</span><span class="w">
+            </span><span class="s2">"address"</span><span class="p">:</span><span class="w"> </span><span class="s2">"110 Cedar St, Somerville, MA 02144, USA"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="s2">"duration"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"slots"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"dates"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"2020-02-24"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2020-02-25"</span><span class="p">],</span><span class="w">
+        </span><span class="s2">"timeWindows"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+            </span><span class="p">{</span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"08:00"</span><span class="p">,</span><span class="w"> </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12:00"</span><span class="p">},</span><span class="w">
+            </span><span class="p">{</span><span class="s2">"twFrom"</span><span class="p">:</span><span class="w"> </span><span class="s2">"12:00"</span><span class="p">,</span><span class="w"> </span><span class="s2">"twTo"</span><span class="p">:</span><span class="w"> </span><span class="s2">"16:00"</span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"planning"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="s2">"clustering"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="s2">"finishOrderBySlotEnd"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>order</code><br /><em>mandatory</em></td>
+<td><a href="#data-objects-order-object">Order Object</a><br />-</td>
+<td>Order that that we are trying to schedule.</td>
+</tr>
+<tr>
+<td><code>slots</code><br /><em>mandatory</em></td>
+<td>Slots object<br />-</td>
+<td>Order that that we are trying to schedule.</td>
+</tr>
+<tr>
+<td><code>planning</code><br /><em>optional</em></td>
+<td>list of <br />default settings</td>
+<td>Planning settings that are defined in <a href="#start-planning">Start Planning</a>: <code>balancing</code>, <code>balanceBy</code>, <code>balancingFactor</code>, <code>clustering</code>, <code>startWith</code>, <code>lockType</code>, <code>depotTrips</code>, <code>depotVisitDuration</code>, <code>useDrivers</code>, <code>useOrders</code>, <code>includeScheduledOrders</code>.</td>
+</tr>
+<tr>
+<td><code>finishOrderBySlotEnd</code><br /><em>optional</em></td>
+<td>boolean<br /><code>false</code></td>
+<td>Set to true if order has to be completed within the time slot.</td>
+</tr>
+</tbody></table>
+<h3 id='booking-slots-beta-parameters-slots-object'>Slots Object</h3>
+<p>Describes the date/time slots within which we are trying to schedule the order.</p>
+
+<p>The slots can be defined as:</p>
+
+<ul>
+<li>combination of <code>dates</code> and <code>timeWindows</code></li>
+<li>combination of <code>dateRange</code> and <code>timeWindows</code></li>
+<li>list of <code>dateTimes</code></li>
+</ul>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>dates</code><br /><em>optional</em></td>
+<td>list of dates (strings)<br />-</td>
+<td>List of dates on which we are trying to schedule the order. <em>YYYY-MM-DD</em> format, for example <code>2020-12-20</code>. Max 8 days.</td>
+</tr>
+<tr>
+<td><code>dateRange</code><br /><em>optional</em></td>
+<td>daterange object<br />{}</td>
+<td>Another way to specify the dates on which we are trying to schedule the order.<br />Daterange is specified as an object with <code>from</code> and <code>to</code> fields, for example:<br /><code>{&quot;from&quot;: &quot;2018-06-01&quot;, &quot;to&quot;: &quot;2018-07-01&quot;}</code><br />Default is an empty object <code>{}</code> meaning no restriction.</td>
+</tr>
+<tr>
+<td><code>timeWindows</code></td>
+<td>list of time windows</td>
+<td>List of time slots in which we are trying to schedule the order.<br />Each time window is an object with <code>twFrom</code> and <code>twTo</code> fields. Both times are in 24-hour (military) clock format, in the range from <code>00:00</code> to <code>23:59</code>.<br /><code>twFrom</code> specifies the earliest time allowed to begin the service (if the driver arrives too early, they will be forced to wait). <code>twTo</code> specifies the deadline to end the service.<br />Example: <br /><code>[{&quot;twFrom&quot;: &quot;10:00&quot;, &quot;twTo&quot;: &quot;14:00&quot;}]</code>.<br />Default is <code>[]</code> meaning no time windows.</td>
+</tr>
+<tr>
+<td><code>dateTimes</code></td>
+<td>list of datetime windows</td>
+<td>Another way to define the date and time slots withing which we are tryint to schedule the order.<br />Each object can contain <code>from</code> and/or <code>to</code> fields, which are datetime strings, or <code>null</code>. Strings are in the format <code>YYYY-MM-DDTHH:MM:SS</code>, e.g. <code>2020-01-30T15:54:02</code>. The field <code>from</code> defines the earliest time to begin the service, and <code>to</code> defines the latest time to <em>begin</em> the service. When only one end of the restriction is given, the other is assumed to be <code>null</code>, meaning it is not restricted.<br />Example: <br /><code>[{&quot;from&quot;: &quot;2019-12-26T00:00:00&quot;, &quot;to&quot;: &quot;2019-12-31T23:59:59&quot;}]</code>.<br />Default is <code>[]</code> meaning no restriction.</td>
+</tr>
+</tbody></table>
+<h2 id='booking-slots-beta-response'>Response</h2>
+<p>Returns all possible time slots and the associated costs.
+Time slots that are not feasible are not returned.</p>
+
+<blockquote>
+<p>Response example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"slots"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"bdf8df81-2495-46be-873f-7cdbeaec1797"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cost"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.369053419</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-24T08:00:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-24T12:00:00"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"a9092489-a8bc-439b-a878-6c9d5671caf9"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cost"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-24T12:00:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-24T16:00:00"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="s2">"index"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"56679a5e-e76e-4723-91bd-387c271fdb6a"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"cost"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2879286373</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-25T08:00:00"</span><span class="p">,</span><span class="w">
+      </span><span class="s2">"to"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-02-25T12:00:00"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the api request was successful, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string  <br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>slots</code><br /><em>optional</em></td>
+<td>list of Reservation objects<br />[]</td>
+<td>If request was successful a list of feasible slots/reservations will be returned.</td>
+</tr>
+</tbody></table>
+<h2 id='booking-slots-beta-reservation-object'>Reservation object</h2>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>index</code><br /><em>mandatory</em></td>
+<td>integer<br /></td>
+<td>Index of the available slot.</td>
+</tr>
+<tr>
+<td><code>reservationId</code><br /><em>mandatory</em></td>
+<td>string<br /></td>
+<td>Reservation ID used for creating the order with <em>Booking Reserve</em> method.</td>
+</tr>
+<tr>
+<td><code>cost</code><br /><em>mandatory</em></td>
+<td>float<br /></td>
+<td>Cost of scheduling the order within this time slot. Values from 0.0 (lowest cost) to 1.0 (highest cost).</td>
+</tr>
+<tr>
+<td><code>from</code><br /><em>mandatory</em></td>
+<td>datetime<br /></td>
+<td>Slot start.</td>
+</tr>
+<tr>
+<td><code>to</code><br /><em>mandatory</em></td>
+<td>datetime<br /></td>
+<td>Slot end.</td>
+</tr>
+</tbody></table>
+<h2 id='booking-slots-beta-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Booking Slots</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_INVALID_PARAM_FORMAT</code></td>
+<td>booking slots are not defined correctly</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_NO_RESOURCES</code></td>
+<td>no drivers are available for this date</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RESOURCES_EXCEEDED</code></td>
+<td>number of driver exceeded</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_REQUESTS_EXCEEDED</code></td>
+<td>number of orders exceeded</td>
+</tr>
+<tr>
+<td><code>ERR_UNSUPPORTED_BY_PRICING_PLAN</code></td>
+<td>enterprise plan is required for booking API</td>
+</tr>
+<tr>
+<td><code>ERR_MAX_BOOKING_DAYS_EXCEEDED</code></td>
+<td>max limit of booking days (8) has been exceeded</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_RUNNING_FOR_DATE</code></td>
+<td>planning is already running for this date</td>
+</tr>
+<tr>
+<td><code>ERR_OPT_COULD_NOT_START</code></td>
+<td>internal error, please contact support</td>
+</tr>
+<tr>
+<td><code>ERR_DRIVER_NOT_FOUND</code></td>
+<td>one or more drivers specified in <code>useDrivers</code> were not found</td>
+</tr>
+<tr>
+<td><code>ERR_MULTIPLE_DRV</code></td>
+<td>multiple drivers with specified identifier have been found</td>
+</tr>
+</tbody></table>
+<h1 id='booking-reserve-beta'>Booking Reserve (Beta)</h1>
+<p>Used to create and schedule the order once the booking slot has been selected.</p>
+<h2 id='booking-reserve-beta-http-request'>HTTP Request</h2>
+<p><code>POST https://api.optimoroute.com/v1/booking_reserve</code></p>
+
+<blockquote>
+<p><em>reqbody.json</em> is a local file containing the JSON data to be posted.
+Make sure to replace <code>AUTH_KEY</code> with your API key.</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -d <span class="s1">'@reqbody.json'</span> <span class="s1">'https://api.optimoroute.com/v1/booking_reserve?key=AUTH_KEY'</span>
+</code></pre><h2 id='booking-reserve-beta-parameters'>Parameters</h2>
+<blockquote>
+<p>Request body example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="s2">"reservationId"</span><span class="p">:</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"createOrderIfBookingFails"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>reservationId</code><br /><em>mandatory</em></td>
+<td>string<br />-</td>
+<td>Reservation ID that was returned by <em>Booking Slots</em>.</td>
+</tr>
+<tr>
+<td><code>createOrderIfBookingFails</code><br /><em>optional</em></td>
+<td>boolean<br /><code>false</code></td>
+<td>If true the system will create the order even if booking fails.</td>
+</tr>
+</tbody></table>
+<h2 id='booking-reserve-beta-response'>Response</h2>
+<blockquote>
+<p>Response example:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"success"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"orderBooked"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type / Default</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>success</code><br /><em>mandatory</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the api request was successful, <code>false</code> if there was an error.</td>
+</tr>
+<tr>
+<td><code>code</code><br /><em>optional</em></td>
+<td>string<br />-</td>
+<td>An error code or a warning code (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>message</code><br /><em>optional</em></td>
+<td>string  <br />-</td>
+<td>An error description or a warning description (not set if the operation was successful).</td>
+</tr>
+<tr>
+<td><code>orderBooked</code><br /><em>optional</em></td>
+<td>boolean<br />-</td>
+<td><code>true</code> if the orders has been booked, <code>false</code> otherwise.</td>
+</tr>
+</tbody></table>
+<h2 id='booking-reserve-beta-error-and-warning-codes'>Error and Warning Codes</h2>
+<p>The following error codes are applicable to <em>Booking Reserve</em> method:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>ERR_INVALID_OR_EXPIRED_RESERVATION</code></td>
+<td>invalid or expired reservation</td>
+</tr>
+<tr>
+<td><code>ERR_UNSUPPORTED_BY_PRICING_PLAN</code></td>
+<td>enterprise plan is required for booking API</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">shell</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
