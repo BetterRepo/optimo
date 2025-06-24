@@ -8,6 +8,7 @@ import ProjectCreationForm from "./components/ProjectCreationForm";
 // import { Logo } from "../common-components/Logo";
 import { Footer } from "../common-components/Footer";
 import FallbackBanner from "../common-components/FallbackBanner";
+import { HelpBubble } from "../common-components/HelpBubble";
 
 export default function ProjectCreationPage() {
   const [isDark, setIsDark] = useState(false);
@@ -65,6 +66,7 @@ export default function ProjectCreationPage() {
       </main>
 
       <Footer />
+      <HelpBubble />
     </div>
   );
 }
