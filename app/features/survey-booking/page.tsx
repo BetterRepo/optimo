@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Footer } from "../common-components/Footer";
 import { HelpBubble } from "../common-components/HelpBubble";
 import FeatureHeader from "../common-components/FeatureHeader";
+import FeatureCard from "../common-components/FeatureCard";
 import { FaCalendarCheck } from "react-icons/fa";
 
 // Extract search params logic to a client component
@@ -80,11 +81,13 @@ export default function SurveyBookingPage() {
         <div className="container mx-auto py-16 px-4 relative">
           <CentralBlock>
             <FeatureHeader title="Book a Survey" Icon={FaCalendarCheck} />
-            {/* Wrap both components that use search params in Suspense */}
-            <Suspense fallback={<div>Loading...</div>}>
-              <SearchParamsHandler />
-              <QueryParamHandler />
-            </Suspense>
+            <FeatureCard>
+              {/* Wrap both components that use search params in Suspense */}
+              <Suspense fallback={<div>Loading...</div>}>
+                <SearchParamsHandler />
+                <QueryParamHandler />
+              </Suspense>
+            </FeatureCard>
           </CentralBlock>
         </div>
       </div>
