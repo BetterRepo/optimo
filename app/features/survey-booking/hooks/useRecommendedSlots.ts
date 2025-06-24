@@ -394,7 +394,11 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
               ),
             }),
           clustering: false,
-          lockType: "RESOURCES",
+          lockType: "NONE",
+          balancing: "ON_FORCE",
+          balanceBy: "WT",
+          balancingFactor: 0.8,
+          startWith: "CURRENT",
         },
       };
 
