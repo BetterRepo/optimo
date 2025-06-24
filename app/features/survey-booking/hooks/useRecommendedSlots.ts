@@ -360,8 +360,8 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
         // ...locationData,
         locationName: `${formData.firstName} ${formData.lastName}`.trim(),
         address: formattedAddress,
-        acceptMultipleResults: true,
-        acceptPartialMatch: true,
+        // acceptMultipleResults: true,
+        // acceptPartialMatch: true,
         // 🎯 Include coordinates if available from geocoding (prevents Optimo geocoding errors)
         // ...(formData.latitude &&
         // 	formData.longitude && {
@@ -398,7 +398,8 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
         },
       };
 
-      const response = await fetch("/api/recommendSlots", {
+      // const response = await fetch("/api/recommendSlots", {
+      const response = await fetch("/api/bookingSlots", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
