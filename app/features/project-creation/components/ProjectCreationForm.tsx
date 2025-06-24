@@ -10,6 +10,7 @@ import { useProjectSubmission } from "../hooks/useProjectSubmission";
 import { SubmitButton } from "../../survey-booking/components/common/SubmitButton";
 import { toast } from "react-toastify";
 import ClientOnly from "@/app/components/ClientOnly";
+import { FaClipboardList } from "react-icons/fa";
 
 // Add LanguageSelector component
 const LanguageSelector: React.FC<{
@@ -75,7 +76,7 @@ const EscalatorSection: React.FC<{
                 value={escalator}
                 checked={selectedEscalator === escalator}
                 onChange={(e) => onChange(e.target.value)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6"
               />
               <label
                 htmlFor={`escalator-${escalator}`}
@@ -1832,9 +1833,10 @@ function ProjectCreationFormContent() {
       
       {/* Title as the first element */}
       <div className="relative mb-8 pt-10">
-        <h2 className="text-center text-3xl font-bold 
+        <h2 className="flex items-center justify-center gap-2 text-3xl font-bold
                      bg-gradient-to-r from-[#58b37e] to-[#053058] dark:from-[#8efbbc] dark:to-[#1db7e2]
                      bg-clip-text text-transparent pb-2">
+          <FaClipboardList className="text-[#69D998]" />
           Enter Your Project Details
         </h2>
       </div>
@@ -2001,7 +2003,7 @@ function ProjectCreationFormContent() {
                 name="secondary-contact"
                 checked={showSecondaryContact}
                 onChange={() => handleSecondaryContactChange(true)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
               <label htmlFor="secondary-contact-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                 Yes
@@ -2014,7 +2016,7 @@ function ProjectCreationFormContent() {
                 name="secondary-contact"
                 checked={!showSecondaryContact}
                 onChange={() => handleSecondaryContactChange(false)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
               <label htmlFor="secondary-contact-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                 No
@@ -2270,7 +2272,7 @@ function ProjectCreationFormContent() {
               name="tenants"
               checked={formData.hasTenants === true}
               onChange={() => handleTenantsChange(true)}
-              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
             <label htmlFor="tenants-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
               Yes
@@ -2283,7 +2285,7 @@ function ProjectCreationFormContent() {
               name="tenants"
               checked={formData.hasTenants === false}
               onChange={() => handleTenantsChange(false)}
-              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
             <label htmlFor="tenants-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
               No
@@ -2487,7 +2489,7 @@ function ProjectCreationFormContent() {
                         ...(newFinanceType === "Cash" ? { financeCompany: "Cash" as FinanceCompany } : {})
                       }));
                     }}
-                    className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                    className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                   />
                   <label htmlFor={`financeType-${type.id}`} className="text-gray-700 dark:text-gray-200 cursor-pointer">
                     {type.label}
