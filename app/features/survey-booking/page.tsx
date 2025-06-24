@@ -7,6 +7,7 @@ import { Ribbon } from "../common-components/Ribbon";
 import { CentralBlock } from "../common-components/CentralBlock";
 import Image from "next/image";
 import { Footer } from "../common-components/Footer";
+import { HelpBubble } from "../common-components/HelpBubble";
 
 // Extract search params logic to a client component
 function SearchParamsHandler() {
@@ -87,6 +88,7 @@ export default function SurveyBookingPage() {
       
       <div className="w-full">
         <Footer />
+        <HelpBubble />
       </div>
     </div>
   );
