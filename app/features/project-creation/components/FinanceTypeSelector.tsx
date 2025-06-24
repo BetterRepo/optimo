@@ -38,7 +38,7 @@ export const FinanceTypeSelector: React.FC<FinanceTypeSelectorProps> = ({
               value={type.id}
               checked={selectedType === type.id}
               onChange={(e) => onChange(e.target.value as FinanceType)}
-              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+              className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6"
             />
             <span className="text-gray-700 dark:text-gray-200">{type.label}</span>
           </label>

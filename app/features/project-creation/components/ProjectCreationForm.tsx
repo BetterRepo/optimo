@@ -75,7 +75,7 @@ const EscalatorSection: React.FC<{
                 value={escalator}
                 checked={selectedEscalator === escalator}
                 onChange={(e) => onChange(e.target.value)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6"
               />
               <label
                 htmlFor={`escalator-${escalator}`}
@@ -2001,7 +2001,7 @@ function ProjectCreationFormContent() {
                 name="secondary-contact"
                 checked={showSecondaryContact}
                 onChange={() => handleSecondaryContactChange(true)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
               <label htmlFor="secondary-contact-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                 Yes
@@ -2014,7 +2014,7 @@ function ProjectCreationFormContent() {
                 name="secondary-contact"
                 checked={!showSecondaryContact}
                 onChange={() => handleSecondaryContactChange(false)}
-                className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
               <label htmlFor="secondary-contact-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                 No
@@ -2270,7 +2270,7 @@ function ProjectCreationFormContent() {
               name="tenants"
               checked={formData.hasTenants === true}
               onChange={() => handleTenantsChange(true)}
-              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
             <label htmlFor="tenants-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
               Yes
@@ -2283,7 +2283,7 @@ function ProjectCreationFormContent() {
               name="tenants"
               checked={formData.hasTenants === false}
               onChange={() => handleTenantsChange(false)}
-              className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+              className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
             <label htmlFor="tenants-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
               No
@@ -2487,7 +2487,7 @@ function ProjectCreationFormContent() {
                         ...(newFinanceType === "Cash" ? { financeCompany: "Cash" as FinanceCompany } : {})
                       }));
                     }}
-                    className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                    className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                   />
                   <label htmlFor={`financeType-${type.id}`} className="text-gray-700 dark:text-gray-200 cursor-pointer">
                     {type.label}

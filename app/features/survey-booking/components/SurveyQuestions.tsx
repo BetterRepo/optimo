@@ -73,7 +73,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasBatteries-yes"
                   checked={formData.hasBatteries === true}
                   onChange={() => handleRadioChange("hasBatteries", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasBatteries-yes" className="text-gray-700 cursor-pointer">
                   Yes
@@ -86,7 +86,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasBatteries-no"
                   checked={formData.hasBatteries === false}
                   onChange={() => handleRadioChange("hasBatteries", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasBatteries-no" className="text-gray-700 cursor-pointer">
                   No
@@ -134,7 +134,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   onChange={() =>
                     handleRadioChange("designPreference", "bestSunlight", "Design the system for maximum efficiency")
                   }
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="designPreference-sunlight" className="text-gray-700 cursor-pointer">
                   Design the system for maximum efficiency
@@ -149,7 +149,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   onChange={() =>
                     handleRadioChange("designPreference", "matchProposed", "Design the system to match the proposal design as closely as possible")
                   }
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="designPreference-match" className="text-gray-700 cursor-pointer">
                   Design the system to match the proposal design as closely as possible
@@ -192,7 +192,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="isSharedRoof-yes"
                   checked={formData.isSharedRoof === true}
                   onChange={() => handleRadioChange("isSharedRoof", true, "Yes, please place the design system exactly as specified")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="isSharedRoof-yes" className="text-gray-700 cursor-pointer">
                   Yes, please place the design system exactly as specified
@@ -205,7 +205,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="isSharedRoof-no"
                   checked={formData.isSharedRoof === false}
                   onChange={() => handleRadioChange("isSharedRoof", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="isSharedRoof-no" className="text-gray-700 cursor-pointer">
                   No
@@ -252,7 +252,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   onChange={() =>
                     handleRadioChange("hasRecentConstruction", true, "Yes")
                   }
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasRecentConstruction-yes" className="text-gray-700 cursor-pointer">
                   Yes
@@ -267,7 +267,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   onChange={() =>
                     handleRadioChange("hasRecentConstruction", false, "No")
                   }
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasRecentConstruction-no" className="text-gray-700 cursor-pointer">
                   No
@@ -312,7 +312,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasVaultedCeilings-yes"
                   checked={formData.hasVaultedCeilings === true}
                   onChange={() => handleRadioChange("hasVaultedCeilings", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasVaultedCeilings-yes" className="text-gray-700 cursor-pointer">
                   Yes
@@ -325,7 +325,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasVaultedCeilings-no"
                   checked={formData.hasVaultedCeilings === false}
                   onChange={() => handleRadioChange("hasVaultedCeilings", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasVaultedCeilings-no" className="text-gray-700 cursor-pointer">
                   No
@@ -414,7 +414,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasOngoingConstruction-yes"
                   checked={formData.hasOngoingConstruction === true}
                   onChange={() => handleRadioChange("hasOngoingConstruction", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasOngoingConstruction-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -427,7 +427,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasOngoingConstruction-no"
                   checked={formData.hasOngoingConstruction === false}
                   onChange={() => handleRadioChange("hasOngoingConstruction", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasOngoingConstruction-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -486,7 +486,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasExistingSolar-yes"
                   checked={formData.hasExistingSolar === true}
                   onChange={() => handleRadioChange("hasExistingSolar", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasExistingSolar-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -499,7 +499,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasExistingSolar-no"
                   checked={formData.hasExistingSolar === false}
                   onChange={() => handleRadioChange("hasExistingSolar", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasExistingSolar-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -539,7 +539,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasHOA-yes"
                   checked={formData.hasHOA === true}
                   onChange={() => handleRadioChange("hasHOA", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasHOA-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -552,7 +552,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasHOA-no"
                   checked={formData.hasHOA === false}
                   onChange={() => handleRadioChange("hasHOA", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasHOA-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -608,7 +608,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="mainPanelLocation-inside"
                   checked={formData.mainPanelLocation === "inside"}
                   onChange={() => handleRadioChange("mainPanelLocation", "inside", "Inside the home")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="mainPanelLocation-inside" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Inside the home
@@ -621,7 +621,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="mainPanelLocation-outside"
                   checked={formData.mainPanelLocation === "outside"}
                   onChange={() => handleRadioChange("mainPanelLocation", "outside", "Outside the home")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="mainPanelLocation-outside" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Outside the home
@@ -634,7 +634,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="mainPanelLocation-garage"
                   checked={formData.mainPanelLocation === "garage"}
                   onChange={() => handleRadioChange("mainPanelLocation", "garage", "In the garage")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="mainPanelLocation-garage" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   In the garage
@@ -647,7 +647,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="mainPanelLocation-other"
                   checked={formData.mainPanelLocation === "other"}
                   onChange={() => handleRadioChange("mainPanelLocation", "other", "Other")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="mainPanelLocation-other" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Other
@@ -705,7 +705,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasSubPanels-yes"
                   checked={formData.hasSubPanels === true}
                   onChange={() => handleRadioChange("hasSubPanels", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasSubPanels-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -718,7 +718,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasSubPanels-no"
                   checked={formData.hasSubPanels === false}
                   onChange={() => handleRadioChange("hasSubPanels", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasSubPanels-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -758,7 +758,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasBlockedAccess-yes"
                   checked={formData.hasBlockedAccess === true}
                   onChange={() => handleRadioChange("hasBlockedAccess", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasBlockedAccess-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -771,7 +771,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="hasBlockedAccess-no"
                   checked={formData.hasBlockedAccess === false}
                   onChange={() => handleRadioChange("hasBlockedAccess", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="hasBlockedAccess-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -820,7 +820,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="gateAccessType-yes"
                   checked={formData.gateAccessType === "yes"}
                   onChange={() => handleRadioChange("gateAccessType", "yes", "Yes, I'll be there to provide access")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="gateAccessType-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes, I&apos;ll be there to provide access
@@ -833,7 +833,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="gateAccessType-code"
                   checked={formData.gateAccessType === "code"}
                   onChange={() => handleRadioChange("gateAccessType", "code", "Yes, I have a code")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="gateAccessType-code" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes, I have a code
@@ -846,7 +846,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="gateAccessType-no"
                   checked={formData.gateAccessType === "no"}
                   onChange={() => handleRadioChange("gateAccessType", "no", "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="gateAccessType-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
@@ -889,7 +889,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="pets-yes"
                   checked={formData.pets === true}
                   onChange={() => handleRadioChange("pets", true, "Yes")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="pets-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   Yes
@@ -902,7 +902,7 @@ export const SurveyQuestions: React.FC<SurveyQuestionsProps> = ({
                   id="pets-no"
                   checked={formData.pets === false}
                   onChange={() => handleRadioChange("pets", false, "No")}
-                  className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4 mr-2"
+                  className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                 />
                 <label htmlFor="pets-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
                   No
