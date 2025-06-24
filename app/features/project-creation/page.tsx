@@ -5,6 +5,8 @@ import { Ribbon } from "../common-components/Ribbon";
 import { CentralBlock } from "../common-components/CentralBlock";
 import Image from "next/image";
 import ProjectCreationForm from "./components/ProjectCreationForm";
+import FeatureHeader from "../common-components/FeatureHeader";
+import { FaProjectDiagram } from "react-icons/fa";
 // import { Logo } from "../common-components/Logo";
 import { Footer } from "../common-components/Footer";
 import FallbackBanner from "../common-components/FallbackBanner";
@@ -51,6 +53,7 @@ export default function ProjectCreationPage() {
 
         <div className="container mx-auto pt-40 px-4 pb-20">
           <CentralBlock>
+            <FeatureHeader title="Create New Project" Icon={FaProjectDiagram} />
             <div className="bg-white dark:bg-[#151821] rounded-lg shadow-xl p-6">
               {/* <FallbackBanner /> */}
               <Suspense
