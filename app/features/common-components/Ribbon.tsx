@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { FaRegClock } from "react-icons/fa";
 
 export const Ribbon = () => {
   const [currentDate, setCurrentDate] = useState<string>("");
@@ -41,8 +42,9 @@ export const Ribbon = () => {
     <div className="fixed top-0 left-0 w-full bg-[#00D37F] py-2 z-50">
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Date on the left */}
-        <div className="text-white text-sm md:text-base font-medium">
-          {currentDate} PST
+        <div className="text-white text-sm md:text-base font-medium flex items-center space-x-1">
+          <FaRegClock className="w-4 h-4" />
+          <span>{currentDate} PST</span>
         </div>
         
         {/* Link in the center */}
