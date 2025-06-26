@@ -146,7 +146,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
     setSelectedSlot(null);
     setShowSlots(false);
   };
-
+  console.log("formData", formData);
   const isOutOfRegion = formData.warehouse === "Out of Region";
 
   return (
@@ -344,7 +344,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
         </div>
       )}
 
-      {formData.warehouse && (
+      {formData.city != "" && formData.warehouse && (
         <div className="">
           {isOutOfRegion ? (
             <OutOfRegionMessage />

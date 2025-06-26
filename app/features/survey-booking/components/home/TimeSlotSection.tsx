@@ -217,13 +217,6 @@ export const TimeSlotSection: React.FC<TimeSlotSectionProps> = ({
             Select Your Preferred Time
           </h2>
           {/* Debug info - now clickable to force increment for testing */}
-          <div
-            className="text-xs text-gray-400 mb-2 cursor-pointer"
-            onClick={forceIncrement}
-          >
-            Attempts: {searchAttempts} | Show Message:{" "}
-            {showNoResultsMessage ? "Yes" : "No"}
-          </div>
         </div>
 
         {/* Show error message after 5 attempts or when error message is "Geocoder did not return an exact match" */}
