@@ -183,8 +183,11 @@ export function DatePicker({ onSelect, warehouse }: DatePickerProps) {
         <h2 className="text-2xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white mb-2 tracking-tight">
           Select a Date
         </h2>
-        <p className="text-gray-500 dark:text-gray-400 text-center mb-4 sm:mb-6 text-sm">
+        <p className="text-gray-500 dark:text-gray-400 text-center mb-2 sm:mb-4 text-sm">
           Choose your preferred survey date from the calendar below.
+        </p>
+        <p className="text-gray-500 dark:text-gray-400 text-center mb-4 sm:mb-6 text-sm">
+          The Recommended Slot is marked with a Star ⭐️
         </p>
         <div className="w-full flex justify-center">
           <Calendar

@@ -5,7 +5,6 @@ import { SlotList } from "../SlotList";
 import { SurveyFormData } from "../../types/FormData";
 import BookingSummaryCard from "../BookingSummaryCard";
 import ContactSupportModal from "../ContactSupportModal";
-import { Calendar } from "@/app/components/ui/calendar";
 import UnavailableLocationNotice from "../../components/UnavailableLocationNotice";
 
 interface TimeSlotSectionProps {
