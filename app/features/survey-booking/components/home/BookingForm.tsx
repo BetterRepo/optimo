@@ -80,6 +80,11 @@ export const BookingForm: React.FC<BookingFormProps> = ({
     }
   }, [formData.isAdditionalSurvey]);
 
+  // Add useEffect to set showSlots to true on component mount
+  useEffect(() => {
+    setShowSlots(true);
+  }, []);
+
   const handleRecommendedSlotSelect = (
     value: string,
     reservationId: string,
@@ -365,27 +370,29 @@ export const BookingForm: React.FC<BookingFormProps> = ({
               </div>
 
               {/* Only show RecommendedTimeSlots for non-Texas warehouses */}
-              {formData.warehouse !== "Dallas, TX" && (
-                <RecommendedTimeSlots
-                  onPickAnotherDate={() => setShowSlots(true)}
-                  formData={formData}
-                  orderNo={selectedSlot?.orderNo || null}
-                  onSlotSelect={handleRecommendedSlotSelect}
-                  selectedRecommendedSlot={selectedSlot}
-                  resetAddressFields={resetAddressFields}
-                  onUpdateFormData={(data) => {
-                    // Convert data updates to use handleChange format
-                    Object.entries(data).forEach(([key, value]) => {
-                      handleChange({
-                        target: {
-                          id: key,
-                          value: value,
-                        },
-                      } as React.ChangeEvent<HTMLInputElement>);
-                    });
-                  }}
-                />
-              )}
+              {formData.warehouse !== "Dallas, TX" &&
+                availableSlotsProp.length < 1 && (
+                  <RecommendedTimeSlots
+                    setAvailableSlots={setAvailableSlotsProp}
+                    onPickAnotherDate={() => setShowSlots(true)}
+                    formData={formData}
+                    orderNo={selectedSlot?.orderNo || null}
+                    onSlotSelect={handleRecommendedSlotSelect}
+                    selectedRecommendedSlot={selectedSlot}
+                    resetAddressFields={resetAddressFields}
+                    onUpdateFormData={(data) => {
+                      // Convert data updates to use handleChange format
+                      Object.entries(data).forEach(([key, value]) => {
+                        handleChange({
+                          target: {
+                            id: key,
+                            value: value,
+                          },
+                        } as React.ChangeEvent<HTMLInputElement>);
+                      });
+                    }}
+                  />
+                )}
 
               {/* For Texas locations, always show the time slot picker */}
               {formData.warehouse === "Dallas, TX" ? (
@@ -408,7 +415,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
                     loading={loading}
                     errorMessage={slotErrorMessage}
                     onDateSelect={onDateSelect}
-                    availableSlots={availableSlots}
+                    availableSlots={availableSlotsProp}
                     selectedSlot={selectedSlot}
                     onSlotSelect={handleSlotSelect}
                     resetAddressFields={resetAddressFields}

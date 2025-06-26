@@ -1,3 +1,4 @@
+import React from "react";
 import { useRecommendedSlots } from "../hooks/useRecommendedSlots";
 import { TimeSlotCard } from "./RecommendedTimeSlots/TimeSlotCard";
 import { Button } from "@/app/features/common-components/button";
@@ -27,6 +28,7 @@ interface RecommendedTimeSlotsProps {
   selectedRecommendedSlot: { value: string; reservationId: string } | null;
   resetAddressFields?: () => void;
   onUpdateFormData?: (data: Partial<FormDataWithFlexibleWarehouse>) => void;
+  setAvailableSlots: (slots: TimeSlot[]) => void;
 }
 
 // Define a type for the time slot
@@ -45,10 +47,14 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   selectedRecommendedSlot,
   resetAddressFields,
   onUpdateFormData,
+  setAvailableSlots,
 }) => {
   const { firstSlot, secondSlot, loading, error, createdOrderNo } =
     useRecommendedSlots(formData, orderNo);
-
+  React.useEffect(() => {
+    // Only set slots if they exist
+    setAvailableSlots([firstSlot, secondSlot].filter(Boolean) as TimeSlot[]);
+  }, [firstSlot, secondSlot, setAvailableSlots]);
   const formatDate = (date: string) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString("en-US", {
