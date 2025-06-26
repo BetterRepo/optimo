@@ -339,7 +339,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
         </div>
       )}
 
-      {formData.warehouse && (
+      {formData.city != "" && formData.warehouse && (
         <div className="">
           {isOutOfRegion ? (
             <OutOfRegionMessage />
