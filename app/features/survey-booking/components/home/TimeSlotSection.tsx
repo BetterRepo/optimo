@@ -279,7 +279,7 @@ export const TimeSlotSection: React.FC<TimeSlotSectionProps> = ({
                   />
                 )}
               </div>
-              <div className="slots-container mt-6 col-span-1">
+              <div className="slots-container mt-12 col-span-1 flex flex-col items-center justify-center">
                 {loading ? (
                   <div className="flex justify-center items-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>

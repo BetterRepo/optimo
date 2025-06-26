@@ -272,7 +272,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({
       } else {
         console.log("❌ GEOCODING FAILED - Response not OK:", response.status);
       }
-      alert("chaing");
     } catch (error) {
       console.log("❌ GEOCODING ERROR:", error);
     }
