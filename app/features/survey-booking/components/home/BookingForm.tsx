@@ -12,6 +12,7 @@ import { AdditionalSurveyFields } from "../AdditionalSurveyFields";
 import { SurveyFormData } from "../../types/FormData";
 import FallbackBanner from "../../../common-components/FallbackBanner";
 import FeedbackSelector from "../../components/FeedbackSelector";
+import ProjectError from "@/app/features/common-components/ProjectError";
 
 interface BookingFormProps {
   formData: SurveyFormData;
@@ -151,7 +152,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
 
   return (
     <div className="space-y-8">
-      {/* <FallbackBanner /> */}
+      {formData.city === "" && <ProjectError />}
 
       <CustomerForm formData={formData} handleChange={handleChange} />
       <AdditionalSurveyFields formData={formData} handleChange={handleChange} />
