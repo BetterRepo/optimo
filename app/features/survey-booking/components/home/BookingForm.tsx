@@ -85,6 +85,16 @@ export const BookingForm: React.FC<BookingFormProps> = ({
   useEffect(() => {
     setShowSlots(true);
   }, []);
+  useEffect(() => {
+    const fetchDate = async () => {
+      console.log("streetAddress:", formData.streetAddress);
+      if (formData.streetAddress) {
+        console.log("Calling onDateSelect");
+        await onDateSelect(new Date());
+      }
+    };
+    fetchDate();
+  }, [formData.streetAddress]);
 
   const handleRecommendedSlotSelect = (
     value: string,
@@ -352,7 +362,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
           ) : (
             <>
               {/* Only show RecommendedTimeSlots for non-Texas warehouses */}
-              {formData.warehouse !== "Dallas, TX" &&
+              {/* {formData.warehouse !== "Dallas, TX" &&
                 availableSlotsProp.length < 1 && (
                   <RecommendedTimeSlots
                     setAvailableSlots={setAvailableSlotsProp}
@@ -374,7 +384,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
                       });
                     }}
                   />
-                )}
+                )} */}
 
               {/* For Texas locations, always show the time slot picker */}
               {formData.warehouse === "Dallas, TX" ? (
@@ -397,7 +407,7 @@ export const BookingForm: React.FC<BookingFormProps> = ({
                     loading={loading}
                     errorMessage={slotErrorMessage}
                     onDateSelect={onDateSelect}
-                    availableSlots={availableSlotsProp}
+                    availableSlots={availableSlots}
                     selectedSlot={selectedSlot}
                     onSlotSelect={handleSlotSelect}
                     resetAddressFields={resetAddressFields}

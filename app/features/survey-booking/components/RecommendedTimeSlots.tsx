@@ -52,6 +52,7 @@ const RecommendedTimeSlots: React.FC<RecommendedTimeSlotsProps> = ({
   const { firstSlot, secondSlot, loading, error, createdOrderNo } =
     useRecommendedSlots(formData, orderNo);
   React.useEffect(() => {
+    console.log("yeaaah in here");
     // Only set slots if they exist
     setAvailableSlots([firstSlot, secondSlot].filter(Boolean) as TimeSlot[]);
   }, [firstSlot, secondSlot, setAvailableSlots]);

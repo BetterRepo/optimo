@@ -32,6 +32,7 @@ export const TimeSlotSection: React.FC<TimeSlotSectionProps> = ({
   onUpdateFormData,
   resetAddressFields,
 }) => {
+  console.log("availableSlots", availableSlots);
   // Format selected date for display if there is a selected slot
   const selectedDate = selectedSlot
     ? availableSlots.find((slot) => slot.value === selectedSlot.value)?.date

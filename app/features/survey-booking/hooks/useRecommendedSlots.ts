@@ -513,16 +513,16 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
     }
   };
 
-  useEffect(() => {
-    if (!formData?.warehouse || !formData?.streetAddress) return;
-
-    setRecommendedSlots((prev) => ({
-      ...prev,
-      loading: true,
-      error: null,
-    }));
-    fetchRecommendedSlots();
-  }, [formData]);
+  // useEffect(() => {
+  //   if (!formData?.warehouse || !formData?.streetAddress) return;
+  //   console.log("in useRecommendedSlots effect with formData:", formData);
+  //   setRecommendedSlots((prev) => ({
+  //     ...prev,
+  //     loading: true,
+  //     error: null,
+  //   }));
+  //   fetchRecommendedSlots();
+  // }, [formData]);
 
   return {
     ...recommendedSlots,

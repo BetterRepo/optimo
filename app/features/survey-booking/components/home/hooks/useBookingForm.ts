@@ -957,6 +957,7 @@ export const useBookingForm = () => {
   };
 
   const onDateSelect = async (date: Date | undefined) => {
+    console.log("Selected date:", date);
     if (!date) return;
 
     // Store original selected date for UI purposes and API request
@@ -1099,19 +1100,19 @@ export const useBookingForm = () => {
           email: formData.email || formData.customerEmail || "",
           phone: formData.phone || formData.customerPhone || "",
           customField1: customerName || fullName, // Use customer name as customField1
+          customField4: "Odey", // Use customer name as customField1
           // Use proper location structure with locationNo, locationName, and address
           location: {
-            locationNo: locationData.locationNo || generatedOrderNo,
             locationName: locationData.locationName || fullName,
             address: locationData.address || formattedAddress,
-            acceptMultipleResults: true,
-            acceptPartialMatch: true,
+            // acceptMultipleResults: true,
+            // acceptPartialMatch: true,
             // Use original formData coordinates to ensure we have the exact coordinates
-            ...(formData.latitude &&
-              formData.longitude && {
-                latitude: formData.latitude,
-                longitude: formData.longitude,
-              }),
+            // ...(formData.latitude &&
+            //   formData.longitude && {
+            //     latitude: formData.latitude,
+            //     longitude: formData.longitude,
+            //   }),
           },
           duration: 60,
         },
@@ -1137,9 +1138,9 @@ export const useBookingForm = () => {
         // Add flag to identify CRM bookings for special handling
         isCRMBooking: formData.isSurveyBooking === true,
       };
-
       setLoading(true);
-      const response = await fetch("/api/fetchSlots", {
+      // const response = await fetch("/api/fetchSlots", {
+      const response = await fetch("/api/bookingSlots", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -1150,8 +1151,14 @@ export const useBookingForm = () => {
       if (response.ok) {
         const responseData = await response.json();
         if (responseData.success) {
-          setAvailableSlots(responseData.slots || []);
-          setSlotErrorMessage("");
+          if (responseData.slots.length === 0) {
+            setSlotErrorMessage("No available slots for the selected date.");
+            setAvailableSlots([]);
+          } else {
+            console.log("Available slots:", responseData.slots);
+            setAvailableSlots(responseData.slots);
+            setSlotErrorMessage("");
+          }
 
           // If the API returned a new orderNo (due to order already existing), use it
           if (responseData.orderNo) {
