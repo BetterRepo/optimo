@@ -377,7 +377,10 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
           type: "D",
           location: locationWithAcceptance, // Use the enhanced location object
           duration: 60,
+          customField1: `${formData.firstName} ${formData.lastName}`.trim(), //customer name
           customField4: "Odey",
+          email: formData.email, //customer email
+          phone: formData.phone, //customer phone
         },
         slots: {
           dates: recommendedDates,
