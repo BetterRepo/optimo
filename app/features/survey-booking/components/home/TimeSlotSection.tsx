@@ -78,13 +78,13 @@ export const TimeSlotSection: React.FC<TimeSlotSectionProps> = ({
   }, [loading, availableSlots.length, showSlots]);
 
   // Separate effect to check attempt count and show message
-  useEffect(() => {
-    // Show message after 5 failed attempts
-    if (searchAttempts >= 5 && !showNoResultsMessage) {
-      console.log("Showing no results message after 5 attempts");
-      setShowNoResultsMessage(true);
-    }
-  }, [searchAttempts, showNoResultsMessage]);
+  // useEffect(() => {
+  //   // Show message after 5 failed attempts
+  //   if (searchAttempts >= 5 && !showNoResultsMessage) {
+  //     console.log("Showing no results message after 5 attempts");
+  //     setShowNoResultsMessage(true);
+  //   }
+  // }, [searchAttempts, showNoResultsMessage]);
 
   // Update form data with preferred dates whenever they change
   useEffect(() => {
