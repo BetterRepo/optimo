@@ -6,6 +6,7 @@ import { driverMapping } from "../../../data/DriverLookupTable";
 import { generateLocationId } from "../../../../../utils/locationHelper";
 import { createOrderLocation } from "../../../../../utils/optimoLocationHelper";
 import { format } from "date-fns";
+import { saveForm } from "../../../actions";
 
 // Function to get warehouse-specific time windows
 const getWarehouseTimeWindows = (warehouse: string) => {
@@ -632,7 +633,7 @@ export const useBookingForm = () => {
           "Customer";
 
         // Create a comprehensive webhook payload with ALL form data
-        const surveyBookingPayload = {
+        var surveyBookingPayload = {
           // Always include feedback fields prominently at top level
           feedbackRating: formData.feedbackRating || "",
           feedbackComments: formData.feedbackComments || "",
@@ -788,7 +789,14 @@ export const useBookingForm = () => {
         console.error("❌ ERROR SENDING WEBHOOK:", surveyWebhookError);
         // Don't throw error to allow the flow to continue
       }
-
+      // Save in database
+      try {
+        const id = localStorage.getItem("submission_id") ?? "";
+        await saveForm(id, formData);
+        console.log("Submission ID saved:", id);
+      } catch (dbError) {
+        console.error("Error saving submission to database:", dbError);
+      }
       // Step 2: Make the reservation
       console.log("Making reservation with ID:", selectedSlot.reservationId);
       const bookingReserve = await fetch("/api/bookingReserve", {

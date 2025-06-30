@@ -5,16 +5,24 @@ import { FinanceCompanySelector } from "../FinanceCompanySelector";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AddressForm } from "../../common-components/AddressForm";
-import { ProjectCreationFormData, StorageOption, Adder, LeadType, FinanceCompany, FinanceType, ModuleType } from "../types";
+import {
+  ProjectCreationFormData,
+  StorageOption,
+  Adder,
+  LeadType,
+  FinanceCompany,
+  FinanceType,
+  ModuleType,
+} from "../types";
 import { useProjectSubmission } from "../hooks/useProjectSubmission";
 import { SubmitButton } from "../../survey-booking/components/common/SubmitButton";
 import { toast } from "react-toastify";
 import ClientOnly from "@/app/components/ClientOnly";
-
+import { generateUUID } from "@/app/lib/utils";
 // Add LanguageSelector component
 const LanguageSelector: React.FC<{
-  selectedLanguage: 'English' | 'Spanish' | '';
-  onChange: (value: 'English' | 'Spanish') => void;
+  selectedLanguage: "English" | "Spanish" | "";
+  onChange: (value: "English" | "Spanish") => void;
 }> = ({ selectedLanguage, onChange }) => {
   return (
     <div className="mb-8">
@@ -29,7 +37,7 @@ const LanguageSelector: React.FC<{
                      focus:outline-none focus:border-green-500
                      bg-white dark:bg-[#151821] dark:text-white"
             value={selectedLanguage}
-            onChange={(e) => onChange(e.target.value as 'English' | 'Spanish')}
+            onChange={(e) => onChange(e.target.value as "English" | "Spanish")}
           >
             <option value="">Please Select</option>
             <option value="English">English</option>
@@ -101,7 +109,9 @@ const UBillUploadSection: React.FC<{
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       setIsUploading(true);
@@ -111,7 +121,7 @@ const UBillUploadSection: React.FC<{
         if (result) {
           // Convert FileList to array and add to existing files
           const newFiles = Array.from(files);
-          setUploadedFiles(prev => [...prev, ...newFiles]);
+          setUploadedFiles((prev) => [...prev, ...newFiles]);
         }
       } catch (error) {
         console.error("Error during file upload:", error);
@@ -126,7 +136,7 @@ const UBillUploadSection: React.FC<{
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-    
+
     const files = e.dataTransfer.files;
     if (files && files.length > 0) {
       setIsUploading(true);
@@ -136,7 +146,7 @@ const UBillUploadSection: React.FC<{
         if (result) {
           // Convert FileList to array and add to existing files
           const newFiles = Array.from(files);
-          setUploadedFiles(prev => [...prev, ...newFiles]);
+          setUploadedFiles((prev) => [...prev, ...newFiles]);
         }
       } catch (error) {
         console.error("Error during file upload:", error);
@@ -148,7 +158,7 @@ const UBillUploadSection: React.FC<{
   };
 
   const removeFile = (index: number) => {
-    setUploadedFiles(prev => prev.filter((_, i) => i !== index));
+    setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -158,9 +168,11 @@ const UBillUploadSection: React.FC<{
           Please upload a complete Utility Bill file
         </h3>
         <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 mb-4">
-          The Utility Bill must clearly show the following information. While optional, projects without a complete utility bill may face delays in the design stage.
+          The Utility Bill must clearly show the following information. While
+          optional, projects without a complete utility bill may face delays in
+          the design stage.
         </p>
-        
+
         <input
           type="file"
           ref={fileInputRef}
@@ -170,10 +182,14 @@ const UBillUploadSection: React.FC<{
           multiple
           data-testid="utility-bill-input"
         />
-        
+
         {/* File Upload Area */}
         <div
-          className={`mt-2 border-2 border-dashed ${isDragging ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/30'} rounded-lg p-8 cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50`}
+          className={`mt-2 border-2 border-dashed ${
+            isDragging
+              ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20"
+              : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800/30"
+          } rounded-lg p-8 cursor-pointer transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800/50`}
           onDragOver={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -190,11 +206,29 @@ const UBillUploadSection: React.FC<{
           <div className="flex flex-col items-center justify-center">
             {isUploading ? (
               <div className="animate-pulse">
-                <svg className="w-12 h-12 text-blue-500 dark:text-blue-400 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="w-12 h-12 text-blue-500 dark:text-blue-400 animate-spin"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
-                <p className="mt-4 text-base font-medium text-gray-700 dark:text-gray-300">Uploading...</p>
+                <p className="mt-4 text-base font-medium text-gray-700 dark:text-gray-300">
+                  Uploading...
+                </p>
               </div>
             ) : (
               <>
@@ -229,45 +263,79 @@ const UBillUploadSection: React.FC<{
             )}
           </div>
         </div>
-        
+
         {/* Uploaded Files List */}
         {uploadedFiles.length > 0 && (
           <div className="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
             <div className="bg-gray-50 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-              <h4 className="font-medium text-gray-700 dark:text-gray-300">Uploaded Files ({uploadedFiles.length})</h4>
+              <h4 className="font-medium text-gray-700 dark:text-gray-300">
+                Uploaded Files ({uploadedFiles.length})
+              </h4>
             </div>
             <ul className="divide-y divide-gray-200 dark:divide-gray-700">
               {uploadedFiles.map((file, index) => (
-                <li key={`${file.name}-${index}`} className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750">
+                <li
+                  key={`${file.name}-${index}`}
+                  className="flex items-center justify-between px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-750"
+                >
                   <div className="flex items-center space-x-3">
                     <div className="flex-shrink-0">
-                      {file.type.includes('image') ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+                      {file.type.includes("image") ? (
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-blue-500"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                            clipRule="evenodd"
+                          />
                         </svg>
                       ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                          <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-red-500"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
+                            clipRule="evenodd"
+                          />
                           <path d="M8 11a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
                         </svg>
                       )}
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate max-w-xs">{file.name}</p>
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 truncate max-w-xs">
+                        {file.name}
+                      </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {(file.size / 1024 / 1024).toFixed(2)} MB
                       </p>
                     </div>
                   </div>
-                  <button 
+                  <button
                     onClick={(e) => {
                       e.stopPropagation();
                       removeFile(index);
                     }}
                     className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 p-1 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
                     </svg>
                   </button>
                 </li>
@@ -275,16 +343,30 @@ const UBillUploadSection: React.FC<{
             </ul>
           </div>
         )}
-        
+
         <div className="mt-5 p-5 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg shadow-sm">
           <h4 className="font-bold text-base text-amber-800 dark:text-amber-300 flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2 flex-shrink-0"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
             Required Information
           </h4>
           <p className="mt-2 text-sm text-amber-800 dark:text-amber-300">
-            The Utility Bill must clearly show the following information, or the Utility Bill status will be considered incomplete. Projects without a complete utility bill will become Deferred and will not proceed to the design stage.
+            The Utility Bill must clearly show the following information, or the
+            Utility Bill status will be considered incomplete. Projects without
+            a complete utility bill will become Deferred and will not proceed to
+            the design stage.
           </p>
           <ul className="mt-3 ml-6 list-disc space-y-1.5 text-sm text-amber-800 dark:text-amber-300">
             <li>Customer Name</li>
@@ -364,7 +446,8 @@ const AdditionalNotesSection: React.FC<{
           placeholder="Enter any additional information or special requirements for this project"
         />
         <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
-          Include any special considerations, customer preferences, or other relevant information that may help with the project.
+          Include any special considerations, customer preferences, or other
+          relevant information that may help with the project.
         </p>
       </div>
     </div>
@@ -374,41 +457,41 @@ const AdditionalNotesSection: React.FC<{
 function ProjectCreationFormContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   // State to control visibility of warning messages
   const [showWarnings, setShowWarnings] = useState(false);
-  
+
   // Add local state for submission handling
   const [localIsSubmitting, setLocalIsSubmitting] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
-  
+
   // Add state to track if files are currently uploading
   const [isFileUploading, setIsFileUploading] = useState(false);
-  
+
   // Add validation state for name fields
   const [nameValidation, setNameValidation] = useState({
     firstName: { isValid: true, message: "" },
     lastName: { isValid: true, message: "" },
   });
-  
+
   // Add validation state for email
   const [emailValidation, setEmailValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
-  
+
   // Add validation state for phone field
   const [phoneValidation, setPhoneValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
-  
+
   // Add validation state for sales rep email
   const [salesRepEmailValidation, setSalesRepEmailValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
-  
+
   // Add state for secondary contact
   const [showSecondaryContact, setShowSecondaryContact] = useState(false);
 
@@ -417,17 +500,17 @@ function ProjectCreationFormContent() {
     firstName: { isValid: true, message: "" },
     lastName: { isValid: true, message: "" },
   });
-  
+
   // Add validation state for secondary email
   const [secondaryEmailValidation, setSecondaryEmailValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
-  
+
   // Add validation state for secondary phone field
   const [secondaryPhoneValidation, setSecondaryPhoneValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
 
   // Add validation state for tenant fields
@@ -435,35 +518,37 @@ function ProjectCreationFormContent() {
     firstName: { isValid: true, message: "" },
     lastName: { isValid: true, message: "" },
   });
-  
+
   // Add validation state for tenant email
   const [tenantEmailValidation, setTenantEmailValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
-  
+
   // Add validation state for tenant phone field
   const [tenantPhoneValidation, setTenantPhoneValidation] = useState({
     isValid: true,
-    message: ""
+    message: "",
   });
 
-  const [formData, setFormData] = useState<ProjectCreationFormData & {
-    secondaryFirstName?: string;
-    secondaryLastName?: string;
-    secondaryEmail?: string;
-    secondaryPhone?: string;
-    secondaryRelationship?: string;
-    hasTenants?: boolean;
-    tenantFirstName?: string;
-    tenantLastName?: string;
-    tenantEmail?: string;
-    tenantPhone?: string;
-    additionalNotes?: string; // Initialize the additional notes field
-  }>({
+  const [formData, setFormData] = useState<
+    ProjectCreationFormData & {
+      secondaryFirstName?: string;
+      secondaryLastName?: string;
+      secondaryEmail?: string;
+      secondaryPhone?: string;
+      secondaryRelationship?: string;
+      hasTenants?: boolean;
+      tenantFirstName?: string;
+      tenantLastName?: string;
+      tenantEmail?: string;
+      tenantPhone?: string;
+      additionalNotes?: string; // Initialize the additional notes field
+    }
+  >({
     firstName: "",
     lastName: "",
-    preferredLanguage: "", 
+    preferredLanguage: "",
     hasCompletedWelcomeCall: false,
     welcomeCallCompleted: false,
     financeCompany: "",
@@ -488,7 +573,7 @@ function ProjectCreationFormContent() {
     isSurveyBooking: false,
     insightlyRecordId: "",
     interestRate: "",
-    yearlyProduction: '',
+    yearlyProduction: "",
     financeOrg: "",
     lgcyCanvassId: "",
     epc: "",
@@ -527,7 +612,7 @@ function ProjectCreationFormContent() {
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
 
   const { handleSubmit, isSubmitting, error } = useProjectSubmission();
-  
+
   // Combine our states
   const effectiveIsSubmitting = isSubmitting || localIsSubmitting;
   const effectiveError = error || localError;
@@ -535,10 +620,10 @@ function ProjectCreationFormContent() {
   // Load form data from URL parameters
   useEffect(() => {
     if (!searchParams) return;
-    
+
     const newFormData = { ...formData };
     let hasUpdates = false;
-    
+
     // Map URL parameters to form fields
     const paramMap: Record<string, keyof ProjectCreationFormData> = {
       firstName: "firstName",
@@ -556,10 +641,10 @@ function ProjectCreationFormContent() {
       lgcyCanvassId: "lgcyCanvassId",
       // Add other fields as needed
     };
-    
+
     // Capture salesCompany parameter even though it doesn't map to a form field
     const salesCompany = searchParams.get("salesCompany");
-    
+
     // Process each parameter
     Object.entries(paramMap).forEach(([param, formField]) => {
       const value = searchParams.get(param);
@@ -569,7 +654,7 @@ function ProjectCreationFormContent() {
         hasUpdates = true;
       }
     });
-    
+
     // Store salesCompany in localStorage if present
     if (salesCompany) {
       try {
@@ -579,7 +664,7 @@ function ProjectCreationFormContent() {
         console.error("Error storing salesCompany in localStorage:", err);
       }
     }
-    
+
     // Update form data if changes were found
     if (hasUpdates) {
       console.log("Loaded form data from URL parameters:", newFormData);
@@ -604,7 +689,7 @@ function ProjectCreationFormContent() {
         ...prev,
         [id]: value,
       }));
-      
+
       // For name fields, validate as user types
       if (id === "firstName" || id === "lastName") {
         validateName(id, value);
@@ -615,21 +700,21 @@ function ProjectCreationFormContent() {
   // Add a direct function to toggle welcome call status
   const forceToggleWelcomeCallStatus = (isChecked: boolean) => {
     console.log("DIRECTLY forcing welcome call status to:", isChecked);
-    
+
     // Try to force the state update in multiple ways
-    setFormData(prevState => ({
+    setFormData((prevState) => ({
       ...prevState,
       welcomeCallCompleted: isChecked,
-      hasCompletedWelcomeCall: isChecked
+      hasCompletedWelcomeCall: isChecked,
     }));
-    
+
     // Removed success toast
-    
+
     // Verify state change
     setTimeout(() => {
       console.log("Verification state after direct update:", {
         welcomeCallCompleted: formData.welcomeCallCompleted,
-        hasCompletedWelcomeCall: formData.hasCompletedWelcomeCall
+        hasCompletedWelcomeCall: formData.hasCompletedWelcomeCall,
       });
     }, 100);
   };
@@ -641,12 +726,12 @@ function ProjectCreationFormContent() {
     // Reset welcome call state when changing company
     if (value !== formData.financeCompany) {
       setFormData((prev) => ({
-        ...prev, 
+        ...prev,
         financeCompany: value,
         escalator: "",
         term: "",
         welcomeCallCompleted: false,
-        hasCompletedWelcomeCall: false
+        hasCompletedWelcomeCall: false,
       }));
     }
   };
@@ -682,109 +767,120 @@ function ProjectCreationFormContent() {
       if (files.length === 0) {
         return true; // No files to upload
       }
-      
+
       setIsFileUploading(true);
-      
+
       // First validate all files before uploading
       const validFiles: File[] = [];
-      const invalidFiles: {name: string, reason: string}[] = [];
-      
+      const invalidFiles: { name: string; reason: string }[] = [];
+
       // Validate all files first
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        
+
         // Validate file size (max 10MB)
         const maxSize = 10 * 1024 * 1024; // 10MB
         if (file.size > maxSize) {
           invalidFiles.push({
             name: file.name,
-            reason: `File size exceeds 10MB limit (${(file.size / (1024 * 1024)).toFixed(2)}MB)`
+            reason: `File size exceeds 10MB limit (${(
+              file.size /
+              (1024 * 1024)
+            ).toFixed(2)}MB)`,
           });
           continue;
         }
-        
+
         // Validate file type
-        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+        const allowedTypes = [
+          "application/pdf",
+          "image/jpeg",
+          "image/jpg",
+          "image/png",
+        ];
         if (!allowedTypes.includes(file.type)) {
           invalidFiles.push({
             name: file.name,
-            reason: `File type not supported (${file.type || 'unknown'}). Please upload PDF, JPG, or PNG files.`
+            reason: `File type not supported (${
+              file.type || "unknown"
+            }). Please upload PDF, JPG, or PNG files.`,
           });
           continue;
         }
-        
+
         validFiles.push(file);
       }
-      
+
       // Show warnings for invalid files
       if (invalidFiles.length > 0) {
-        invalidFiles.forEach(file => {
+        invalidFiles.forEach((file) => {
           toast.warning(`${file.name}: ${file.reason}`);
         });
-        
+
         if (validFiles.length === 0) {
           setIsFileUploading(false);
           return false;
         }
       }
-      
+
       if (validFiles.length > 0) {
         toast.info(`Uploading ${validFiles.length} file(s)...`, {
-          autoClose: 2000
+          autoClose: 2000,
         });
       }
-      
+
       // Prepare FormData with valid files
       const uploadFormData = new FormData();
-      
+
       // Add customer name to form data for file naming
       if (formData.firstName && formData.lastName) {
-        uploadFormData.append('firstName', formData.firstName);
-        uploadFormData.append('lastName', formData.lastName);
+        uploadFormData.append("firstName", formData.firstName);
+        uploadFormData.append("lastName", formData.lastName);
       }
-      
-      const token = Date.now() + '-' + Math.random().toString(36).substring(2, 10);
-      uploadFormData.append('token', token);
-      
+
+      const token =
+        Date.now() + "-" + Math.random().toString(36).substring(2, 10);
+      uploadFormData.append("token", token);
+
       // Add all valid files to FormData
-      validFiles.forEach(file => {
-        uploadFormData.append('files', file);
+      validFiles.forEach((file) => {
+        uploadFormData.append("files", file);
       });
-      
+
       // Upload files with progress tracking if browser supports it
       try {
         const startTime = Date.now();
         console.log(`🚀 Starting upload of ${validFiles.length} files...`);
-        
-        const response = await fetch('/api/file-upload', {
-          method: 'POST',
-          body: uploadFormData
+
+        const response = await fetch("/api/file-upload", {
+          method: "POST",
+          body: uploadFormData,
         });
-        
+
         const endTime = Date.now();
         console.log(`⏱️ Upload took ${(endTime - startTime) / 1000} seconds`);
 
         if (!response.ok) {
           const errorText = await response.text();
-          let errorMessage = 'Upload failed';
-          
+          let errorMessage = "Upload failed";
+
           try {
             const errorData = JSON.parse(errorText);
             errorMessage = errorData.message || errorMessage;
           } catch (e) {
             if (errorText) errorMessage = errorText;
           }
-          
-          console.error('Upload error:', errorMessage);
+
+          console.error("Upload error:", errorMessage);
           toast.error(errorMessage);
           setIsFileUploading(false);
           return false;
         }
 
         const data = await response.json();
-        
+
         if (!data.success) {
-          toast.error(data.message || 'Upload failed');
+          toast.error(data.message || "Upload failed");
           setIsFileUploading(false);
           return false;
         }
@@ -795,12 +891,12 @@ function ProjectCreationFormContent() {
             name: file.fileName,
             type: file.fileType,
             size: file.fileSize,
-            url: file.fileUrl
+            url: file.fileUrl,
           }));
 
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
-            ubillFiles: [...(prev.ubillFiles || []), ...uploadedFiles]
+            ubillFiles: [...(prev.ubillFiles || []), ...uploadedFiles],
           }));
 
           toast.success(`Successfully uploaded ${data.files.length} file(s)`);
@@ -808,54 +904,62 @@ function ProjectCreationFormContent() {
           return true;
         }
 
-        toast.error('Invalid response format from server');
+        toast.error("Invalid response format from server");
         setIsFileUploading(false);
         return false;
       } catch (error: any) {
-        console.error('Network error during upload:', error);
-        toast.error(error.message || 'Network error during file upload');
+        console.error("Network error during upload:", error);
+        toast.error(error.message || "Network error during file upload");
         setIsFileUploading(false);
         return false;
       }
     } catch (error: any) {
-      console.error('File processing error:', error);
-      toast.error(error.message || 'Error processing files');
+      console.error("File processing error:", error);
+      toast.error(error.message || "Error processing files");
       setIsFileUploading(false);
       return false;
     }
   };
 
   const handleInterestRateChange = (value: string) => {
-    setFormData(prev => ({ ...prev, interestRate: value }));
+    setFormData((prev) => ({ ...prev, interestRate: value }));
   };
 
-  const handleLanguageChange = (value: 'English' | 'Spanish') => {
-    setFormData(prev => ({ ...prev, preferredLanguage: value }));
+  const handleLanguageChange = (value: "English" | "Spanish") => {
+    setFormData((prev) => ({ ...prev, preferredLanguage: value }));
   };
 
   // Keep the original onSubmit for the form
   const onSubmit = async (e: React.FormEvent | React.MouseEvent) => {
     // Make sure we prevent the default behavior regardless of event type
     if (e && e.preventDefault) {
-    e.preventDefault();
+      e.preventDefault();
     }
-    
+
     console.log("⭐️ onSubmit function called!", { eventType: e.type });
-    
+
     // Debug the lgcyCanvassId value and localStorage salesCompany value before submission
     console.log("DEBUG BEFORE SUBMIT - lgcyCanvassId:", formData.lgcyCanvassId);
-    
+
     // Check localStorage for salesCompany
-    let salesCompany = '';
+    let salesCompany = "";
     try {
-      const storedSalesCompany = typeof window !== 'undefined' ? localStorage.getItem('salesCompany') : null;
-      console.log("DEBUG BEFORE SUBMIT - salesCompany from localStorage:", storedSalesCompany);
+      const storedSalesCompany =
+        typeof window !== "undefined"
+          ? localStorage.getItem("salesCompany")
+          : null;
+      console.log(
+        "DEBUG BEFORE SUBMIT - salesCompany from localStorage:",
+        storedSalesCompany
+      );
     } catch (error) {
       console.error("Error accessing localStorage:", error);
     }
-    
+
     // Call the button click handler directly
-    const submitButton = document.querySelector('button[type="button"]') as HTMLButtonElement;
+    const submitButton = document.querySelector(
+      'button[type="button"]'
+    ) as HTMLButtonElement;
     if (submitButton) {
       submitButton.click();
     }
@@ -873,16 +977,18 @@ function ProjectCreationFormContent() {
   });
 
   // Validate name fields
-  const validateName = (field: 'firstName' | 'lastName', value: string) => {
+  const validateName = (field: "firstName" | "lastName", value: string) => {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     // Name shouldn't be empty
     if (!value.trim()) {
       isValid = false;
-      message = `Primary Customer ${field === 'firstName' ? 'First' : 'Last'} Name is required`;
-    } 
+      message = `Primary Customer ${
+        field === "firstName" ? "First" : "Last"
+      } Name is required`;
+    }
     // Name should be at least 2 characters
     else if (value.trim().length < 2) {
       isValid = false;
@@ -898,56 +1004,61 @@ function ProjectCreationFormContent() {
       isValid = false;
       message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
     }
-    
+
     // Update validation state
-    setNameValidation(prev => ({
+    setNameValidation((prev) => ({
       ...prev,
-      [field]: { isValid, message }
+      [field]: { isValid, message },
     }));
-    
+
     return isValid;
   };
-  
+
   // Format name with proper capitalization
   const formatNameCase = (name: string): string => {
     if (!name) return name;
-    
+
     // Split on spaces, hyphens, and apostrophes while keeping the delimiters
-    return name.trim().toLowerCase().split(/(?=['\s-])|(?<=['\s-])/)
+    return name
+      .trim()
+      .toLowerCase()
+      .split(/(?=['\s-])|(?<=['\s-])/)
       .map((part) => {
         // Only capitalize parts that are actual characters, not delimiters
-        return /[a-z]/.test(part) ? part.charAt(0).toUpperCase() + part.slice(1) : part;
+        return /[a-z]/.test(part)
+          ? part.charAt(0).toUpperCase() + part.slice(1)
+          : part;
       })
-      .join('');
+      .join("");
   };
-  
+
   // Handle email field blur
   const handleEmailBlur = (email: string) => {
     // Validate email and update validation state
     const validation = validateEmail(email);
     setEmailValidation(validation);
-    
+
     // If valid, trim whitespace
     if (validation.isValid && email) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        customerEmail: email.trim()
+        customerEmail: email.trim(),
       }));
     }
   };
 
   // Handle name field blur (when user tabs out or clicks elsewhere)
-  const handleNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+  const handleNameBlur = (field: "firstName" | "lastName", value: string) => {
     // Validate the name
     const isValid = validateName(field, value);
-    
+
     // If valid, format with proper capitalization
     if (isValid && value.trim()) {
       const formattedName = formatNameCase(value);
-      
-      setFormData(prev => ({
+
+      setFormData((prev) => ({
         ...prev,
-        [field]: formattedName
+        [field]: formattedName,
       }));
     }
   };
@@ -957,23 +1068,23 @@ function ProjectCreationFormContent() {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     // Email shouldn't be empty
     if (!trimmedEmail) {
       isValid = false;
       message = "Primary Customer Email is required";
       return { isValid, message };
-    } 
-    
+    }
+
     // Basic email format check using regex
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       isValid = false;
       message = "Please enter a valid email address";
       return { isValid, message };
     }
-    
+
     // Validate email format more rigorously
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(trimmedEmail)) {
@@ -981,56 +1092,62 @@ function ProjectCreationFormContent() {
       message = "Please enter a valid email address format";
       return { isValid, message };
     }
-    
+
     // Extract domain from email
-    const domain = trimmedEmail.split('@')[1];
-    
+    const domain = trimmedEmail.split("@")[1];
+
     // Check for common test/temporary email domains
     if (domain) {
       const disallowedDomains = [
-        'test.com',
-        'example.com',
-        'mailinator.com',
-        'tempmail.com',
-        'fakeemail.com',
-        'fakeinbox.com',
-        'yopmail.com',
-        'mailnesia.com',
-        'guerrillamail.com',
-        'sharklasers.com',
-        'temp-mail.org',
-        '10minutemail.com',
-        'tempinbox.com',
-        'throwawaymail.com',
-        'trashmail.com',
-        'mailcatch.com',
-        'getairmail.com',
-        'getnada.com',
-        'dispostable.com'
+        "test.com",
+        "example.com",
+        "mailinator.com",
+        "tempmail.com",
+        "fakeemail.com",
+        "fakeinbox.com",
+        "yopmail.com",
+        "mailnesia.com",
+        "guerrillamail.com",
+        "sharklasers.com",
+        "temp-mail.org",
+        "10minutemail.com",
+        "tempinbox.com",
+        "throwawaymail.com",
+        "trashmail.com",
+        "mailcatch.com",
+        "getairmail.com",
+        "getnada.com",
+        "dispostable.com",
       ];
-      
+
       // Check for obviously fake domains
-      if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+      if (
+        disallowedDomains.some(
+          (banned) => domain === banned || domain.endsWith(`.${banned}`)
+        )
+      ) {
         isValid = false;
         message = "Please use a real email address";
         return { isValid, message };
       }
-      
+
       // Check for suspicious patterns in the domain
-      if (domain.includes('temp') || 
-          domain.includes('fake') || 
-          domain.includes('test') || 
-          domain.includes('disposable') ||
-          domain.includes('throwaway') || 
-          domain.includes('trash') || 
-          domain.includes('dump') ||
-          domain.includes('temporary')) {
+      if (
+        domain.includes("temp") ||
+        domain.includes("fake") ||
+        domain.includes("test") ||
+        domain.includes("disposable") ||
+        domain.includes("throwaway") ||
+        domain.includes("trash") ||
+        domain.includes("dump") ||
+        domain.includes("temporary")
+      ) {
         isValid = false;
         message = "Please use your regular email address";
         return { isValid, message };
       }
     }
-    
+
     // Email shouldn't be too long
     if (trimmedEmail.length > 100) {
       isValid = false;
@@ -1044,7 +1161,7 @@ function ProjectCreationFormContent() {
       message = "Email address contains too many repeated characters";
       return { isValid, message };
     }
-    
+
     // Return validation result for valid email
     return { isValid, message };
   };
@@ -1052,12 +1169,12 @@ function ProjectCreationFormContent() {
   // Handle changes to the phone field
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Extract only digits from the input
-    const digitsOnly = e.target.value.replace(/\D/g, '');
-    
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+
     // Update state with just the digits
-    setFormData(prev => ({ 
-      ...prev, 
-      customerPhone: digitsOnly 
+    setFormData((prev) => ({
+      ...prev,
+      customerPhone: digitsOnly,
     }));
   };
 
@@ -1065,15 +1182,15 @@ function ProjectCreationFormContent() {
   const handlePhoneBlur = (phone: string) => {
     // Format phone before validation
     const formattedPhone = formatPhoneNumber(phone);
-    
+
     // Validate phone
     const validation = validatePhone(formattedPhone);
     setPhoneValidation(validation);
-    
+
     // Always update with formatted version
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      customerPhone: formattedPhone
+      customerPhone: formattedPhone,
     }));
   };
 
@@ -1081,75 +1198,76 @@ function ProjectCreationFormContent() {
   const validatePhone = (phone: string) => {
     let isValid = true;
     let message = "";
-    
+
     // Remove all non-digit characters
-    const digitsOnly = phone.replace(/\D/g, '');
-    
+    const digitsOnly = phone.replace(/\D/g, "");
+
     // Phone shouldn't be empty
     if (!digitsOnly) {
       isValid = false;
       message = "Customer phone number is required";
       return { isValid, message };
     }
-    
+
     // Phone must be exactly 11 digits starting with 1 (US format with country code)
     if (digitsOnly.length !== 11) {
       isValid = false;
-      message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+      message =
+        "Phone number must be 11 digits including country code (e.g., 17074303821)";
       return { isValid, message };
     }
-    
+
     // First digit must be 1 (country code)
-    if (digitsOnly[0] !== '1') {
+    if (digitsOnly[0] !== "1") {
       isValid = false;
       message = "Phone number must start with 1 (US country code)";
       return { isValid, message };
     }
-    
+
     // Valid phone number
     return { isValid, message };
   };
-  
+
   // Format phone number in required format 17074303821
   const formatPhoneNumber = (phone: string): string => {
     // Remove all non-digit characters
-    const digitsOnly = phone.replace(/\D/g, '');
-    
+    const digitsOnly = phone.replace(/\D/g, "");
+
     // If it's already the right length, just return it
-    if (digitsOnly.length === 11 && digitsOnly[0] === '1') {
+    if (digitsOnly.length === 11 && digitsOnly[0] === "1") {
       return digitsOnly;
     }
-    
+
     // If it's 10 digits (without country code), add the 1
     if (digitsOnly.length === 10) {
       return `1${digitsOnly}`;
     }
-    
+
     // Otherwise just return what we have
     return digitsOnly;
   };
-  
+
   // Validate sales rep email (similar to customer email but with different messages)
   const validateSalesRepEmail = (email: string) => {
     let isValid = true;
     let message = "";
-    
+
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     // Email shouldn't be empty
     if (!trimmedEmail) {
       isValid = false;
       message = "Sales representative email is required";
       return { isValid, message };
     }
-    
+
     // Basic email format check using regex
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
       isValid = false;
       message = "Please enter a valid email address";
       return { isValid, message };
     }
-    
+
     // Validate email format more rigorously
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(trimmedEmail)) {
@@ -1157,7 +1275,7 @@ function ProjectCreationFormContent() {
       message = "Please enter a valid email address format";
       return { isValid, message };
     }
-    
+
     // Check for company domains if needed
     // const allowedDomains = ['betterearth.solar', 'company.com'];
     // if (domain && !allowedDomains.some(allowed => domain === allowed)) {
@@ -1165,28 +1283,28 @@ function ProjectCreationFormContent() {
     //   message = "Please use a company email address";
     //   return { isValid, message };
     // }
-    
+
     // Email shouldn't be too long
     if (trimmedEmail.length > 100) {
       isValid = false;
       message = "Email address is too long";
       return { isValid, message };
     }
-    
+
     return { isValid, message };
   };
-  
+
   // Handle sales rep email blur
   const handleSalesRepEmailBlur = (email: string) => {
     // Validate email
     const validation = validateSalesRepEmail(email);
     setSalesRepEmailValidation(validation);
-    
+
     // If valid, trim whitespace
     if (validation.isValid && email) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        salesRepEmail: email.trim()
+        salesRepEmail: email.trim(),
       }));
     }
   };
@@ -1197,14 +1315,14 @@ function ProjectCreationFormContent() {
     const errors: string[] = [];
 
     // Check name fields
-    const isFirstNameValid = validateName('firstName', formData.firstName);
-    const isLastNameValid = validateName('lastName', formData.lastName);
-    
+    const isFirstNameValid = validateName("firstName", formData.firstName);
+    const isLastNameValid = validateName("lastName", formData.lastName);
+
     if (!isFirstNameValid) {
       isValid = false;
       errors.push(nameValidation.firstName.message || "First Name is invalid");
     }
-    
+
     if (!isLastNameValid) {
       isValid = false;
       errors.push(nameValidation.lastName.message || "Last Name is invalid");
@@ -1248,7 +1366,7 @@ function ProjectCreationFormContent() {
 
     // Check leadType - now optional
     // Removed the validation for lead type
-    
+
     // Check moduleType
     if (!formData.moduleType) {
       isValid = false;
@@ -1300,30 +1418,32 @@ function ProjectCreationFormContent() {
   };
 
   // Add handler for secondary phone formatting
-  const handleSecondaryPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSecondaryPhoneChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     // Extract only digits from the input
-    const digitsOnly = e.target.value.replace(/\D/g, '');
-    
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+
     // Update state with just the digits
-    setFormData(prev => ({ 
-      ...prev, 
-      secondaryPhone: digitsOnly 
+    setFormData((prev) => ({
+      ...prev,
+      secondaryPhone: digitsOnly,
     }));
   };
-  
+
   // Handle secondary phone field blur
   const handleSecondaryPhoneBlur = (phone: string) => {
     // Format phone before validation
     const formattedPhone = formatPhoneNumber(phone);
-    
+
     // Validate phone
     const validation = validateSecondaryPhone(formattedPhone);
     setSecondaryPhoneValidation(validation);
-    
+
     // Always update with formatted version
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      secondaryPhone: formattedPhone
+      secondaryPhone: formattedPhone,
     }));
   };
 
@@ -1331,37 +1451,41 @@ function ProjectCreationFormContent() {
   const validateSecondaryPhone = (phone: string) => {
     let isValid = true;
     let message = "";
-    
+
     // Remove all non-digit characters
-    const digitsOnly = phone.replace(/\D/g, '');
-    
+    const digitsOnly = phone.replace(/\D/g, "");
+
     // If phone is provided (optional), validate it
     if (digitsOnly) {
       // Phone must be exactly 11 digits starting with 1 (US format with country code)
       if (digitsOnly.length !== 11) {
         isValid = false;
-        message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+        message =
+          "Phone number must be 11 digits including country code (e.g., 17074303821)";
         return { isValid, message };
       }
-      
+
       // First digit must be 1 (country code)
-      if (digitsOnly[0] !== '1') {
+      if (digitsOnly[0] !== "1") {
         isValid = false;
         message = "Phone number must start with 1 (US country code)";
         return { isValid, message };
       }
     }
-    
+
     // Valid phone number
     return { isValid, message };
   };
 
   // Validate secondary name fields
-  const validateSecondaryName = (field: 'firstName' | 'lastName', value: string) => {
+  const validateSecondaryName = (
+    field: "firstName" | "lastName",
+    value: string
+  ) => {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     // Only validate if a value is provided (secondary contact fields are optional)
     if (value.trim()) {
       // Name should be at least 2 characters
@@ -1380,34 +1504,37 @@ function ProjectCreationFormContent() {
         message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
       }
     }
-    
+
     // Update validation state
-    setSecondaryNameValidation(prev => ({
+    setSecondaryNameValidation((prev) => ({
       ...prev,
-      [field]: { isValid, message }
+      [field]: { isValid, message },
     }));
-    
+
     return isValid;
   };
 
   // Handle secondary name field blur
-  const handleSecondaryNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+  const handleSecondaryNameBlur = (
+    field: "firstName" | "lastName",
+    value: string
+  ) => {
     // Validate the name
     const isValid = validateSecondaryName(field, value);
-    
+
     // If valid, format with proper capitalization
     if (isValid && value.trim()) {
       const formattedName = formatNameCase(value);
-      
-      if (field === 'firstName') {
-        setFormData(prev => ({
+
+      if (field === "firstName") {
+        setFormData((prev) => ({
           ...prev,
-          secondaryFirstName: formattedName
+          secondaryFirstName: formattedName,
         }));
       } else {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          secondaryLastName: formattedName
+          secondaryLastName: formattedName,
         }));
       }
     }
@@ -1418,9 +1545,9 @@ function ProjectCreationFormContent() {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     // If email is provided (optional), validate it
     if (trimmedEmail) {
       // Basic email format check using regex
@@ -1429,7 +1556,7 @@ function ProjectCreationFormContent() {
         message = "Please enter a valid email address";
         return { isValid, message };
       }
-      
+
       // Validate email format more rigorously
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(trimmedEmail)) {
@@ -1437,56 +1564,62 @@ function ProjectCreationFormContent() {
         message = "Please enter a valid email address format";
         return { isValid, message };
       }
-      
+
       // Extract domain from email
-      const domain = trimmedEmail.split('@')[1];
-      
+      const domain = trimmedEmail.split("@")[1];
+
       // Check for common test/temporary email domains
       if (domain) {
         const disallowedDomains = [
-          'test.com',
-          'example.com',
-          'mailinator.com',
-          'tempmail.com',
-          'fakeemail.com',
-          'fakeinbox.com',
-          'yopmail.com',
-          'mailnesia.com',
-          'guerrillamail.com',
-          'sharklasers.com',
-          'temp-mail.org',
-          '10minutemail.com',
-          'tempinbox.com',
-          'throwawaymail.com',
-          'trashmail.com',
-          'mailcatch.com',
-          'getairmail.com',
-          'getnada.com',
-          'dispostable.com'
+          "test.com",
+          "example.com",
+          "mailinator.com",
+          "tempmail.com",
+          "fakeemail.com",
+          "fakeinbox.com",
+          "yopmail.com",
+          "mailnesia.com",
+          "guerrillamail.com",
+          "sharklasers.com",
+          "temp-mail.org",
+          "10minutemail.com",
+          "tempinbox.com",
+          "throwawaymail.com",
+          "trashmail.com",
+          "mailcatch.com",
+          "getairmail.com",
+          "getnada.com",
+          "dispostable.com",
         ];
-        
+
         // Check for obviously fake domains
-        if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+        if (
+          disallowedDomains.some(
+            (banned) => domain === banned || domain.endsWith(`.${banned}`)
+          )
+        ) {
           isValid = false;
           message = "Please use a real email address";
           return { isValid, message };
         }
-        
+
         // Check for suspicious patterns in the domain
-        if (domain.includes('temp') || 
-            domain.includes('fake') || 
-            domain.includes('test') || 
-            domain.includes('disposable') ||
-            domain.includes('throwaway') ||
-            domain.includes('trash') ||
-            domain.includes('dump') ||
-            domain.includes('temporary')) {
+        if (
+          domain.includes("temp") ||
+          domain.includes("fake") ||
+          domain.includes("test") ||
+          domain.includes("disposable") ||
+          domain.includes("throwaway") ||
+          domain.includes("trash") ||
+          domain.includes("dump") ||
+          domain.includes("temporary")
+        ) {
           isValid = false;
           message = "Please use a regular email address";
           return { isValid, message };
         }
       }
-      
+
       // Email shouldn't be too long
       if (trimmedEmail.length > 100) {
         isValid = false;
@@ -1501,36 +1634,39 @@ function ProjectCreationFormContent() {
         return { isValid, message };
       }
     }
-    
+
     // Return validation result
     return { isValid, message };
   };
-  
+
   // Handle secondary email field blur
   const handleSecondaryEmailBlur = (email: string) => {
     // Validate email and update validation state
     const validation = validateSecondaryEmail(email);
     setSecondaryEmailValidation(validation);
-    
+
     // If valid, trim whitespace
     if (validation.isValid && email) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        secondaryEmail: email.trim()
+        secondaryEmail: email.trim(),
       }));
     }
   };
 
   const handleTenantsChange = (value: boolean) => {
-    setFormData(prev => ({ ...prev, hasTenants: value }));
+    setFormData((prev) => ({ ...prev, hasTenants: value }));
   };
 
   // Validate tenant name fields
-  const validateTenantName = (field: 'firstName' | 'lastName', value: string) => {
+  const validateTenantName = (
+    field: "firstName" | "lastName",
+    value: string
+  ) => {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     // Only validate if a value is provided (tenant fields are optional)
     if (value.trim()) {
       // Name should be at least 2 characters
@@ -1549,34 +1685,37 @@ function ProjectCreationFormContent() {
         message = `Name can only contain letters, spaces, hyphens, and apostrophes`;
       }
     }
-    
+
     // Update validation state
-    setTenantNameValidation(prev => ({
+    setTenantNameValidation((prev) => ({
       ...prev,
-      [field]: { isValid, message }
+      [field]: { isValid, message },
     }));
-    
+
     return isValid;
   };
 
   // Handle tenant name field blur
-  const handleTenantNameBlur = (field: 'firstName' | 'lastName', value: string) => {
+  const handleTenantNameBlur = (
+    field: "firstName" | "lastName",
+    value: string
+  ) => {
     // Validate the name
     const isValid = validateTenantName(field, value);
-    
+
     // If valid, format with proper capitalization
     if (isValid && value.trim()) {
       const formattedName = formatNameCase(value);
-      
-      if (field === 'firstName') {
-        setFormData(prev => ({
+
+      if (field === "firstName") {
+        setFormData((prev) => ({
           ...prev,
-          tenantFirstName: formattedName
+          tenantFirstName: formattedName,
         }));
       } else {
-        setFormData(prev => ({
+        setFormData((prev) => ({
           ...prev,
-          tenantLastName: formattedName
+          tenantLastName: formattedName,
         }));
       }
     }
@@ -1587,9 +1726,9 @@ function ProjectCreationFormContent() {
     // Initialize validation state
     let isValid = true;
     let message = "";
-    
+
     const trimmedEmail = email.trim().toLowerCase();
-    
+
     // If email is provided (optional), validate it
     if (trimmedEmail) {
       // Basic email format check using regex
@@ -1598,7 +1737,7 @@ function ProjectCreationFormContent() {
         message = "Please enter a valid email address";
         return { isValid, message };
       }
-      
+
       // Validate email format more rigorously
       const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
       if (!emailRegex.test(trimmedEmail)) {
@@ -1606,46 +1745,52 @@ function ProjectCreationFormContent() {
         message = "Please enter a valid email address format";
         return { isValid, message };
       }
-      
+
       // Extract domain from email
-      const domain = trimmedEmail.split('@')[1];
-      
+      const domain = trimmedEmail.split("@")[1];
+
       // Check for common test/temporary email domains
       if (domain) {
         const disallowedDomains = [
-          'test.com',
-          'example.com',
-          'mailinator.com',
-          'tempmail.com',
-          'fakeemail.com',
-          'fakeinbox.com',
-          'yopmail.com',
-          'mailnesia.com',
-          'guerrillamail.com',
-          'sharklasers.com',
-          'temp-mail.org',
-          '10minutemail.com'
+          "test.com",
+          "example.com",
+          "mailinator.com",
+          "tempmail.com",
+          "fakeemail.com",
+          "fakeinbox.com",
+          "yopmail.com",
+          "mailnesia.com",
+          "guerrillamail.com",
+          "sharklasers.com",
+          "temp-mail.org",
+          "10minutemail.com",
         ];
-        
+
         // Check for obviously fake domains
-        if (disallowedDomains.some(banned => domain === banned || domain.endsWith(`.${banned}`))) {
+        if (
+          disallowedDomains.some(
+            (banned) => domain === banned || domain.endsWith(`.${banned}`)
+          )
+        ) {
           isValid = false;
           message = "Please use a real email address";
           return { isValid, message };
         }
-        
+
         // Check for suspicious patterns in the domain
-        if (domain.includes('temp') || 
-            domain.includes('fake') || 
-            domain.includes('test') || 
-            domain.includes('disposable') ||
-            domain.includes('throwaway')) {
+        if (
+          domain.includes("temp") ||
+          domain.includes("fake") ||
+          domain.includes("test") ||
+          domain.includes("disposable") ||
+          domain.includes("throwaway")
+        ) {
           isValid = false;
           message = "Please use a regular email address";
           return { isValid, message };
         }
       }
-      
+
       // Email shouldn't be too long
       if (trimmedEmail.length > 100) {
         isValid = false;
@@ -1653,22 +1798,22 @@ function ProjectCreationFormContent() {
         return { isValid, message };
       }
     }
-    
+
     // Return validation result
     return { isValid, message };
   };
-  
+
   // Handle tenant email field blur
   const handleTenantEmailBlur = (email: string) => {
     // Validate email and update validation state
     const validation = validateTenantEmail(email);
     setTenantEmailValidation(validation);
-    
+
     // If valid, trim whitespace
     if (validation.isValid && email) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        tenantEmail: email.trim()
+        tenantEmail: email.trim(),
       }));
     }
   };
@@ -1676,28 +1821,28 @@ function ProjectCreationFormContent() {
   // Add handler for tenant phone formatting
   const handleTenantPhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Extract only digits from the input
-    const digitsOnly = e.target.value.replace(/\D/g, '');
-    
+    const digitsOnly = e.target.value.replace(/\D/g, "");
+
     // Update state with just the digits
-    setFormData(prev => ({ 
-      ...prev, 
-      tenantPhone: digitsOnly 
+    setFormData((prev) => ({
+      ...prev,
+      tenantPhone: digitsOnly,
     }));
   };
-  
+
   // Handle tenant phone field blur
   const handleTenantPhoneBlur = (phone: string) => {
     // Format phone before validation
     const formattedPhone = formatPhoneNumber(phone);
-    
+
     // Validate phone
     const validation = validateTenantPhone(formattedPhone);
     setTenantPhoneValidation(validation);
-    
+
     // Always update with formatted version
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tenantPhone: formattedPhone
+      tenantPhone: formattedPhone,
     }));
   };
 
@@ -1705,143 +1850,149 @@ function ProjectCreationFormContent() {
   const validateTenantPhone = (phone: string) => {
     let isValid = true;
     let message = "";
-    
+
     // Remove all non-digit characters
-    const digitsOnly = phone.replace(/\D/g, '');
-    
+    const digitsOnly = phone.replace(/\D/g, "");
+
     // If phone is provided (optional), validate it
     if (digitsOnly) {
       // Phone must be exactly 11 digits starting with 1 (US format with country code)
       if (digitsOnly.length !== 11) {
         isValid = false;
-        message = "Phone number must be 11 digits including country code (e.g., 17074303821)";
+        message =
+          "Phone number must be 11 digits including country code (e.g., 17074303821)";
         return { isValid, message };
       }
-      
+
       // First digit must be 1 (country code)
-      if (digitsOnly[0] !== '1') {
+      if (digitsOnly[0] !== "1") {
         isValid = false;
         message = "Phone number must start with 1 (US country code)";
         return { isValid, message };
       }
     }
-    
+
     // Valid phone number
     return { isValid, message };
   };
 
   const handleModuleCountChange = (value: string) => {
-    setFormData(prev => ({ ...prev, moduleCount: value }));
+    setFormData((prev) => ({ ...prev, moduleCount: value }));
   };
 
   const handleModuleTypeChange = (value: ModuleType | "") => {
-    setFormData(prev => ({ ...prev, moduleType: value }));
+    setFormData((prev) => ({ ...prev, moduleType: value }));
   };
 
   const handleStorageChange = (value: StorageOption) => {
-    setFormData(prev => ({ ...prev, storage: value }));
+    setFormData((prev) => ({ ...prev, storage: value }));
   };
 
   const handleYearlyProductionChange = (value: string) => {
-    setFormData(prev => ({ ...prev, yearlyProduction: value }));
+    setFormData((prev) => ({ ...prev, yearlyProduction: value }));
   };
 
   const handleFinanceOrgChange = (value: string) => {
-    setFormData(prev => ({ ...prev, financeOrg: value }));
+    setFormData((prev) => ({ ...prev, financeOrg: value }));
   };
 
   const handleLgcyCanvassIdChange = (value: string) => {
-    setFormData(prev => ({ ...prev, lgcyCanvassId: value }));
+    setFormData((prev) => ({ ...prev, lgcyCanvassId: value }));
   };
 
   const handleEpcChange = (value: string) => {
-    setFormData(prev => ({ ...prev, epc: value }));
+    setFormData((prev) => ({ ...prev, epc: value }));
   };
 
   const handleKwhRateChange = (value: string) => {
-    setFormData(prev => ({ ...prev, kwhRate: value }));
+    setFormData((prev) => ({ ...prev, kwhRate: value }));
   };
 
   const handleLeadIdChange = (value: string) => {
-    setFormData(prev => ({ ...prev, leadId: value }));
+    setFormData((prev) => ({ ...prev, leadId: value }));
   };
 
   const handlePangeaIdChange = (value: string) => {
-    setFormData(prev => ({ ...prev, pangeaId: value }));
+    setFormData((prev) => ({ ...prev, pangeaId: value }));
   };
 
   const handleInsightlyIdChange = (value: string) => {
-    setFormData(prev => ({ ...prev, insightlyId: value }));
+    setFormData((prev) => ({ ...prev, insightlyId: value }));
   };
 
   const handleSalesRepEmailChange = (value: string) => {
-    setFormData(prev => ({ ...prev, salesRepEmail: value }));
+    setFormData((prev) => ({ ...prev, salesRepEmail: value }));
   };
 
   const handleSalesRepEmail2Change = (value: string) => {
-    setFormData(prev => ({ ...prev, salesRepEmail2: value }));
+    setFormData((prev) => ({ ...prev, salesRepEmail2: value }));
   };
 
   const handleDialerEmailChange = (value: string) => {
-    setFormData(prev => ({ ...prev, dialerEmail: value }));
+    setFormData((prev) => ({ ...prev, dialerEmail: value }));
   };
 
   const handleCustomerEmailChange = (value: string) => {
     // Check if this is a special welcome call update from FinanceCompanySelector
-    if (value.startsWith('__WELCOME_CALL_')) {
+    if (value.startsWith("__WELCOME_CALL_")) {
       // Format: __WELCOME_CALL_true__originalEmail or __WELCOME_CALL_false__originalEmail
-      const parts = value.split('__');
+      const parts = value.split("__");
       if (parts.length >= 3) {
-        const isChecked = parts[2] === 'true';
-        const originalEmail = parts.slice(3).join('__') || formData.customerEmail;
-        
+        const isChecked = parts[2] === "true";
+        const originalEmail =
+          parts.slice(3).join("__") || formData.customerEmail;
+
         // Update both welcome call flags and preserve the original email
-        console.log("Special welcome call update detected - FORCING to:", isChecked);
-        
+        console.log(
+          "Special welcome call update detected - FORCING to:",
+          isChecked
+        );
+
         // Directly set the form state with all fields explicitly set
         setFormData({
           ...formData,
           welcomeCallCompleted: isChecked,
           hasCompletedWelcomeCall: isChecked,
-          customerEmail: originalEmail
+          customerEmail: originalEmail,
         });
-        
+
         // Log the state after update to verify it worked
         setTimeout(() => {
           console.log("Verification state after update:", {
             welcomeCallCompleted: formData.welcomeCallCompleted,
-            hasCompletedWelcomeCall: formData.hasCompletedWelcomeCall
+            hasCompletedWelcomeCall: formData.hasCompletedWelcomeCall,
           });
         }, 100);
-        
+
         return;
       }
     }
-    
+
     // Regular email update
-    setFormData({...formData, customerEmail: value});
+    setFormData({ ...formData, customerEmail: value });
   };
 
   const handleCustomerPhoneChange = (value: string) => {
-    setFormData(prev => ({ ...prev, customerPhone: value }));
+    setFormData((prev) => ({ ...prev, customerPhone: value }));
   };
 
   return (
     <form onSubmit={onSubmit} className="space-y-6 pb-10">
       {/* Debug error display - completely removed */}
-      
+
       {/* Title as the first element */}
       <div className="relative mb-8 pt-10">
-        <h2 className="text-center text-3xl font-bold 
+        <h2
+          className="text-center text-3xl font-bold 
                      bg-gradient-to-r from-[#58b37e] to-[#053058] dark:from-[#8efbbc] dark:to-[#1db7e2]
-                     bg-clip-text text-transparent pb-2">
+                     bg-clip-text text-transparent pb-2"
+        >
           Enter Your Project Details
         </h2>
       </div>
-      
+
       {/* LeadType Section */}
       <div className="space-y-4">
-        
         {/* Display Insightly Record ID if it's an additional survey or survey booking */}
         {(formData.isAdditionalSurvey || formData.isSurveyBooking) && (
           <div className="mb-6">
@@ -1860,37 +2011,46 @@ function ProjectCreationFormContent() {
             />
           </div>
         )}
-        
+
         {/* Customer Name Row - Two columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Customer First Name */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
-              Primary Customer First Name <span className="text-red-500">*</span>
+              Primary Customer First Name{" "}
+              <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               id="firstName"
               value={formData.firstName}
               onChange={handleChange}
-              onBlur={(e) => handleNameBlur('firstName', e.target.value)}
-              className={`p-2 border ${!nameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                       focus:outline-none focus:ring-2 ${!nameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+              onBlur={(e) => handleNameBlur("firstName", e.target.value)}
+              className={`p-2 border ${
+                !nameValidation.firstName.isValid
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${
+                         !nameValidation.firstName.isValid
+                           ? "focus:ring-red-500"
+                           : "focus:ring-blue-500"
+                       }
                        bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
               placeholder="Enter first name"
               aria-invalid={!nameValidation.firstName.isValid}
               aria-describedby="firstName-error"
             />
             {!nameValidation.firstName.isValid && (
-              <div 
-                id="firstName-error" 
+              <div
+                id="firstName-error"
                 className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
               >
                 ⚠️ {nameValidation.firstName.message}
               </div>
             )}
           </div>
-          
+
           {/* Customer Last Name */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -1901,17 +2061,25 @@ function ProjectCreationFormContent() {
               id="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              onBlur={(e) => handleNameBlur('lastName', e.target.value)}
-              className={`p-2 border ${!nameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                       focus:outline-none focus:ring-2 ${!nameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+              onBlur={(e) => handleNameBlur("lastName", e.target.value)}
+              className={`p-2 border ${
+                !nameValidation.lastName.isValid
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${
+                         !nameValidation.lastName.isValid
+                           ? "focus:ring-red-500"
+                           : "focus:ring-blue-500"
+                       }
                        bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
               placeholder="Enter last name"
               aria-invalid={!nameValidation.lastName.isValid}
               aria-describedby="lastName-error"
             />
             {!nameValidation.lastName.isValid && (
-              <div 
-                id="lastName-error" 
+              <div
+                id="lastName-error"
                 className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
               >
                 ⚠️ {nameValidation.lastName.message}
@@ -1920,7 +2088,7 @@ function ProjectCreationFormContent() {
           </div>
         </div>
         <br></br>
-        
+
         {/* Customer Contact Row - Two columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Customer Email */}
@@ -1933,53 +2101,76 @@ function ProjectCreationFormContent() {
               id="customerEmail"
               value={formData.customerEmail}
               onChange={(e) => {
-                setFormData(prev => ({ ...prev, customerEmail: e.target.value }));
+                setFormData((prev) => ({
+                  ...prev,
+                  customerEmail: e.target.value,
+                }));
                 // Don't immediately validate as user types
               }}
               onBlur={(e) => handleEmailBlur(e.target.value)}
-              className={`p-2 border ${!emailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                       focus:outline-none focus:ring-2 ${!emailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+              className={`p-2 border ${
+                !emailValidation.isValid
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${
+                         !emailValidation.isValid
+                           ? "focus:ring-red-500"
+                           : "focus:ring-blue-500"
+                       }
                        bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
               placeholder="Enter customer email"
               aria-invalid={!emailValidation.isValid}
               aria-describedby="email-error"
             />
             {!emailValidation.isValid && (
-              <div 
-                id="email-error" 
+              <div
+                id="email-error"
                 className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
               >
                 ⚠️ {emailValidation.message}
               </div>
             )}
           </div>
-          
+
           {/* Customer Phone */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
               Primary Customer Phone <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-            <input
-              type="tel"
+              <input
+                type="tel"
                 id="customerPhone"
-              value={formData.customerPhone}
+                value={formData.customerPhone}
                 onChange={handlePhoneChange}
                 onBlur={(e) => handlePhoneBlur(e.target.value)}
-                className={`p-2 border ${!phoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                         focus:outline-none focus:ring-2 ${!phoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                className={`p-2 border ${
+                  !phoneValidation.isValid
+                    ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${
+                           !phoneValidation.isValid
+                             ? "focus:ring-red-500"
+                             : "focus:ring-blue-500"
+                         }
                          bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                 placeholder="Enter as 17074303821"
                 aria-invalid={!phoneValidation.isValid}
                 aria-describedby="phone-format-hint phone-error"
               />
             </div>
-            <p id="phone-format-hint" className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-              Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+            <p
+              id="phone-format-hint"
+              className="mt-1 text-xs text-gray-500 dark:text-gray-400"
+            >
+              Format: 17074303821 (US country code + 10-digit number with no
+              spaces or symbols)
             </p>
             {!phoneValidation.isValid && (
-              <div 
-                id="phone-error" 
+              <div
+                id="phone-error"
                 className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
               >
                 ⚠️ {phoneValidation.message}
@@ -1987,7 +2178,7 @@ function ProjectCreationFormContent() {
             )}
           </div>
         </div>
-        
+
         {/* Secondary Contact Question */}
         <div className="mt-8 mb-6">
           <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-3">
@@ -2003,7 +2194,10 @@ function ProjectCreationFormContent() {
                 onChange={() => handleSecondaryContactChange(true)}
                 className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
-              <label htmlFor="secondary-contact-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+              <label
+                htmlFor="secondary-contact-yes"
+                className="text-gray-700 dark:text-gray-200 cursor-pointer"
+              >
                 Yes
               </label>
             </div>
@@ -2016,13 +2210,16 @@ function ProjectCreationFormContent() {
                 onChange={() => handleSecondaryContactChange(false)}
                 className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
               />
-              <label htmlFor="secondary-contact-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+              <label
+                htmlFor="secondary-contact-no"
+                className="text-gray-700 dark:text-gray-200 cursor-pointer"
+              >
                 No
               </label>
             </div>
           </div>
         </div>
-        
+
         {/* Secondary Contact Fields - Show only if user selected "Yes" */}
         {showSecondaryContact && (
           <div className="space-y-6 mt-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -2034,8 +2231,13 @@ function ProjectCreationFormContent() {
                 </label>
                 <select
                   id="secondaryRelationship"
-                  value={formData.secondaryRelationship || ''}
-                  onChange={(e) => setFormData(prev => ({ ...prev, secondaryRelationship: e.target.value }))}
+                  value={formData.secondaryRelationship || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      secondaryRelationship: e.target.value,
+                    }))
+                  }
                   className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
                            focus:outline-none focus:ring-2 focus:ring-blue-500
                            bg-white dark:bg-[#3A3B3C] dark:text-white"
@@ -2051,7 +2253,7 @@ function ProjectCreationFormContent() {
                 </select>
               </div>
             </div>
-            
+
             {/* Secondary Contact Name Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Secondary First Name */}
@@ -2064,27 +2266,40 @@ function ProjectCreationFormContent() {
                   id="secondaryFirstName"
                   value={formData.secondaryFirstName}
                   onChange={(e) => {
-                    setFormData(prev => ({ ...prev, secondaryFirstName: e.target.value }));
-                    validateSecondaryName('firstName', e.target.value);
+                    setFormData((prev) => ({
+                      ...prev,
+                      secondaryFirstName: e.target.value,
+                    }));
+                    validateSecondaryName("firstName", e.target.value);
                   }}
-                  onBlur={(e) => handleSecondaryNameBlur('firstName', e.target.value)}
-                  className={`p-2 border ${!secondaryNameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                           focus:outline-none focus:ring-2 ${!secondaryNameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                  onBlur={(e) =>
+                    handleSecondaryNameBlur("firstName", e.target.value)
+                  }
+                  className={`p-2 border ${
+                    !secondaryNameValidation.firstName.isValid
+                      ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                      : "border-gray-300 dark:border-gray-600"
+                  } rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${
+                             !secondaryNameValidation.firstName.isValid
+                               ? "focus:ring-red-500"
+                               : "focus:ring-blue-500"
+                           }
                            bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                   placeholder="Enter first name"
                   aria-invalid={!secondaryNameValidation.firstName.isValid}
                   aria-describedby="secondaryFirstName-error"
                 />
                 {!secondaryNameValidation.firstName.isValid && (
-                  <div 
-                    id="secondaryFirstName-error" 
+                  <div
+                    id="secondaryFirstName-error"
                     className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                   >
                     ⚠️ {secondaryNameValidation.firstName.message}
                   </div>
                 )}
               </div>
-              
+
               {/* Secondary Last Name */}
               <div>
                 <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -2095,20 +2310,33 @@ function ProjectCreationFormContent() {
                   id="secondaryLastName"
                   value={formData.secondaryLastName}
                   onChange={(e) => {
-                    setFormData(prev => ({ ...prev, secondaryLastName: e.target.value }));
-                    validateSecondaryName('lastName', e.target.value);
+                    setFormData((prev) => ({
+                      ...prev,
+                      secondaryLastName: e.target.value,
+                    }));
+                    validateSecondaryName("lastName", e.target.value);
                   }}
-                  onBlur={(e) => handleSecondaryNameBlur('lastName', e.target.value)}
-                  className={`p-2 border ${!secondaryNameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                           focus:outline-none focus:ring-2 ${!secondaryNameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                  onBlur={(e) =>
+                    handleSecondaryNameBlur("lastName", e.target.value)
+                  }
+                  className={`p-2 border ${
+                    !secondaryNameValidation.lastName.isValid
+                      ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                      : "border-gray-300 dark:border-gray-600"
+                  } rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${
+                             !secondaryNameValidation.lastName.isValid
+                               ? "focus:ring-red-500"
+                               : "focus:ring-blue-500"
+                           }
                            bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                   placeholder="Enter last name"
                   aria-invalid={!secondaryNameValidation.lastName.isValid}
                   aria-describedby="secondaryLastName-error"
                 />
                 {!secondaryNameValidation.lastName.isValid && (
-                  <div 
-                    id="secondaryLastName-error" 
+                  <div
+                    id="secondaryLastName-error"
                     className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                   >
                     ⚠️ {secondaryNameValidation.lastName.message}
@@ -2116,7 +2344,7 @@ function ProjectCreationFormContent() {
                 )}
               </div>
             </div>
-            
+
             {/* Secondary Contact Info Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Secondary Email */}
@@ -2128,25 +2356,38 @@ function ProjectCreationFormContent() {
                   type="email"
                   id="secondaryEmail"
                   value={formData.secondaryEmail}
-                  onChange={(e) => setFormData(prev => ({ ...prev, secondaryEmail: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      secondaryEmail: e.target.value,
+                    }))
+                  }
                   onBlur={(e) => handleSecondaryEmailBlur(e.target.value)}
-                  className={`p-2 border ${!secondaryEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                           focus:outline-none focus:ring-2 ${!secondaryEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                  className={`p-2 border ${
+                    !secondaryEmailValidation.isValid
+                      ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                      : "border-gray-300 dark:border-gray-600"
+                  } rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${
+                             !secondaryEmailValidation.isValid
+                               ? "focus:ring-red-500"
+                               : "focus:ring-blue-500"
+                           }
                            bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                   placeholder="Enter email address"
                   aria-invalid={!secondaryEmailValidation.isValid}
                   aria-describedby="secondary-email-error"
                 />
                 {!secondaryEmailValidation.isValid && (
-                  <div 
-                    id="secondary-email-error" 
+                  <div
+                    id="secondary-email-error"
                     className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                   >
                     ⚠️ {secondaryEmailValidation.message}
                   </div>
                 )}
               </div>
-              
+
               {/* Secondary Phone */}
               <div>
                 <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -2158,29 +2399,38 @@ function ProjectCreationFormContent() {
                   value={formData.secondaryPhone}
                   onChange={handleSecondaryPhoneChange}
                   onBlur={(e) => handleSecondaryPhoneBlur(e.target.value)}
-                  className={`p-2 border ${!secondaryPhoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                           focus:outline-none focus:ring-2 ${!secondaryPhoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                  className={`p-2 border ${
+                    !secondaryPhoneValidation.isValid
+                      ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                      : "border-gray-300 dark:border-gray-600"
+                  } rounded-md w-full 
+                           focus:outline-none focus:ring-2 ${
+                             !secondaryPhoneValidation.isValid
+                               ? "focus:ring-red-500"
+                               : "focus:ring-blue-500"
+                           }
                            bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                   placeholder="Enter as 17074303821"
                   aria-invalid={!secondaryPhoneValidation.isValid}
                   aria-describedby="secondary-phone-error"
                 />
                 {!secondaryPhoneValidation.isValid && (
-                  <div 
-                    id="secondary-phone-error" 
+                  <div
+                    id="secondary-phone-error"
                     className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                   >
                     ⚠️ {secondaryPhoneValidation.message}
                   </div>
                 )}
                 <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                  Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+                  Format: 17074303821 (US country code + 10-digit number with no
+                  spaces or symbols)
                 </p>
               </div>
             </div>
           </div>
         )}
-        
+
         {/* Sales Rep Email Row - Two columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
           {/* Sales Rep Email */}
@@ -2192,10 +2442,23 @@ function ProjectCreationFormContent() {
               type="email"
               id="salesRepEmail"
               value={formData.salesRepEmail}
-              onChange={(e) => setFormData(prev => ({ ...prev, salesRepEmail: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  salesRepEmail: e.target.value,
+                }))
+              }
               onBlur={(e) => handleSalesRepEmailBlur(e.target.value)}
-              className={`p-2 border ${!salesRepEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                       focus:outline-none focus:ring-2 ${!salesRepEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+              className={`p-2 border ${
+                !salesRepEmailValidation.isValid
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${
+                         !salesRepEmailValidation.isValid
+                           ? "focus:ring-red-500"
+                           : "focus:ring-blue-500"
+                       }
                        bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
               placeholder="Enter sales representative email"
               required
@@ -2203,15 +2466,15 @@ function ProjectCreationFormContent() {
               aria-describedby="salesrep-email-error"
             />
             {!salesRepEmailValidation.isValid && (
-              <div 
-                id="salesrep-email-error" 
+              <div
+                id="salesrep-email-error"
                 className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
               >
                 ⚠️ {salesRepEmailValidation.message}
               </div>
             )}
           </div>
-          
+
           {/* Sales Rep Email 2 */}
           <div>
             <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -2220,7 +2483,12 @@ function ProjectCreationFormContent() {
             <input
               type="email"
               value={formData.salesRepEmail2}
-              onChange={(e) => setFormData(prev => ({ ...prev, salesRepEmail2: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  salesRepEmail2: e.target.value,
+                }))
+              }
               className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
                        focus:outline-none focus:ring-2 focus:ring-blue-500
                        bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200"
@@ -2228,27 +2496,32 @@ function ProjectCreationFormContent() {
             />
           </div>
         </div>
-        
+
         {/* LGCY Canvas ID - Only show if sales rep email contains "lgcypower.com" */}
-        {formData.salesRepEmail && formData.salesRepEmail.toLowerCase().includes('lgcypower.com') && (
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
-                LGCY Canvas ID
-              </label>
-              <input
-                type="text"
-                value={formData.lgcyCanvassId || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, lgcyCanvassId: e.target.value }))}
-                className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
+        {formData.salesRepEmail &&
+          formData.salesRepEmail.toLowerCase().includes("lgcypower.com") && (
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
+                  LGCY Canvas ID
+                </label>
+                <input
+                  type="text"
+                  value={formData.lgcyCanvassId || ""}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      lgcyCanvassId: e.target.value,
+                    }))
+                  }
+                  className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
                          focus:outline-none focus:ring-2 focus:ring-blue-500
                          bg-white dark:bg-[#3A3B3C] dark:text-white"
-                placeholder="Enter LGCY Canvas ID"
-              />
+                  placeholder="Enter LGCY Canvas ID"
+                />
+              </div>
             </div>
-          </div>
-        )}
-
+          )}
       </div>
 
       <AddressForm
@@ -2272,7 +2545,10 @@ function ProjectCreationFormContent() {
               onChange={() => handleTenantsChange(true)}
               className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
-            <label htmlFor="tenants-yes" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+            <label
+              htmlFor="tenants-yes"
+              className="text-gray-700 dark:text-gray-200 cursor-pointer"
+            >
               Yes
             </label>
           </div>
@@ -2285,13 +2561,16 @@ function ProjectCreationFormContent() {
               onChange={() => handleTenantsChange(false)}
               className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
             />
-            <label htmlFor="tenants-no" className="text-gray-700 dark:text-gray-200 cursor-pointer">
+            <label
+              htmlFor="tenants-no"
+              className="text-gray-700 dark:text-gray-200 cursor-pointer"
+            >
               No
             </label>
           </div>
         </div>
       </div>
-      
+
       {/* Tenant Information Fields - Show only if user selected "Yes" */}
       {formData.hasTenants && (
         <div className="space-y-6 mt-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
@@ -2307,27 +2586,40 @@ function ProjectCreationFormContent() {
                 id="tenantFirstName"
                 value={formData.tenantFirstName}
                 onChange={(e) => {
-                  setFormData(prev => ({ ...prev, tenantFirstName: e.target.value }));
-                  validateTenantName('firstName', e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    tenantFirstName: e.target.value,
+                  }));
+                  validateTenantName("firstName", e.target.value);
                 }}
-                onBlur={(e) => handleTenantNameBlur('firstName', e.target.value)}
-                className={`p-2 border ${!tenantNameValidation.firstName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                         focus:outline-none focus:ring-2 ${!tenantNameValidation.firstName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                onBlur={(e) =>
+                  handleTenantNameBlur("firstName", e.target.value)
+                }
+                className={`p-2 border ${
+                  !tenantNameValidation.firstName.isValid
+                    ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${
+                           !tenantNameValidation.firstName.isValid
+                             ? "focus:ring-red-500"
+                             : "focus:ring-blue-500"
+                         }
                          bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                 placeholder="Enter tenant first name"
                 aria-invalid={!tenantNameValidation.firstName.isValid}
                 aria-describedby="tenantFirstName-error"
               />
               {!tenantNameValidation.firstName.isValid && (
-                <div 
-                  id="tenantFirstName-error" 
+                <div
+                  id="tenantFirstName-error"
                   className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                 >
                   ⚠️ {tenantNameValidation.firstName.message}
                 </div>
               )}
             </div>
-            
+
             {/* Tenant Last Name */}
             <div>
               <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -2338,20 +2630,31 @@ function ProjectCreationFormContent() {
                 id="tenantLastName"
                 value={formData.tenantLastName}
                 onChange={(e) => {
-                  setFormData(prev => ({ ...prev, tenantLastName: e.target.value }));
-                  validateTenantName('lastName', e.target.value);
+                  setFormData((prev) => ({
+                    ...prev,
+                    tenantLastName: e.target.value,
+                  }));
+                  validateTenantName("lastName", e.target.value);
                 }}
-                onBlur={(e) => handleTenantNameBlur('lastName', e.target.value)}
-                className={`p-2 border ${!tenantNameValidation.lastName.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                         focus:outline-none focus:ring-2 ${!tenantNameValidation.lastName.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                onBlur={(e) => handleTenantNameBlur("lastName", e.target.value)}
+                className={`p-2 border ${
+                  !tenantNameValidation.lastName.isValid
+                    ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${
+                           !tenantNameValidation.lastName.isValid
+                             ? "focus:ring-red-500"
+                             : "focus:ring-blue-500"
+                         }
                          bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                 placeholder="Enter tenant last name"
                 aria-invalid={!tenantNameValidation.lastName.isValid}
                 aria-describedby="tenantLastName-error"
               />
               {!tenantNameValidation.lastName.isValid && (
-                <div 
-                  id="tenantLastName-error" 
+                <div
+                  id="tenantLastName-error"
                   className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                 >
                   ⚠️ {tenantNameValidation.lastName.message}
@@ -2359,7 +2662,7 @@ function ProjectCreationFormContent() {
               )}
             </div>
           </div>
-          
+
           {/* Tenant Contact Info Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Tenant Email */}
@@ -2371,25 +2674,38 @@ function ProjectCreationFormContent() {
                 type="email"
                 id="tenantEmail"
                 value={formData.tenantEmail}
-                onChange={(e) => setFormData(prev => ({ ...prev, tenantEmail: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    tenantEmail: e.target.value,
+                  }))
+                }
                 onBlur={(e) => handleTenantEmailBlur(e.target.value)}
-                className={`p-2 border ${!tenantEmailValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                         focus:outline-none focus:ring-2 ${!tenantEmailValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                className={`p-2 border ${
+                  !tenantEmailValidation.isValid
+                    ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${
+                           !tenantEmailValidation.isValid
+                             ? "focus:ring-red-500"
+                             : "focus:ring-blue-500"
+                         }
                          bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                 placeholder="Enter tenant email address"
                 aria-invalid={!tenantEmailValidation.isValid}
                 aria-describedby="tenant-email-error"
               />
               {!tenantEmailValidation.isValid && (
-                <div 
-                  id="tenant-email-error" 
+                <div
+                  id="tenant-email-error"
                   className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                 >
                   ⚠️ {tenantEmailValidation.message}
                 </div>
               )}
             </div>
-            
+
             {/* Tenant Phone */}
             <div>
               <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1">
@@ -2401,33 +2717,40 @@ function ProjectCreationFormContent() {
                 value={formData.tenantPhone}
                 onChange={handleTenantPhoneChange}
                 onBlur={(e) => handleTenantPhoneBlur(e.target.value)}
-                className={`p-2 border ${!tenantPhoneValidation.isValid ? 'border-red-500 bg-red-50 dark:bg-red-900/10' : 'border-gray-300 dark:border-gray-600'} rounded-md w-full 
-                         focus:outline-none focus:ring-2 ${!tenantPhoneValidation.isValid ? 'focus:ring-red-500' : 'focus:ring-blue-500'}
+                className={`p-2 border ${
+                  !tenantPhoneValidation.isValid
+                    ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                    : "border-gray-300 dark:border-gray-600"
+                } rounded-md w-full 
+                         focus:outline-none focus:ring-2 ${
+                           !tenantPhoneValidation.isValid
+                             ? "focus:ring-red-500"
+                             : "focus:ring-blue-500"
+                         }
                          bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
                 placeholder="Enter as 17074303821"
                 aria-invalid={!tenantPhoneValidation.isValid}
                 aria-describedby="tenant-phone-error"
               />
               {!tenantPhoneValidation.isValid && (
-                <div 
-                  id="tenant-phone-error" 
+                <div
+                  id="tenant-phone-error"
                   className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
                 >
                   ⚠️ {tenantPhoneValidation.message}
                 </div>
               )}
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Format: 17074303821 (US country code + 10-digit number with no spaces or symbols)
+                Format: 17074303821 (US country code + 10-digit number with no
+                spaces or symbols)
               </p>
             </div>
           </div>
         </div>
       )}
-      
+
       {/* Lead Type and Preferred Language in same row */}
-      
-      
-      
+
       {/* Lead Type and Preferred Language in same row */}
       <div className="mt-8 mb-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -2451,7 +2774,7 @@ function ProjectCreationFormContent() {
           </div>
         </div>
       </div>
-      
+
       {/* Finance Type selection */}
       <div className="pt-8 pb-6">
         <div>
@@ -2464,12 +2787,12 @@ function ProjectCreationFormContent() {
           <div className="border border-gray-300 dark:border-gray-600 rounded-lg p-6">
             <div className="space-y-3">
               {[
-                { id: 'Loan', label: 'Loan' },
-                { id: 'Cash', label: 'Cash' },
-                { id: 'Lease', label: 'Lease' },
-                { id: 'PPA', label: 'PPA' },
-                { id: 'PACE', label: 'PACE' },
-                { id: 'Prepaid-PPA', label: 'Prepaid-PPA' }
+                { id: "Loan", label: "Loan" },
+                { id: "Cash", label: "Cash" },
+                { id: "Lease", label: "Lease" },
+                { id: "PPA", label: "PPA" },
+                { id: "PACE", label: "PACE" },
+                { id: "Prepaid-PPA", label: "Prepaid-PPA" },
               ].map((type) => (
                 <div key={type.id} className="flex items-center">
                   <input
@@ -2480,16 +2803,21 @@ function ProjectCreationFormContent() {
                     checked={formData.financeType === type.id}
                     onChange={(e) => {
                       const newFinanceType = e.target.value as FinanceType;
-                      setFormData(prev => ({ 
-                        ...prev, 
+                      setFormData((prev) => ({
+                        ...prev,
                         financeType: newFinanceType,
                         // If "Cash" is selected as finance type, automatically set the finance company to "Cash"
-                        ...(newFinanceType === "Cash" ? { financeCompany: "Cash" as FinanceCompany } : {})
+                        ...(newFinanceType === "Cash"
+                          ? { financeCompany: "Cash" as FinanceCompany }
+                          : {}),
                       }));
                     }}
                     className="form-radio text-[#69D998] focus:ring-[#69D998] h-6 w-6 mr-2"
                   />
-                  <label htmlFor={`financeType-${type.id}`} className="text-gray-700 dark:text-gray-200 cursor-pointer">
+                  <label
+                    htmlFor={`financeType-${type.id}`}
+                    className="text-gray-700 dark:text-gray-200 cursor-pointer"
+                  >
                     {type.label}
                   </label>
                 </div>
@@ -2498,7 +2826,7 @@ function ProjectCreationFormContent() {
           </div>
         </div>
       </div>
-      
+
       {/* Finance Company selection */}
       <div className="pt-8 pb-6">
         <div className="mb-6">
@@ -2506,12 +2834,13 @@ function ProjectCreationFormContent() {
             Select Finance Company <span className="text-red-500">*</span>
           </h3>
           <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-            Choose the financial institution you&apos;ll be working with for this project
+            Choose the financial institution you&apos;ll be working with for
+            this project
           </p>
-          
+
           {/* Remove TPO Warning since it's now in FinanceCompanySelector */}
         </div>
-        
+
         <FinanceCompanySelector
           selectedCompany={formData.financeCompany}
           selectedEscalator={formData.escalator}
@@ -2564,17 +2893,37 @@ function ProjectCreationFormContent() {
           onLgcyCanvassIdChange={(value: string) =>
             setFormData((prev) => ({ ...prev, lgcyCanvassId: value }))
           }
-          onEpcChange={(value) => setFormData(prev => ({ ...prev, epc: value }))}
-          onKwhRateChange={(value) => setFormData(prev => ({ ...prev, kwhRate: value }))}
-          onLeadIdChange={(value) => setFormData(prev => ({ ...prev, leadId: value }))}
-          onPangeaIdChange={(value) => setFormData(prev => ({ ...prev, pangeaId: value }))}
-          onInsightlyIdChange={(value) => setFormData(prev => ({ ...prev, insightlyId: value }))}
-          onSalesRepEmailChange={(value) => setFormData(prev => ({ ...prev, salesRepEmail: value }))}
-          onSalesRepEmail2Change={(value) => setFormData(prev => ({ ...prev, salesRepEmail2: value }))}
-          onDialerEmailChange={(value) => setFormData(prev => ({ ...prev, dialerEmail: value }))}
+          onEpcChange={(value) =>
+            setFormData((prev) => ({ ...prev, epc: value }))
+          }
+          onKwhRateChange={(value) =>
+            setFormData((prev) => ({ ...prev, kwhRate: value }))
+          }
+          onLeadIdChange={(value) =>
+            setFormData((prev) => ({ ...prev, leadId: value }))
+          }
+          onPangeaIdChange={(value) =>
+            setFormData((prev) => ({ ...prev, pangeaId: value }))
+          }
+          onInsightlyIdChange={(value) =>
+            setFormData((prev) => ({ ...prev, insightlyId: value }))
+          }
+          onSalesRepEmailChange={(value) =>
+            setFormData((prev) => ({ ...prev, salesRepEmail: value }))
+          }
+          onSalesRepEmail2Change={(value) =>
+            setFormData((prev) => ({ ...prev, salesRepEmail2: value }))
+          }
+          onDialerEmailChange={(value) =>
+            setFormData((prev) => ({ ...prev, dialerEmail: value }))
+          }
           onCustomerEmailChange={handleCustomerEmailChange}
-          onCustomerPhoneChange={(value) => setFormData(prev => ({ ...prev, customerPhone: value }))}
-          onSystemSizeChange={(value) => setFormData(prev => ({ ...prev, systemSize: value }))}
+          onCustomerPhoneChange={(value) =>
+            setFormData((prev) => ({ ...prev, customerPhone: value }))
+          }
+          onSystemSizeChange={(value) =>
+            setFormData((prev) => ({ ...prev, systemSize: value }))
+          }
           onToggleWelcomeCall={forceToggleWelcomeCallStatus}
         />
       </div>
@@ -2586,32 +2935,53 @@ function ProjectCreationFormContent() {
           </div>
 
           <div className="text-lg font-semibold text-red-500 pl-9">
-            AS A REMINDER, YOU, AS THE REP WILL HAVE TO COUNTERSIGN THE EVERBRIGHT AGREEMENT IN YOUR EMAIL.
+            AS A REMINDER, YOU, AS THE REP WILL HAVE TO COUNTERSIGN THE
+            EVERBRIGHT AGREEMENT IN YOUR EMAIL.
           </div>
 
           <div className="text-sm font-semibold text-red-500 pl-9">
-            This form is only for GoodLeap PPAs/Leases ONLY. Please submit any GoodLeap Loan deals through Pangea
+            This form is only for GoodLeap PPAs/Leases ONLY. Please submit any
+            GoodLeap Loan deals through Pangea
           </div>
 
           <div className="text-sm font-semibold text-red-500 pl-9">
-            This form is only for EnFin PPAs/Leases ONLY. Please submit any EnFin Loan deals through Pangea
+            This form is only for EnFin PPAs/Leases ONLY. Please submit any
+            EnFin Loan deals through Pangea
           </div>
         </>
       )}
 
       {/* Validation Errors Section - Always visible when errors exist */}
       {validationErrors.length > 0 && (
-        <div id="validation-errors" className="mt-6 p-6 bg-red-50 border-2 border-red-400 rounded-lg shadow-lg animate-pulse">
+        <div
+          id="validation-errors"
+          className="mt-6 p-6 bg-red-50 border-2 border-red-400 rounded-lg shadow-lg animate-pulse"
+        >
           <div className="flex items-start">
-            <svg className="w-7 h-7 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <svg
+              className="w-7 h-7 text-red-600 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
             </svg>
             <div className="ml-3 w-full">
-              <h3 className="text-xl font-bold text-red-800">Please fix the following errors:</h3>
+              <h3 className="text-xl font-bold text-red-800">
+                Please fix the following errors:
+              </h3>
               <div className="mt-3 text-base text-red-700">
                 <ul className="list-disc pl-5 space-y-2">
                   {validationErrors.map((error, index) => (
-                    <li key={index} className="font-medium">{error}</li>
+                    <li key={index} className="font-medium">
+                      {error}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -2621,13 +2991,16 @@ function ProjectCreationFormContent() {
       )}
 
       {/* Add Additional Notes section before utility bill upload */}
-      <AdditionalNotesSection 
-        value={formData.additionalNotes} 
+      <AdditionalNotesSection
+        value={formData.additionalNotes}
         onChange={(e) => handleChange(e as any)}
       />
 
       {/* Move utility bill upload to be the last section before submit button */}
-      <UBillUploadSection onFileUpload={handleFileUpload} onUploadStatusChange={setIsFileUploading} />
+      <UBillUploadSection
+        onFileUpload={handleFileUpload}
+        onUploadStatusChange={setIsFileUploading}
+      />
 
       <div className="text-center mt-8">
         <button
@@ -2640,133 +3013,167 @@ function ProjectCreationFormContent() {
               );
               if (!confirmSubmit) return;
             }
-            
+
             // Immediately check welcome call status
-            console.log("Welcome Call Status at submit:", formData.hasCompletedWelcomeCall, formData.welcomeCallCompleted);
-            
+            console.log(
+              "Welcome Call Status at submit:",
+              formData.hasCompletedWelcomeCall,
+              formData.welcomeCallCompleted
+            );
+
             // DEBUGGING: Always log button click and reset previous errors
             console.log("🚨 SUBMIT BUTTON CLICKED - DEBUGGING");
             setDebugError("Submit button clicked - processing...");
-            
+
             // Show a visual indicator that the button was clicked
-            const submitButton = document.querySelector('button[type="button"]') as HTMLButtonElement;
+            const submitButton = document.querySelector(
+              'button[type="button"]'
+            ) as HTMLButtonElement;
             if (submitButton) {
-              submitButton.style.backgroundColor = '#0078FF'; // Make it blue instead of red
+              submitButton.style.backgroundColor = "#0078FF"; // Make it blue instead of red
               setTimeout(() => {
-                submitButton.style.backgroundColor = '#5FCF87'; // Back to green
+                submitButton.style.backgroundColor = "#5FCF87"; // Back to green
               }, 500); // Longer flash to be noticeable
             }
-            
+
             try {
               // DEBUGGING: Mark the beginning of the try block
               console.log("🚨 ENTERING TRY BLOCK");
               setDebugError("Processing submission...");
-              
+
               // Always show toast to confirm button was clicked
               toast.info("Processing form submission...");
-              
+
               // DEBUGGING: Check if validation runs
               console.log("🚨 RUNNING VALIDATION");
               setDebugError("Validating form fields...");
-              
+
               // Validate all fields
               const isValid = validateAllFields();
               console.log("🚨 VALIDATION RESULT:", isValid);
-              
+
               if (!isValid) {
                 console.log("🚨 VALIDATION FAILED");
                 setDebugError("Validation failed - check form fields");
-                toast.error("Please correct the errors in the form before submitting");
-                
+                toast.error(
+                  "Please correct the errors in the form before submitting"
+                );
+
                 // Scroll to the validation errors section
                 setTimeout(() => {
-                  const errorElement = document.getElementById('validation-errors');
+                  const errorElement =
+                    document.getElementById("validation-errors");
                   if (errorElement) {
-                    errorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    errorElement.scrollIntoView({
+                      behavior: "smooth",
+                      block: "center",
+                    });
                   }
                 }, 100);
-                
+
                 return;
               }
-              
+
               // Add the actual form submission code here
-              console.log("✅ Validation passed, preparing to submit to API...");
+              console.log(
+                "✅ Validation passed, preparing to submit to API..."
+              );
               setDebugError("Validation passed! Submitting to API...");
-              
+
               try {
                 // Format names with proper case
                 const formattedData = {
                   ...formData,
                   firstName: formatNameCase(formData.firstName),
-                  lastName: formatNameCase(formData.lastName)
+                  lastName: formatNameCase(formData.lastName),
                 };
-                
+
                 // Generate a unique token if one doesn't exist
                 if (!formattedData.internalToken) {
-                  formattedData.internalToken = `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
-                  console.log("📝 Generated new internal token:", formattedData.internalToken);
+                  formattedData.internalToken = `${Date.now()}-${Math.random()
+                    .toString(36)
+                    .substring(2, 10)}`;
+                  console.log(
+                    "📝 Generated new internal token:",
+                    formattedData.internalToken
+                  );
                 }
-                
+
                 // Format adders as semicolon-separated string if it's an array
                 if (Array.isArray(formattedData.adders)) {
-                  (formattedData as any).addersString = formattedData.adders.join(';');
+                  (formattedData as any).addersString =
+                    formattedData.adders.join(";");
                 }
-                
+
                 // Format ubillFiles URLs as semicolon-separated string
-                if (Array.isArray(formattedData.ubillFiles) && formattedData.ubillFiles.length > 0) {
+                if (
+                  Array.isArray(formattedData.ubillFiles) &&
+                  formattedData.ubillFiles.length > 0
+                ) {
                   // Extract URLs from all uploaded files and join with semicolons
                   // Make sure we're using Google Drive viewer URLs
-                  const fileUrls = formattedData.ubillFiles.map(file => {
-                    // If the URL contains a Google Drive file ID, ensure it's a viewer URL
-                    const url = file.url;
-                    if (url.includes('drive.google.com')) {
-                      // Check if it's a direct download URL
-                      if (url.includes('export=download')) {
-                      // Convert direct download URL to viewer URL
-                      const fileIdMatch = url.match(/id=([^&]+)/);
-                      if (fileIdMatch && fileIdMatch[1]) {
-                        const fileId = fileIdMatch[1];
-                        return `https://drive.google.com/file/d/${fileId}/view`;
+                  const fileUrls = formattedData.ubillFiles
+                    .map((file) => {
+                      // If the URL contains a Google Drive file ID, ensure it's a viewer URL
+                      const url = file.url;
+                      if (url.includes("drive.google.com")) {
+                        // Check if it's a direct download URL
+                        if (url.includes("export=download")) {
+                          // Convert direct download URL to viewer URL
+                          const fileIdMatch = url.match(/id=([^&]+)/);
+                          if (fileIdMatch && fileIdMatch[1]) {
+                            const fileId = fileIdMatch[1];
+                            return `https://drive.google.com/file/d/${fileId}/view`;
+                          }
                         }
-                      } 
-                      // Check if it's already a view URL but in the wrong format
-                      else if (url.includes('/file/d/')) {
-                        // Extract the file ID from the URL
-                        const fileIdMatch = url.match(/\/file\/d\/([^\/]+)/);
-                        if (fileIdMatch && fileIdMatch[1]) {
-                          const fileId = fileIdMatch[1];
-                          return `https://drive.google.com/file/d/${fileId}/view`;
+                        // Check if it's already a view URL but in the wrong format
+                        else if (url.includes("/file/d/")) {
+                          // Extract the file ID from the URL
+                          const fileIdMatch = url.match(/\/file\/d\/([^\/]+)/);
+                          if (fileIdMatch && fileIdMatch[1]) {
+                            const fileId = fileIdMatch[1];
+                            return `https://drive.google.com/file/d/${fileId}/view`;
+                          }
                         }
                       }
-                    }
-                    return url;
-                  }).join(';');
-                  
+                      return url;
+                    })
+                    .join(";");
+
                   (formattedData as any).ubillFilesUrls = fileUrls;
-                  
+
                   // Also create a string of filenames for reference
-                  const fileNames = formattedData.ubillFiles.map(file => file.name).join(';');
+                  const fileNames = formattedData.ubillFiles
+                    .map((file) => file.name)
+                    .join(";");
                   (formattedData as any).ubillFilesNames = fileNames;
-                  
+
                   console.log("📝 Formatted ubillFiles URLs:", fileUrls);
                 }
-                
+                //Dynamic id for db ids
+                const id = generateUUID();
+                formattedData.form_id = id;
+                localStorage.setItem("submission_id", id);
                 // Keep all fields in the payload even if null
-                const filteredPayload: Record<string, any> = { ...formattedData };
-                
-                console.log("📝 Submitting complete form data without filtering fields");
-                
+                const filteredPayload: Record<string, any> = {
+                  ...formattedData,
+                };
+
+                console.log(
+                  "📝 Submitting complete form data without filtering fields"
+                );
+
                 // Call the API endpoint
-                const response = await fetch('/api/project-submit', {
-                  method: 'POST',
+                const response = await fetch("/api/project-submit", {
+                  method: "POST",
                   headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json",
                   },
-                  body: JSON.stringify(filteredPayload) // Send the complete payload
+                  body: JSON.stringify(filteredPayload), // Send the complete payload
                 });
-                
+
                 console.log("📝 API response status:", response.status);
-                
+
                 if (!response.ok) {
                   let errorMessage = `Server responded with status ${response.status}`;
                   try {
@@ -2777,75 +3184,85 @@ function ProjectCreationFormContent() {
                   }
                   throw new Error(errorMessage);
                 }
-                
+
                 const responseData = await response.json();
                 console.log("✅ API response:", responseData);
-                
+
                 // Show success message
                 toast.success("Project submitted successfully!");
                 setDebugError("Success! Redirecting...");
-                
-                console.log("📝 Project submitted successfully. State:", formattedData.state, "Warehouse:", formattedData.warehouse);
-                
+
+                console.log(
+                  "📝 Project submitted successfully. State:",
+                  formattedData.state,
+                  "Warehouse:",
+                  formattedData.warehouse
+                );
+
                 // For all projects including Arizona, proceed with the normal survey booking flow
                 // Generate URL parameters for the survey booking
                 const params = new URLSearchParams();
-                params.append('firstName', formattedData.firstName);
-                params.append('lastName', formattedData.lastName);
-                params.append('email', formattedData.customerEmail);
-                params.append('customerEmail', formattedData.customerEmail);
-                params.append('phone', formattedData.customerPhone);
-                params.append('customerPhone', formattedData.customerPhone);
-                params.append('streetAddress', formattedData.streetAddress);
-                params.append('city', formattedData.city);
-                params.append('state', formattedData.state);
-                params.append('postalCode', formattedData.postalCode);
-                params.append('warehouse', formattedData.warehouse || '');
-                params.append('token', formattedData.internalToken);
-                
+                params.append("firstName", formattedData.firstName);
+                params.append("lastName", formattedData.lastName);
+                params.append("email", formattedData.customerEmail);
+                params.append("customerEmail", formattedData.customerEmail);
+                params.append("phone", formattedData.customerPhone);
+                params.append("customerPhone", formattedData.customerPhone);
+                params.append("streetAddress", formattedData.streetAddress);
+                params.append("city", formattedData.city);
+                params.append("state", formattedData.state);
+                params.append("postalCode", formattedData.postalCode);
+                params.append("warehouse", formattedData.warehouse || "");
+                params.append("token", formattedData.internalToken);
+
                 // Add success message parameters
-                params.append('success', 'true');
-                params.append('message', 'Project submitted successfully! Please complete your survey booking.');
-                
+                params.append("success", "true");
+                params.append(
+                  "message",
+                  "Project submitted successfully! Please complete your survey booking."
+                );
+
                 // Show elegant success animation before redirecting
-                const successOverlay = document.createElement('div');
-                successOverlay.style.position = 'fixed';
-                successOverlay.style.top = '0';
-                successOverlay.style.left = '0';
-                successOverlay.style.width = '100%';
-                successOverlay.style.height = '100%';
-                successOverlay.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-                successOverlay.style.display = 'flex';
-                successOverlay.style.flexDirection = 'column';
-                successOverlay.style.alignItems = 'center';
-                successOverlay.style.justifyContent = 'center';
-                successOverlay.style.zIndex = '9999';
-                successOverlay.style.transition = 'opacity 0.5s ease-in-out';
-                
-                const icon = document.createElement('div');
+                const successOverlay = document.createElement("div");
+                successOverlay.style.position = "fixed";
+                successOverlay.style.top = "0";
+                successOverlay.style.left = "0";
+                successOverlay.style.width = "100%";
+                successOverlay.style.height = "100%";
+                successOverlay.style.backgroundColor =
+                  "rgba(255, 255, 255, 0.9)";
+                successOverlay.style.display = "flex";
+                successOverlay.style.flexDirection = "column";
+                successOverlay.style.alignItems = "center";
+                successOverlay.style.justifyContent = "center";
+                successOverlay.style.zIndex = "9999";
+                successOverlay.style.transition = "opacity 0.5s ease-in-out";
+
+                const icon = document.createElement("div");
                 icon.innerHTML = `
                   <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                   </svg>
                 `;
-                icon.style.animation = 'checkmark-pop 0.5s ease-in-out forwards';
-                
-                const text = document.createElement('h2');
-                text.textContent = 'Project Successfully Submitted!';
-                text.style.fontFamily = 'sans-serif';
-                text.style.color = '#333';
-                text.style.marginTop = '20px';
-                text.style.fontSize = '24px';
-                
-                const subtext = document.createElement('p');
-                subtext.textContent = 'Redirecting to survey booking...';
-                subtext.style.fontFamily = 'sans-serif';
-                subtext.style.color = '#666';
-                subtext.style.marginTop = '10px';
-                
+                icon.style.animation =
+                  "checkmark-pop 0.5s ease-in-out forwards";
+
+                const text = document.createElement("h2");
+                text.textContent = "Project Successfully Submitted!";
+                text.style.fontFamily = "sans-serif";
+                text.style.color = "#333";
+                text.style.marginTop = "20px";
+                text.style.fontSize = "24px";
+
+                const subtext = document.createElement("p");
+                subtext.textContent = "Redirecting to survey booking...";
+                subtext.style.fontFamily = "sans-serif";
+                subtext.style.color = "#666";
+                subtext.style.marginTop = "10px";
+
                 // Add a style element for animations
-                const style = document.createElement('style');
+                const style = document.createElement("style");
                 style.textContent = `
                   @keyframes checkmark-pop {
                     0% { transform: scale(0); }
@@ -2857,13 +3274,13 @@ function ProjectCreationFormContent() {
                     to { opacity: 1; }
                   }
                 `;
-                
+
                 document.head.appendChild(style);
                 successOverlay.appendChild(icon);
                 successOverlay.appendChild(text);
                 successOverlay.appendChild(subtext);
                 document.body.appendChild(successOverlay);
-                
+
                 // Redirect after showing success animation
                 setTimeout(() => {
                   // Redirect to survey booking with parameters
@@ -2871,7 +3288,10 @@ function ProjectCreationFormContent() {
                 }, 2000);
               } catch (apiError) {
                 console.error("❌ API submission error:", apiError);
-                const errorMessage = apiError instanceof Error ? apiError.message : "Error submitting to API";
+                const errorMessage =
+                  apiError instanceof Error
+                    ? apiError.message
+                    : "Error submitting to API";
                 setDebugError(`API Error: ${errorMessage}`);
                 toast.error(errorMessage);
                 setLocalError(errorMessage);
@@ -2880,7 +3300,8 @@ function ProjectCreationFormContent() {
             } catch (err) {
               console.log("🚨 OUTER ERROR CAUGHT:", err);
               console.error("❌ Submission error:", err);
-              const errorMessage = err instanceof Error ? err.message : "Error submitting form";
+              const errorMessage =
+                err instanceof Error ? err.message : "Error submitting form";
               setDebugError(`Outer error: ${errorMessage}`);
               toast.error(errorMessage);
               setLocalError(errorMessage);
@@ -2893,11 +3314,15 @@ function ProjectCreationFormContent() {
           disabled={effectiveIsSubmitting || isFileUploading}
           className="mx-auto bg-[#5FCF87] hover:bg-[#4ab674] text-white py-3 px-8 rounded-full text-base font-medium transition-all duration-200 shadow-sm"
           style={{
-            width: '180px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)'
+            width: "180px",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
           }}
         >
-          {effectiveIsSubmitting ? 'Submitting...' : isFileUploading ? 'Uploading...' : 'Submit Project'}
+          {effectiveIsSubmitting
+            ? "Submitting..."
+            : isFileUploading
+            ? "Uploading..."
+            : "Submit Project"}
         </button>
         {isFileUploading && (
           <div className="mt-2 text-amber-600 text-center font-medium">
@@ -2906,43 +3331,78 @@ function ProjectCreationFormContent() {
         )}
         <div className="mt-3 text-gray-600 dark:text-gray-400 flex items-center justify-center">
           <div className="flex items-center space-x-1">
-            <span className="text-base font-medium">You&apos;ll Proceed to Survey Scheduling Next</span>
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <span className="text-base font-medium">
+              You&apos;ll Proceed to Survey Scheduling Next
+            </span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </div>
         </div>
       </div>
-      
+
       {/* Make the error display more prominent */}
       {(effectiveError || submissionError) && (
         <div className="mt-4 p-6 bg-red-100 border-2 border-red-500 rounded-md shadow-lg">
           <div className="flex items-start">
-            <svg className="w-8 h-8 text-red-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <svg
+              className="w-8 h-8 text-red-600 mt-0.5 flex-shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
             </svg>
             <div className="ml-3">
-              <h3 className="text-lg font-bold text-red-800">Submission Failed</h3>
+              <h3 className="text-lg font-bold text-red-800">
+                Submission Failed
+              </h3>
               <div className="mt-2 text-base text-red-700">
-                <p className="font-medium">{effectiveError || submissionError}</p>
-                <p className="mt-3">Please try again or contact support if the problem persists.</p>
+                <p className="font-medium">
+                  {effectiveError || submissionError}
+                </p>
+                <p className="mt-3">
+                  Please try again or contact support if the problem persists.
+                </p>
               </div>
             </div>
           </div>
         </div>
       )}
-      
+
       {/* Additional troubleshooting information */}
       {(effectiveError || submissionError) && (
         <div className="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
           <details className="cursor-pointer">
-            <summary className="text-sm font-medium text-gray-700">Troubleshooting Steps</summary>
+            <summary className="text-sm font-medium text-gray-700">
+              Troubleshooting Steps
+            </summary>
             <div className="mt-2 text-sm text-gray-600">
               <ul className="list-disc pl-5 space-y-1">
                 <li>Check your internet connection and try again</li>
                 <li>Ensure all required fields are filled correctly</li>
                 <li>Try refreshing the page and submitting again</li>
-                <li>If you&apos;ve uploaded files, try with smaller files or fewer files</li>
+                <li>
+                  If you&apos;ve uploaded files, try with smaller files or fewer
+                  files
+                </li>
                 <li>Contact technical support for assistance</li>
               </ul>
             </div>
