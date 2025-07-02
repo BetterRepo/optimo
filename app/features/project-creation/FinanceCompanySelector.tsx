@@ -119,24 +119,28 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
   onToggleWelcomeCall,
 }) => {
   // Add state for tracking uploaded HOI files
-  const [hoiFiles, setHoiFiles] = useState<Array<{name: string, size: number}>>([]);
+  const [hoiFiles, setHoiFiles] = useState<
+    Array<{ name: string; size: number }>
+  >([]);
   const [isUploadingHoi, setIsUploadingHoi] = useState(false);
 
   // Logo Container Component for standardized display
-  const LogoContainer = ({ 
-    company, 
-    isSelected
-  }: { 
+  const LogoContainer = ({
+    company,
+    isSelected,
+  }: {
     company: { id: string; label: string; logoPath: string };
     isSelected: boolean;
-  }) => {    
+  }) => {
     return (
-      <div 
+      <div
         key={company.id}
         className={`relative cursor-pointer rounded-xl shadow-sm transition-all duration-300 
-          ${isSelected 
-            ? 'border-2 border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md transform -translate-y-1' 
-            : 'border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 hover:bg-gray-50 dark:hover:bg-gray-800/50'}`}
+          ${
+            isSelected
+              ? "border-2 border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md transform -translate-y-1"
+              : "border border-gray-200 dark:border-gray-700 hover:border-green-300 dark:hover:border-green-700 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+          }`}
       >
         <input
           type="radio"
@@ -154,25 +158,26 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
           <div className="flex flex-col items-center space-y-3">
             <div className="h-24 w-full flex items-center justify-center p-2 bg-white rounded-lg">
               <div className="w-32 h-20 flex items-center justify-center relative">
-                <img 
+                <img
                   src={company.logoPath}
                   alt={`${company.label} logo`}
                   className="max-h-full max-w-full object-contain"
                   style={{
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))'
+                    objectFit: "contain",
+                    filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))",
                   }}
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.onerror = null; // Prevent infinite loop
-                    target.style.display = 'none';
-                    
+                    target.style.display = "none";
+
                     // Create text fallback
                     const parent = target.parentElement;
                     if (parent) {
-                      const textFallback = document.createElement('span');
+                      const textFallback = document.createElement("span");
                       textFallback.textContent = company.label;
-                      textFallback.className = 'text-lg font-semibold text-gray-700 dark:text-gray-300';
+                      textFallback.className =
+                        "text-lg font-semibold text-gray-700 dark:text-gray-300";
                       parent.appendChild(textFallback);
                     }
                   }}
@@ -180,13 +185,25 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
               </div>
             </div>
             <div className="text-center">
-              <div className="font-medium text-gray-800 dark:text-white">{company.label}</div>
+              <div className="font-medium text-gray-800 dark:text-white">
+                {company.label}
+              </div>
             </div>
           </div>
           {isSelected && (
             <div className="absolute top-2 right-2 h-6 w-6 bg-green-500 rounded-full flex items-center justify-center">
-              <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              <svg
+                className="h-4 w-4 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
             </div>
           )}
@@ -196,8 +213,13 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
   };
 
   const companies = [
-    { id: "LightReach", label: "LightReach", logoPath: "/images/lightrach-1.png" },
+    {
+      id: "LightReach",
+      label: "LightReach",
+      logoPath: "/images/lightrach-1.png",
+    },
     { id: "GoodLeap", label: "GoodLeap", logoPath: "/images/goodleap.png" },
+    { id: "Sungage", label: "Sungage", logoPath: "/images/sungage.png" },
     { id: "EnFin", label: "EnFin", logoPath: "/images/enfin-1.png" },
     { id: "HomeRun", label: "HomeRun", logoPath: "/images/homerun-1.png" },
     { id: "Dividend", label: "Dividend", logoPath: "/images/dividend-1.png" },
@@ -206,7 +228,7 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
   ];
 
   // Filter companies based on finance type
-  const filteredCompanies = companies.filter(company => {
+  const filteredCompanies = companies.filter((company) => {
     // If formData or financeType is not set, show all companies
     if (!formData?.financeType) {
       return true;
@@ -216,10 +238,14 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
       case "Cash":
         return company.id === "Cash";
       case "Loan":
-        return ["GoodLeap", "EnFin", "Dividend"].includes(company.id);
+        return ["GoodLeap", "EnFin", "Dividend", "Sungage"].includes(
+          company.id
+        );
       case "Lease":
       case "PPA":
-        return ["GoodLeap", "EnFin", "LightReach", "Sunrun"].includes(company.id);
+        return ["GoodLeap", "EnFin", "LightReach", "Sunrun"].includes(
+          company.id
+        );
       case "PACE":
         return company.id === "HomeRun";
       case "Prepaid-PPA":
@@ -232,12 +258,14 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">Finance Companies</h3>
+        <h3 className="text-base font-bold text-gray-800 dark:text-gray-100">
+          Finance Companies
+        </h3>
       </div>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
         {filteredCompanies.map((company) => (
-          <LogoContainer 
+          <LogoContainer
             key={company.id}
             company={company}
             isSelected={selectedCompany === company.id}
@@ -247,121 +275,188 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
 
       {/* Financier's Welcome Call Checkbox section */}
       <div className="mt-6 mb-6">
-        <div 
+        <div
           className={`p-6 rounded-lg shadow-sm ${
-            formData.welcomeCallCompleted 
-              ? 'bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800' 
-              : 'bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800'
+            formData.welcomeCallCompleted
+              ? "bg-green-50 border border-green-200 dark:bg-green-900/20 dark:border-green-800"
+              : "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
           }`}
         >
           <div className="flex items-start space-x-4">
             <div className="flex-grow">
               {/* Finance-specific verification text */}
               {(selectedCompany as string) === "EnFin" && (
-                <h4 className={`text-base font-bold ${
-                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                }`}>
-                  I verify that my EnFin customer has completed the EnFin Welcome Call and cleared all stipulations (if needed) <span className="text-red-500">*</span>
+                <h4
+                  className={`text-base font-bold ${
+                    formData.welcomeCallCompleted
+                      ? "text-green-700 dark:text-green-300"
+                      : "text-red-700 dark:text-red-300"
+                  }`}
+                >
+                  I verify that my EnFin customer has completed the EnFin
+                  Welcome Call and cleared all stipulations (if needed){" "}
+                  <span className="text-red-500">*</span>
                 </h4>
               )}
-              
+
               {/* GoodLeap text */}
               {(selectedCompany as string) === "GoodLeap" && (
-                <h4 className={`text-base font-bold ${
-                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                }`}>
-                  I verify that my Goodleap customer has completed their Digital Welcome Call (with Call Pilot), payment information, and title / ID information (if needed) <span className="text-red-500">*</span>
+                <h4
+                  className={`text-base font-bold ${
+                    formData.welcomeCallCompleted
+                      ? "text-green-700 dark:text-green-300"
+                      : "text-red-700 dark:text-red-300"
+                  }`}
+                >
+                  I verify that my Goodleap customer has completed their Digital
+                  Welcome Call (with Call Pilot), payment information, and title
+                  / ID information (if needed){" "}
+                  <span className="text-red-500">*</span>
                 </h4>
               )}
-              
+
               {/* LightReach text */}
               {(selectedCompany as string) === "LightReach" && (
-                <h4 className={`text-base font-bold ${
-                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                }`}>
-                  I verify that my LightReach customer has completed their welcome checklist, uploaded their ID, payment information, and title information (if needed) <span className="text-red-500">*</span>
+                <h4
+                  className={`text-base font-bold ${
+                    formData.welcomeCallCompleted
+                      ? "text-green-700 dark:text-green-300"
+                      : "text-red-700 dark:text-red-300"
+                  }`}
+                >
+                  I verify that my LightReach customer has completed their
+                  welcome checklist, uploaded their ID, payment information, and
+                  title information (if needed){" "}
+                  <span className="text-red-500">*</span>
                 </h4>
               )}
-              
+
               {/* Other finance companies */}
               {!selectedCompany && (
-                <h4 className={`text-base font-bold ${
-                  formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                }`}>
-                  I have completed the financier&apos;s Welcome Call & uploaded necessary documentation <span className="text-red-500">*</span>
+                <h4
+                  className={`text-base font-bold ${
+                    formData.welcomeCallCompleted
+                      ? "text-green-700 dark:text-green-300"
+                      : "text-red-700 dark:text-red-300"
+                  }`}
+                >
+                  I have completed the financier&apos;s Welcome Call & uploaded
+                  necessary documentation{" "}
+                  <span className="text-red-500">*</span>
                 </h4>
               )}
-              
+
               {/* Sunnova section */}
               {(selectedCompany as string) === "Sunnova" && (
                 <div>
-                  <h4 className={`text-base font-bold ${
-                    formData.welcomeCallCompleted ? 'text-green-700 dark:text-green-300' : 'text-red-700 dark:text-red-300'
-                  }`}>
-                    I have completed the Sunnova Welcome Call or Digital Welcome Checklist. <span className="text-red-500">*</span>
+                  <h4
+                    className={`text-base font-bold ${
+                      formData.welcomeCallCompleted
+                        ? "text-green-700 dark:text-green-300"
+                        : "text-red-700 dark:text-red-300"
+                    }`}
+                  >
+                    I have completed the Sunnova Welcome Call or Digital Welcome
+                    Checklist. <span className="text-red-500">*</span>
                   </h4>
                   <div className="mt-2">
-                    <a 
-                      href="https://help.betterearth.io/knowledge/finance-information/sunnova#block-e4e8636569dc49728469f89ebd5f4ec3" 
-                      target="_blank" 
+                    <a
+                      href="https://help.betterearth.io/knowledge/finance-information/sunnova#block-e4e8636569dc49728469f89ebd5f4ec3"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 inline-flex items-center"
                     >
-                      Click here for information about submitting a Sunnova project
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      Click here for information about submitting a Sunnova
+                      project
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 ml-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
                       </svg>
                     </a>
                   </div>
                 </div>
               )}
-              
-              <p className={`mt-3 text-sm flex items-center ${
-                formData.welcomeCallCompleted ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-              }`}>
+
+              <p
+                className={`mt-3 text-sm flex items-center ${
+                  formData.welcomeCallCompleted
+                    ? "text-green-600 dark:text-green-400"
+                    : "text-red-600 dark:text-red-400"
+                }`}
+              >
                 {formData.welcomeCallCompleted ? (
                   <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-1.5 flex-shrink-0"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                        clipRule="evenodd"
+                      />
                     </svg>
-                    Verification complete! You can now proceed with your TPO project submission
+                    Verification complete! You can now proceed with your TPO
+                    project submission
                   </>
                 ) : (
                   <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1.5 flex-shrink-0" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 mr-1.5 flex-shrink-0"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                        clipRule="evenodd"
+                      />
                     </svg>
-                    This step is required before proceeding with your TPO project submission
+                    This step is required before proceeding with your TPO
+                    project submission
                   </>
                 )}
               </p>
-              
+
               {/* Single, highly-visible direct trigger to toggle verification */}
               <button
                 type="button"
                 className={`mt-4 py-3 px-6 w-full rounded-md border-2 shadow-md font-bold text-base transition-colors duration-200 ${
                   formData.welcomeCallCompleted
-                    ? 'bg-white border-green-600 text-green-700 hover:bg-green-50'
-                    : 'bg-white border-red-600 text-red-700 hover:bg-red-50'
+                    ? "bg-white border-green-600 text-green-700 hover:bg-green-50"
+                    : "bg-white border-red-600 text-red-700 hover:bg-red-50"
                 }`}
                 onClick={() => {
                   const isChecked = !formData.welcomeCallCompleted;
                   console.log("DIRECT TOGGLE - setting to:", isChecked);
-                  
+
                   // Method 1: Try the direct toggle function if available
                   if (onToggleWelcomeCall) {
                     console.log("Using direct toggle function");
                     onToggleWelcomeCall(isChecked);
                   }
-                  
+
                   // Method 2: Use the traditional way through email special value
                   if (onCustomerEmailChange) {
                     console.log("Using indirect toggle through customer email");
-                    const originalEmail = formData.customerEmail || '';
+                    const originalEmail = formData.customerEmail || "";
                     const specialValue = `__WELCOME_CALL_${isChecked}__${originalEmail}`;
                     onCustomerEmailChange(specialValue);
                   }
-                  
+
                   // Method 3: Try using window-exposed function (emergency fallback)
                   setTimeout(() => {
                     if (formData.welcomeCallCompleted !== isChecked) {
@@ -379,9 +474,9 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                   }, 300);
                 }}
               >
-                {formData.welcomeCallCompleted 
-                  ? '✓ VERIFICATION CONFIRMED - Click to Change' 
-                  : '⚠️ CLICK HERE TO VERIFY COMPLETION'}
+                {formData.welcomeCallCompleted
+                  ? "✓ VERIFICATION CONFIRMED - Click to Change"
+                  : "⚠️ CLICK HERE TO VERIFY COMPLETION"}
               </button>
             </div>
           </div>
@@ -419,7 +514,9 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
               id="module-premium"
               name="moduleType"
               value="Premium Module (410w QCell Panel)"
-              checked={selectedModuleType === "Premium Module (410w QCell Panel)"}
+              checked={
+                selectedModuleType === "Premium Module (410w QCell Panel)"
+              }
               onChange={(e) => onModuleTypeChange(e.target.value as ModuleType)}
               className="form-radio text-blue-600 focus:ring-blue-500 h-4 w-4"
             />
@@ -535,7 +632,7 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                 onChange={(e) => {
                   // Allow only numbers with up to 2 decimal places
                   const value = e.target.value;
-                  if (value === '' || /^\d*\.?\d{0,2}$/.test(value)) {
+                  if (value === "" || /^\d*\.?\d{0,2}$/.test(value)) {
                     onSystemSizeChange(value);
                   }
                 }}
@@ -550,36 +647,52 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
               />
             </div>
           </div>
-          
+
           {/* Insurance Information Section - Only when system size > 11.75 */}
           {selectedSystemSize && parseFloat(selectedSystemSize) > 11.75 && (
             <div className="mt-6 p-4 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
               <div className="flex items-start space-x-3">
                 <div className="flex-shrink-0">
-                  <svg className="h-6 w-6 text-orange-600 dark:text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 18.5c-.77.833.192 2.5 1.732 2.5z" />
+                  <svg
+                    className="h-6 w-6 text-orange-600 dark:text-orange-400"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 18.5c-.77.833.192 2.5 1.732 2.5z"
+                    />
                   </svg>
                 </div>
                 <div className="flex-grow">
                   <h4 className="text-base font-bold text-orange-800 dark:text-orange-200">
-                    Insurance Information Required <span className="text-red-500">*</span>
+                    Insurance Information Required{" "}
+                    <span className="text-red-500">*</span>
                   </h4>
                   <p className="text-sm text-orange-700 dark:text-orange-300 mt-1">
-                    For systems over 11.75 kW, please provide homeowner&apos;s insurance information and upload the declaration pages of your HOI (Homeowner&apos;s Insurance).
+                    For systems over 11.75 kW, please provide homeowner&apos;s
+                    insurance information and upload the declaration pages of
+                    your HOI (Homeowner&apos;s Insurance).
                   </p>
-                  
+
                   {/* File Upload Section for HOI Declaration Pages */}
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-orange-800 dark:text-orange-200 mb-2">
-                      HOI Declaration Pages <span className="text-red-500">*</span>
+                      HOI Declaration Pages{" "}
+                      <span className="text-red-500">*</span>
                     </label>
-                    
+
                     {/* Upload Area */}
-                    <div className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
-                      hoiFiles.length > 0 
-                        ? 'border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20'
-                        : 'border-orange-300 dark:border-orange-600 hover:border-orange-400 dark:hover:border-orange-500'
-                    }`}>
+                    <div
+                      className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${
+                        hoiFiles.length > 0
+                          ? "border-green-300 dark:border-green-600 bg-green-50 dark:bg-green-900/20"
+                          : "border-orange-300 dark:border-orange-600 hover:border-orange-400 dark:hover:border-orange-500"
+                      }`}
+                    >
                       <input
                         type="file"
                         id="hoiDeclarationPages"
@@ -591,30 +704,48 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                             setIsUploadingHoi(true);
                             try {
                               const filesArray = Array.from(e.target.files);
-                              const success = await onFileUpload(e.target.files);
+                              const success = await onFileUpload(
+                                e.target.files
+                              );
                               if (success) {
-                                setHoiFiles(prev => [
+                                setHoiFiles((prev) => [
                                   ...prev,
-                                  ...filesArray.map(file => ({ name: file.name, size: file.size }))
+                                  ...filesArray.map((file) => ({
+                                    name: file.name,
+                                    size: file.size,
+                                  })),
                                 ]);
                               }
                             } catch (error) {
-                              console.error('Error uploading HOI declaration pages:', error);
+                              console.error(
+                                "Error uploading HOI declaration pages:",
+                                error
+                              );
                             } finally {
                               setIsUploadingHoi(false);
                             }
                           }
                         }}
                       />
-                      <label 
-                        htmlFor="hoiDeclarationPages" 
+                      <label
+                        htmlFor="hoiDeclarationPages"
                         className="cursor-pointer"
                       >
                         <div className="space-y-2">
                           {isUploadingHoi ? (
                             <>
-                              <svg className="mx-auto h-8 w-8 text-orange-500 animate-spin" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                              <svg
+                                className="mx-auto h-8 w-8 text-orange-500 animate-spin"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                />
                               </svg>
                               <div className="text-sm text-orange-700 dark:text-orange-300">
                                 Uploading files...
@@ -622,22 +753,47 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                             </>
                           ) : hoiFiles.length > 0 ? (
                             <>
-                              <svg className="mx-auto h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              <svg
+                                className="mx-auto h-8 w-8 text-green-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
                               </svg>
                               <div className="text-sm text-green-700 dark:text-green-300">
-                                <span className="font-medium">Files uploaded successfully!</span>
+                                <span className="font-medium">
+                                  Files uploaded successfully!
+                                </span>
                                 <br />
                                 Click to upload additional files
                               </div>
                             </>
                           ) : (
                             <>
-                              <svg className="mx-auto h-8 w-8 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                              <svg
+                                className="mx-auto h-8 w-8 text-orange-500"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
                               </svg>
                               <div className="text-sm text-orange-700 dark:text-orange-300">
-                                <span className="font-medium">Click to upload</span> or drag and drop
+                                <span className="font-medium">
+                                  Click to upload
+                                </span>{" "}
+                                or drag and drop
                               </div>
                             </>
                           )}
@@ -647,7 +803,7 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                         </div>
                       </label>
                     </div>
-                    
+
                     {/* Uploaded Files List */}
                     {hoiFiles.length > 0 && (
                       <div className="mt-3 space-y-2">
@@ -655,10 +811,23 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                           Uploaded Files ({hoiFiles.length}):
                         </h5>
                         {hoiFiles.map((file, index) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800">
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-2 bg-green-50 dark:bg-green-900/20 rounded border border-green-200 dark:border-green-800"
+                          >
                             <div className="flex items-center space-x-2">
-                              <svg className="h-4 w-4 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              <svg
+                                className="h-4 w-4 text-green-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
                               </svg>
                               <span className="text-sm text-green-800 dark:text-green-200 font-medium">
                                 {file.name}
@@ -670,21 +839,34 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
                             <button
                               type="button"
                               onClick={() => {
-                                setHoiFiles(prev => prev.filter((_, i) => i !== index));
+                                setHoiFiles((prev) =>
+                                  prev.filter((_, i) => i !== index)
+                                );
                               }}
                               className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300"
                             >
-                              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                              <svg
+                                className="h-4 w-4"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
                               </svg>
                             </button>
                           </div>
                         ))}
                       </div>
                     )}
-                    
+
                     <p className="text-xs text-orange-600 dark:text-orange-400 mt-2">
-                      Please ensure the declaration pages clearly show the property address, coverage amounts, and policy details.
+                      Please ensure the declaration pages clearly show the
+                      property address, coverage amounts, and policy details.
                     </p>
                   </div>
                 </div>
@@ -699,15 +881,27 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
           Please check off any add-on products or services sold to the customer
         </h3>
         <div className="mt-1">
-          <a 
-            href="https://help.betterearth.io/adder-options" 
-            target="_blank" 
+          <a
+            href="https://help.betterearth.io/adder-options"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 inline-flex items-center"
           >
-            Click here for information on different add-on products and services offered by Better Earth
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            Click here for information on different add-on products and services
+            offered by Better Earth
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-4 w-4 ml-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
             </svg>
           </a>
         </div>
@@ -753,22 +947,23 @@ export const FinanceCompanySelector: React.FC<FinanceCompanySelectorProps> = ({
       </div>
 
       {/* Conditional Email of Dialer field */}
-      {(selectedSalesRepEmail.includes("@betterearth.solar") && selectedLeadId.includes("LightReach")) && (
-        <div className="mt-6">
-          <label className="block text-gray-700 dark:text-gray-200 font-semibold">
-            Email of Dialer (if applicable)
-          </label>
-          <input
-            type="email"
-            value={selectedDialerEmail}
-            onChange={(e) => onDialerEmailChange(e.target.value)}
-            className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
+      {selectedSalesRepEmail.includes("@betterearth.solar") &&
+        selectedLeadId.includes("LightReach") && (
+          <div className="mt-6">
+            <label className="block text-gray-700 dark:text-gray-200 font-semibold">
+              Email of Dialer (if applicable)
+            </label>
+            <input
+              type="email"
+              value={selectedDialerEmail}
+              onChange={(e) => onDialerEmailChange(e.target.value)}
+              className="mt-1 p-2 w-full border border-gray-300 dark:border-gray-600 rounded-md 
                      focus:outline-none focus:ring-2 focus:ring-blue-500
                      bg-white dark:bg-[#3A3B3C] dark:text-white"
-            placeholder="Enter dialer email"
-          />
-        </div>
-      )}
+              placeholder="Enter dialer email"
+            />
+          </div>
+        )}
     </div>
   );
 };

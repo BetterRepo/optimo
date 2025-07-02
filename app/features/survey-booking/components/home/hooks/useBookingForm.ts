@@ -833,6 +833,7 @@ export const useBookingForm = () => {
 
         // Redirect to success page with date parameter - use slotDate instead of actualSurveyDateStr
         // This fixes the issue where URL shows a different date than the actual booking
+        localStorage.removeItem("submission_id");
         const dateParam = bookingRecap.slotDate
           ? `?date=${encodeURIComponent(bookingRecap.slotDate)}`
           : "";
@@ -1098,7 +1099,11 @@ export const useBookingForm = () => {
         `📅 Using ${timeWindows.length} time windows for warehouse: ${warehouse}`,
         timeWindows
       );
-
+      //Call api to fetch uploaded files
+      const submissionIId = localStorage.getItem("submission_id");
+      const files = await fetch(`/api/submissions/${submissionIId}`);
+      const filesData = await files.json();
+      console.log("Files data fetched:", filesData);
       const bookingData = {
         order: {
           operation: "CREATE",
@@ -1106,7 +1111,9 @@ export const useBookingForm = () => {
           type: "D",
           email: formData.email || formData.customerEmail || "",
           phone: formData.phone || formData.customerPhone || "",
-          customField1: customerName || fullName, // Use customer name as customField1
+          customField1: `${formData.firstName} ${formData.lastName}`.trim(), //customer name
+          customField4: "Odey",
+          customField3: filesData.success ? filesData.data : "",
           // Use proper location structure with locationNo, locationName, and address
           location: {
             locationNo: locationData.locationNo || generatedOrderNo,
@@ -1145,7 +1152,7 @@ export const useBookingForm = () => {
         // Add flag to identify CRM bookings for special handling
         isCRMBooking: formData.isSurveyBooking === true,
       };
-
+      console.log("booking data", bookingData);
       setLoading(true);
       const response = await fetch("/api/fetchSlots", {
         method: "POST",
