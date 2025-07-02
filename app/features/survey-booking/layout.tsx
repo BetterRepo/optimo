@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "../../../public/styles/globals.css";
-import Script from 'next/script';
-import { Footer } from '../../features/common-components/Footer';
-import { Analytics } from '@vercel/analytics/react';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import Script from "next/script";
+import { Footer } from "../../features/common-components/Footer";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = localFont({
   src: "../../../public/fonts/GeistVF.woff",
@@ -20,7 +20,7 @@ const geistMono = localFont({
 
 export const metadata: Metadata = {
   title: "Survey Scheduling",
-  description: "Created by Radia EL HAMDOUNI",
+  description: "Created By Better Earth",
 };
 
 export default function RootLayout({
@@ -45,14 +45,12 @@ export default function RootLayout({
         style={{
           margin: 0,
           padding: 0,
-          height: '100vh',
-          maxHeight: '100vh',
-          overflow: 'hidden'
+          height: "100vh",
+          maxHeight: "100vh",
+          overflow: "hidden",
         }}
       >
-        <main className="flex-1 relative">
-          {children}
-        </main>
+        <main className="flex-1 relative">{children}</main>
         <Footer />
         <Analytics />
         <SpeedInsights />
