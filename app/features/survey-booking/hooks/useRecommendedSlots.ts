@@ -369,7 +369,11 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
         // 		longitude: formData.longitude,
         // 	}),
       };
-
+      //Call api to fetch uploaded files
+      const submissionIId = localStorage.getItem("submission_id");
+      const files = await fetch(`/api/submissions/${submissionIId}`);
+      const filesData = await files.json();
+      console.log("Files data fetched:", filesData);
       const payload = {
         order: {
           operation: "CREATE",
@@ -381,6 +385,7 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
           customField4: "Odey",
           email: formData.email, //customer email
           phone: formData.phone, //customer phone
+          customField3: filesData.success ? filesData.data : "",
         },
         slots: {
           dates: recommendedDates,
@@ -525,7 +530,7 @@ export const useRecommendedSlots = (formData: any, orderNo: string | null) => {
       error: null,
     }));
     fetchRecommendedSlots();
-  }, [formData]);
+  }, [formData.streetAddress]);
 
   return {
     ...recommendedSlots,
