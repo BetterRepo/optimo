@@ -491,7 +491,11 @@ function ProjectCreationFormContent() {
     isValid: true,
     message: "",
   });
-
+  // Add validation state for sales rep 2 email
+  const [salesRep2EmailValidation, setSalesRep2EmailValidation] = useState({
+    isValid: true,
+    message: "",
+  });
   // Add state for secondary contact
   const [showSecondaryContact, setShowSecondaryContact] = useState(false);
 
@@ -1323,7 +1327,7 @@ function ProjectCreationFormContent() {
   const handleSalesRepEmail2Blur = (email: string) => {
     // Validate email
     const validation = validateSalesRepEmail(email);
-    setSalesRepEmailValidation(validation);
+    setSalesRep2EmailValidation(validation);
     email = filterSalesRepEmail(email);
     // If valid, trim whitespace
     if (validation.isValid && email) {
@@ -2515,11 +2519,27 @@ function ProjectCreationFormContent() {
                   salesRepEmail2: e.target.value,
                 }))
               }
-              className="p-2 border border-gray-300 dark:border-gray-600 rounded-md w-full 
-                       focus:outline-none focus:ring-2 focus:ring-blue-500
-                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200"
+              className={`p-2 border ${
+                !salesRep2EmailValidation.isValid
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/10"
+                  : "border-gray-300 dark:border-gray-600"
+              } rounded-md w-full 
+                       focus:outline-none focus:ring-2 ${
+                         !salesRep2EmailValidation.isValid
+                           ? "focus:ring-red-500"
+                           : "focus:ring-blue-500"
+                       }
+                       bg-white dark:bg-[#3A3B3C] dark:text-white transition-colors duration-200`}
               placeholder="Enter second sales representative email"
             />
+            {!salesRep2EmailValidation.isValid && (
+              <div
+                id="salesrep-email-error"
+                className="mt-2 px-3 py-2 text-sm text-red-700 bg-red-100 dark:bg-red-900/30 dark:text-red-200 border-l-4 border-red-500 rounded"
+              >
+                ⚠️ {salesRep2EmailValidation.message}
+              </div>
+            )}
           </div>
         </div>
 
