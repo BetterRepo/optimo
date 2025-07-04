@@ -1319,6 +1319,20 @@ function ProjectCreationFormContent() {
       }));
     }
   };
+  // Handle sales rep email2 blur
+  const handleSalesRepEmail2Blur = (email: string) => {
+    // Validate email
+    const validation = validateSalesRepEmail(email);
+    setSalesRepEmailValidation(validation);
+    email = filterSalesRepEmail(email);
+    // If valid, trim whitespace
+    if (validation.isValid && email) {
+      setFormData((prev) => ({
+        ...prev,
+        salesRepEmail2: email.trim(),
+      }));
+    }
+  };
 
   // Add function to validate all fields and display errors
   const validateAllFields = () => {
@@ -2494,6 +2508,7 @@ function ProjectCreationFormContent() {
             <input
               type="email"
               value={formData.salesRepEmail2}
+              onBlur={(e) => handleSalesRepEmail2Blur(e.target.value)}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
