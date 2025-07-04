@@ -1293,13 +1293,24 @@ function ProjectCreationFormContent() {
 
     return { isValid, message };
   };
-
+  const filterSalesRepEmail = (email: string) => {
+    let trimmedEmail = email.trim().toLowerCase();
+    // If email contains a '+' before the '@', strip everything from '+' to '@'
+    const plusIndex = trimmedEmail.indexOf("+");
+    const atIndex = trimmedEmail.indexOf("@");
+    if (plusIndex > -1 && atIndex > plusIndex) {
+      // Remove the +... part
+      trimmedEmail =
+        trimmedEmail.slice(0, plusIndex) + trimmedEmail.slice(atIndex);
+    }
+    return trimmedEmail;
+  };
   // Handle sales rep email blur
   const handleSalesRepEmailBlur = (email: string) => {
     // Validate email
     const validation = validateSalesRepEmail(email);
     setSalesRepEmailValidation(validation);
-
+    email = filterSalesRepEmail(email);
     // If valid, trim whitespace
     if (validation.isValid && email) {
       setFormData((prev) => ({
